@@ -74,10 +74,9 @@ md5_table:
 	.word 0x2AD7D2BB
 	.word 0xEB86D391 /* 64 */
 
-/* implements the md5_process_block function from md5.c */
 .text
 .global md5_process_block_asm
-md5_process_block_asm: /* (context* ctxt, uint8_t* block) */
+md5_process_block_asm: /* (uint32_t hash[4], uint8_t block[64]) */
 	push {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
 	ldr r2, addr_table
 	mov r3, #0 /* loop counter */
@@ -89,24 +88,22 @@ md5_process_block_asm: /* (context* ctxt, uint8_t* block) */
 	ldr r7, [r0, #12]
 
 loop0_start:
-	/* there is still room for optimization */
 	/* 1. iteration */
 	ldr r11, [r2, r3, LSL #2]
+	ldr r10, [r1, r3, LSL #2]
 	and r8, r5, r6
 	bic r9, r7, r5
-	ldr r10, [r1, r3, LSL #2]
+	add r4, r4, r11
 	orr r8, r8, r9
+	add r9, r8, r10
 	add r3, r3, #1
-
-	add r9, r10, r11
-	add r4, r4, r8
 	add r4, r4, r9
 	add r4, r5, r4, ROR #25
 
 	/* 2. iteration */
 	ldr r11, [r2, r3, LSL #2]
-	and r8, r4, r5
 	ldr r10, [r1, r3, LSL #2]
+	and r8, r4, r5
 	bic r9, r6, r4
 	add r3, r3, #1
 	orr r8, r8, r9
@@ -118,8 +115,8 @@ loop0_start:
 
 	/* 3. iteration */
 	ldr r11, [r2, r3, LSL #2]
-	and r8, r7, r4
 	ldr r10, [r1, r3, LSL #2]
+	and r8, r7, r4
 	bic r9, r5, r7
 	add r3, r3, #1
 	orr r8, r8, r9
@@ -131,8 +128,8 @@ loop0_start:
 
 	/* 4. iteration */
 	ldr r11, [r2, r3, LSL #2]
-	and r8, r6, r7
 	ldr r10, [r1, r3, LSL #2]
+	and r8, r6, r7
 	bic r9, r4, r6
 	add r3, r3, #1
 	orr r8, r8, r9
@@ -146,8 +143,8 @@ loop0_check:
 	cmp r3, #16
 	blt loop0_start
 	mov r12, #1
+
 loop1_start:
-	/* fixme: i need optimizations!!! */
 	/* 1. iteration */
 	and r8, r7, r5
 	ldr r10, [r1, r12, LSL #2]
@@ -209,18 +206,18 @@ loop1_start:
 loop1_check:
 	cmp r3, #32
 	blt loop1_start
+	mov r12, #5
 
 loop2_start:
 	/* 1. iteration */
 	eor r8, r5, r6
 	eor r9, r8, r7
 
-	add r8, r3, r3, LSL #1
-	add r8, r8, #5
-	and r8, r8, #0x0F
-
-	ldr r10, [r1, r8, LSL #2]
+	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
+
+	add r12, r12, #3
+	and r12, r12, #0x0F
 
 	add r10, r10, r11
 	add r9, r9, r10
@@ -232,12 +229,10 @@ loop2_start:
 	eor r8, r4, r5
 	eor r9, r8, r6
 
-	add r8, r3, r3, LSL #1
-	add r8, r8, #5
-	and r8, r8, #0x0F
-
-	ldr r10, [r1, r8, LSL #2]
+	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
+
+	add r12, r12, #3
 
 	add r10, r10, r11
 	add r7, r7, r10
@@ -249,12 +244,11 @@ loop2_start:
 	eor r8, r7, r4
 	eor r9, r8, r5
 
-	add r8, r3, r3, LSL #1
-	add r8, r8, #5
-	and r8, r8, #0x0F
-
-	ldr r10, [r1, r8, LSL #2]
+	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
+
+	add r12, r12, #3
+	and r12, r12, #0x0F
 
 	add r10, r10, r11
 	add r6, r6, r10
@@ -266,12 +260,11 @@ loop2_start:
 	eor r8, r6, r7
 	eor r9, r8, r4
 
-	add r8, r3, r3, LSL #1
-	add r8, r8, #5
-	and r8, r8, #0x0F
-
-	ldr r10, [r1, r8, LSL #2]
+	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
+
+	add r12, r12, #3
+	and r12, r12, #0x0F
 
 	add r10, r10, r11
 	add r5, r5, r10
@@ -282,17 +275,18 @@ loop2_start:
 loop2_check:
 	cmp r3, #48
 	blt loop2_start
+	mov r12, #0
 loop3_start:
 	/* 1. iteration */
 	mvn r8, r7 /* transform f4 */
 	orr r8, r5, r8
 	eor r9, r8, r6
 
-	rsb r8, r3, r3, LSL #3
-	and r8, r8, #0x0F
-
-	ldr r10, [r1, r8, LSL #2]
+	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
+
+	add r12, r12, #7
+	and r12, r12, #0x0F
 
 	add r10, r10, r11
 	add r4, r4, r10
@@ -306,11 +300,11 @@ loop3_start:
 	orr r8, r8, r4
 	eor r9, r8, r5
 
-	rsb r8, r3, r3, LSL #3
-	and r8, r8, #0x0F
-
-	ldr r10, [r1, r8, LSL #2]
+	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
+
+	add r12, r12, #7
+	and r12, r12, #0x0F
 
 	add r10, r10, r11
 	add r7, r7, r10
@@ -323,11 +317,11 @@ loop3_start:
 	orr r8, r8, r7
 	eor r9, r8, r4
 
-	rsb r8, r3, r3, LSL #3
-	and r8, r8, #0x0F
-
-	ldr r10, [r1, r8, LSL #2]
+	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
+
+	add r12, r12, #7
+	and r12, r12, #0x0F
 
 	add r10, r10, r11
 	add r6, r6, r10
@@ -340,11 +334,11 @@ loop3_start:
 	orr r8, r8, r6
 	eor r9, r8, r7
 
-	rsb r8, r3, r3, LSL #3
-	and r8, r8, #0x0F
-
-	ldr r10, [r1, r8, LSL #2]
+	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
+
+	add r12, r12, #7
+	and r12, r12, #0x0F
 
 	add r10, r10, r11
 	add r5, r5, r10
