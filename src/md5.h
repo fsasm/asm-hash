@@ -1,5 +1,5 @@
 /*
- * md5_2.h
+ * md5.h
  * Author Fabjan Sukalia (fsukalia@gmail.com)
  * Date: 2014-04-04
  */

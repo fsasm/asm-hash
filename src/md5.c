@@ -1,10 +1,10 @@
 /*
- * md5_2.c
+ * md5.c
  * Author: Fabjan Sukalia (fsukalia@gmail.com)
  * Date: 2014-04-04
  */
 
-#include "md5_2.h"
+#include "md5.h"
 
 uint32_t md5_table[64] = {
 	0xD76AA478, 0xE8C7B756, 0x242070DB, 0xC1BDCEEE,
