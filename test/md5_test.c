@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <time.h>
 #include "md5.h"
-
+ 
 extern void md5_process_block_asm (uint32_t* hash, uint8_t* block);
 
 uint8_t test_block[] = {
@@ -18,10 +18,10 @@ uint8_t test_block[] = {
 
 int main (void) {
 	uint32_t hash_asm[4] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
-	uint32_t hash_ref[4] = {0x67452301, 0xEFCDAB89, 0x98BACDFE, 0x10325476};
+	uint32_t hash_ref[4] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
 
-	md5_process_block_asm (hash_asm, test_block);
 	md5_process_block (test_block, hash_ref);
+	md5_process_block_asm (hash_asm, test_block);
 
 	printf ("asm: %X %X %X %X\n", hash_asm[0], hash_asm[1], hash_asm[2], hash_asm[3]);
 	printf ("ref: %X %X %X %X\n", hash_ref[0], hash_ref[1], hash_ref[2], hash_ref[3]);

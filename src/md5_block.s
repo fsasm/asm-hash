@@ -138,7 +138,7 @@ loop0_start:
 	add r5, r5, r8
 	add r5, r5, r10
 	add r5, r6, r5, ROR #10
-
+	
 loop0_check:
 	cmp r3, #16
 	blt loop0_start
