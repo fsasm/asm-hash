@@ -5,6 +5,7 @@
  */
 
 #include "block.h"
+#include "int_util.h"
 #include <string.h>
 
 void block_init (block* b, size_t max_size, uint8_t buffer[], process_func func, void* func_data) {
@@ -79,15 +80,16 @@ void block_util_finalize (block* b, bool little_endian, bool length_128) {
 	
 	uint64_t full_size = b->full_size * 8;
 	if (little_endian) {
-		for (; size < max_size; size++) {
-			buffer[size] = full_size & 0xFF;
-			full_size >>= 8;
+		u64_to_u8_le (full_size, &buffer[size]);
+		if (length_128) {
+			memset (&buffer[size + 8], 0, 8);
 		}
 	} else {
-		for (size_t i = b->max_size - 1; i >= length_index; i--) {
-			buffer[i] = full_size & 0xFF;
-			full_size >>= 8;
+		if (length_128) {
+			memset (&buffer[size], 0, 8);
+			size += 8;
 		}
+		u64_to_u8_be (full_size, &buffer[size]);
 	}
 	
 	b->func (buffer, b->func_data);

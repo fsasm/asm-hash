@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include "block.h"
 
+#define MD5_BLOCK_SIZE 64
+#define MD5_HASH_SIZE 16
 #define MD5_DIGEST_SIZE 16
 
 typedef struct {
@@ -19,7 +21,7 @@ typedef struct {
 } md5_context;
 
 void md5_init (md5_context* ctxt);
-void md5_update (md5_context* ctxt, uint8_t data[], uint64_t length);
+void md5_add (md5_context* ctxt, uint8_t data[], size_t length);
 void md5_finalize (md5_context* ctxt);
 void md5_get_digest (md5_context* ctxt, uint8_t digest[MD5_DIGEST_SIZE]);
 

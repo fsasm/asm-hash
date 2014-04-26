@@ -5,7 +5,7 @@
 #define DIGEST_SIZE SHA1_DIGEST_SIZE
 #define CONTEXT sha1_context
 #define INIT sha1_init
-#define UPDATE sha1_update
+#define UPDATE sha1_add
 #define FINALIZE sha1_finalize
 #define GET_DIGEST sha1_get_digest
 
@@ -15,7 +15,7 @@
 #define DIGEST_SIZE MD5_DIGEST_SIZE
 #define CONTEXT md5_context
 #define INIT md5_init
-#define UPDATE md5_update
+#define UPDATE md5_add
 #define FINALIZE md5_finalize
 #define GET_DIGEST md5_get_digest
 
@@ -61,7 +61,7 @@
 
 #endif
 
-#define BUFFER_SIZE 4093
+#define BUFFER_SIZE 4096
 
 #include <stdio.h>
 #include <stdlib.h>
