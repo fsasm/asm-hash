@@ -27,4 +27,3 @@ void sha1_get_digest (sha1_context* ctxt, uint8_t digest[SHA1_DIGEST_SIZE]);
 
 void sha1_process_block (uint8_t block[64], uint32_t hash[5]);
 #endif
-

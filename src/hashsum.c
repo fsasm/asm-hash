@@ -25,7 +25,7 @@
 #define DIGEST_SIZE SHA256_DIGEST_SIZE
 #define CONTEXT sha256_context
 #define INIT sha256_init
-#define UPDATE sha256_update
+#define UPDATE sha256_add
 #define FINALIZE sha256_finalize
 #define GET_DIGEST sha256_get_digest
 
@@ -35,7 +35,7 @@
 #define DIGEST_SIZE SHA224_DIGEST_SIZE
 #define CONTEXT sha224_context
 #define INIT sha224_init
-#define UPDATE sha224_update
+#define UPDATE sha224_add
 #define FINALIZE sha224_finalize
 #define GET_DIGEST sha224_get_digest
 
