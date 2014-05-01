@@ -45,7 +45,7 @@
 #define DIGEST_SIZE SHA384_DIGEST_SIZE
 #define CONTEXT sha384_context
 #define INIT sha384_init
-#define UPDATE sha384_update
+#define UPDATE sha384_add
 #define FINALIZE sha384_finalize
 #define GET_DIGEST sha384_get_digest
 
