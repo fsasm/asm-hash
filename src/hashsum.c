@@ -55,9 +55,29 @@
 #define DIGEST_SIZE SHA512_DIGEST_SIZE
 #define CONTEXT sha512_context
 #define INIT sha512_init
-#define UPDATE sha512_update
+#define UPDATE sha512_add
 #define FINALIZE sha512_finalize
 #define GET_DIGEST sha512_get_digest
+
+#elif HASH_SHA512_224
+
+#include "sha512.h"
+#define DIGEST_SIZE SHA512_224_DIGEST_SIZE
+#define CONTEXT sha512_context
+#define INIT sha512_224_init
+#define UPDATE sha512_add
+#define FINALIZE sha512_finalize
+#define GET_DIGEST sha512_224_get_digest
+
+#elif HASH_SHA512_256
+
+#include "sha512.h"
+#define DIGEST_SIZE SHA512_256_DIGEST_SIZE
+#define CONTEXT sha512_context
+#define INIT sha512_256_init
+#define UPDATE sha512_add
+#define FINALIZE sha512_finalize
+#define GET_DIGEST sha512_256_get_digest
 
 #endif
 
