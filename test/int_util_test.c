@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include "int_util.h"
 
+/* FIXME add tests for u8_to_u64_le/be and rotate_left/right_64 */
+
 int main (void) {
 	/* rotate_left_32 */
 	{

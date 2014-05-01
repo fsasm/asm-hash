@@ -50,6 +50,22 @@ uint32_t u8_to_u32_be (uint8_t from[4]) {
 	return to;
 }
 
+uint64_t u8_to_u64_le (uint8_t from[8]) {
+	uint64_t to = 0;
+	for (int i = 0; i < 8; i++) {
+		to = (to << 8) | from[7 - i];
+	}
+	return to;
+}
+
+uint64_t u8_to_u64_be (uint8_t from[8]) {
+	uint64_t to = 0;
+	for (int i = 0; i < 8; i++) {
+		to = (to << 8) | from[i];
+	}
+	return to;
+}
+
 uint32_t rotate_left_32 (uint32_t value, unsigned int times) {
 	times %= 32;
 	if (times == 0)
@@ -64,4 +80,20 @@ uint32_t rotate_right_32 (uint32_t value, unsigned int times) {
 		return value;
 	
 	return (value >> times) | (value << (32 - times));
+}
+
+uint64_t rotate_left_64 (uint64_t value, unsigned int times) {
+	times %= 64;
+	if (times == 0)
+		return value;
+	
+	return (value << times) | (value >> (64 - times));
+}
+
+uint64_t rotate_right_64 (uint64_t value, unsigned int times) {
+	times %= 64;
+	if (times == 0)
+		return value;
+	
+	return (value >> times) | (value << (64 - times));
 }

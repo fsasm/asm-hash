@@ -18,7 +18,13 @@ void u32_to_u8_be (uint32_t from, uint8_t to[4]);
 uint32_t u8_to_u32_le (uint8_t from[4]);
 uint32_t u8_to_u32_be (uint8_t from[4]);
 
+uint64_t u8_to_u64_le (uint8_t from[8]);
+uint64_t u8_to_u64_be (uint8_t from[8]);
+
 uint32_t rotate_left_32 (uint32_t value, unsigned int times);
 uint32_t rotate_right_32 (uint32_t value, unsigned int times);
+
+uint64_t rotate_left_64 (uint64_t value, unsigned int times);
+uint64_t rotate_right_64 (uint64_t value, unsigned int times);
 
 #endif
