@@ -82,10 +82,7 @@ md5_process_block_asm: /* (uint32_t hash[4], uint8_t block[64]) */
 	mov r3, #0 /* loop counter */
 	mov r12, #0 /* block index */
 	/* r4 = h0; r5 = h1; r6 = h2; r7 = h3 */
-	ldr r4, [r0, #0] /* todo maybe with a pop */
-	ldr r5, [r0, #4]
-	ldr r6, [r0, #8]
-	ldr r7, [r0, #12]
+	ldmia  r0, {r4, r5, r6, r7}
 
 loop0_start:
 	/* 1. iteration */
@@ -138,7 +135,7 @@ loop0_start:
 	add r5, r5, r8
 	add r5, r5, r10
 	add r5, r6, r5, ROR #10
-	
+
 loop0_check:
 	cmp r3, #16
 	blt loop0_start
@@ -349,22 +346,12 @@ loop3_check:
 	cmp r3, #64
 	blt loop3_start
 
-
-	ldr r10, [r0, #0]
-	add r4, r4, r10
-	str r4, [r0, #0]
-
-	ldr r10, [r0, #4]
-	add r5, r5, r10
-	str r5, [r0, #4]
-
-	ldr r10, [r0, #8]
+	ldmia r0, {r8, r9, r10, r11}
+	add r4, r4, r8
+	add r5, r5, r9
 	add r6, r6, r10
-	str r6, [r0, #8]
-
-	ldr r10, [r0, #12]
-	add r7, r7, r10
-	str r7, [r0, #12]
+	add r7, r7, r11
+	stmia r0, {r4, r5, r6, r7}
 
 	pop {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
 	bx lr
