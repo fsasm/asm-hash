@@ -88,8 +88,8 @@ loop0_start:
 	/* 1. iteration */
 	ldr r10, [r1, r3, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-	and r8, r5, r6
 	bic r9, r7, r5
+	and r8, r5, r6
 	orr r8, r8, r9
 	add r4, r4, r8
 	add r10, r10, r11
@@ -100,8 +100,8 @@ loop0_start:
 	/* 2. iteration */
 	ldr r10, [r1, r3, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-	and r8, r4, r5
 	bic r9, r6, r4
+	and r8, r4, r5
 	orr r8, r8, r9
 	add r7, r7, r8
 	add r10, r10, r11
@@ -112,8 +112,8 @@ loop0_start:
 	/* 3. iteration */
 	ldr r10, [r1, r3, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-	and r8, r7, r4
 	bic r9, r5, r7
+	and r8, r7, r4
 	orr r8, r8, r9
 	add r6, r6, r8
 	add r10, r10, r11
@@ -124,8 +124,8 @@ loop0_start:
 	/* 4. iteration */
 	ldr r10, [r1, r3, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-	and r8, r6, r7
 	bic r9, r4, r6
+	and r8, r6, r7
 	orr r8, r8, r9
 	add r5, r5, r8
 	add r10, r10, r11
@@ -140,61 +140,61 @@ loop0_check:
 
 loop1_start:
 	/* 1. iteration */
-	and r8, r7, r5
-	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
+	ldr r10, [r1, r12, LSL #2]
 	bic r9, r6, r7
+	and r8, r7, r5
 	orr r9, r8, r9
 
+	add r3, r3, #1
 	add r10, r10, r11
+	add r4, r4, r9
 	add r12, r12, #5
 	add r4, r4, r10
 	and r12, r12, #0x0F
-	add r4, r4, r9
-	add r3, r3, #1
 	add r4, r5, r4, ROR #27 /* 5, 9, 14, 20 */
 
 	/* 2. iteration */
-	and r8, r6, r4
 	ldr r11, [r2, r3, LSL #2]
 	ldr r10, [r1, r12, LSL #2]
 	bic r9, r5, r6
+	and r8, r6, r4
 	orr r9, r8, r9
 
-	add r10, r10, r11
 	add r3, r3, #1
-	add r7, r7, r10
-	add r12, r12, #5
+	add r10, r10, r11
 	add r7, r7, r9
+	add r12, r12, #5
+	add r7, r7, r10
 	and r12, r12, #0x0F
 	add r7, r4, r7, ROR #23
 
 	/* 3. iteration */
-	and r8, r5, r7
 	ldr r11, [r2, r3, LSL #2]
 	ldr r10, [r1, r12, LSL #2]
 	bic r9, r4, r5
+	and r8, r5, r7
 	orr r9, r8, r9
 
-	add r10, r10, r11
 	add r3, r3, #1
-	add r6, r6, r10
-	add r12, r12, #5
+	add r10, r10, r11
 	add r6, r6, r9
+	add r12, r12, #5
+	add r6, r6, r10
 	and r12, r12, #0x0F
 	add r6, r7, r6, ROR #18
 
 	/* 4. iteration */
-	and r8, r4, r6
 	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	bic r9, r7, r4
+	and r8, r4, r6
 	orr r9, r8, r9
 
-	add r10, r10, r11
 	add r3, r3, #1
-	add r5, r5, r10
+	add r10, r10, r11
 	add r5, r5, r9
+	add r5, r5, r10
 	add r12, r12, #5
 	add r5, r6, r5, ROR #12
 loop1_check:
@@ -204,141 +204,119 @@ loop1_check:
 
 loop2_start:
 	/* 1. iteration */
-	eor r8, r5, r6
-	eor r9, r8, r7
-
-	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-
+	ldr r10, [r1, r12, LSL #2]
+	eor r8, r5, r6
 	add r12, r12, #3
-	and r12, r12, #0x0F
-
+	eor r9, r8, r7
 	add r10, r10, r11
-	add r9, r9, r10
 	add r4, r4, r9
-	add r4, r5, r4, ROR #28 /* 4, 11, 16, 23 */
+	and r12, r12, #0x0F
+	add r4, r4, r10
 	add r3, r3, #1
+	add r4, r5, r4, ROR #28 /* 4, 11, 16, 23 */
 
 	/* 2. iteration */
-	eor r8, r4, r5
-	eor r9, r8, r6
-
 	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-
+	eor r8, r4, r5
 	add r12, r12, #3
-
+	eor r9, r8, r6
 	add r10, r10, r11
-	add r7, r7, r10
 	add r7, r7, r9
-	add r7, r4, r7, ROR #21
+	add r7, r7, r10
 	add r3, r3, #1
+	add r7, r4, r7, ROR #21
 
 	/* 3. iteration */
-	eor r8, r7, r4
-	eor r9, r8, r5
-
 	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-
+	eor r8, r7, r4
 	add r12, r12, #3
-	and r12, r12, #0x0F
-
+	eor r9, r8, r5
 	add r10, r10, r11
-	add r6, r6, r10
 	add r6, r6, r9
-	add r6, r7, r6, ROR #16
+	and r12, r12, #0x0F
+	add r6, r6, r10
 	add r3, r3, #1
+	add r6, r7, r6, ROR #16
 
 	/* 4. iteration */
-	eor r8, r6, r7
-	eor r9, r8, r4
-
 	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-
+	eor r8, r6, r7
 	add r12, r12, #3
-	and r12, r12, #0x0F
-
+	eor r9, r8, r4
 	add r10, r10, r11
-	add r5, r5, r10
 	add r5, r5, r9
-	add r5, r6, r5, ROR #9
+	and r12, r12, #0x0F
+	add r5, r5, r10
 	add r3, r3, #1
+	add r5, r6, r5, ROR #9
 
 loop2_check:
 	cmp r3, #48
 	blt loop2_start
 	mov r12, #0
+
 loop3_start:
 	/* 1. iteration */
-	mvn r8, r7 /* transform f4 */
-	orr r8, r5, r8
-	eor r9, r8, r6
-
-	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-
+	ldr r10, [r1, r12, LSL #2]
+	mvn r8, r7
 	add r12, r12, #7
+	orr r8, r5, r8
 	and r12, r12, #0x0F
-
+	eor r9, r8, r6
 	add r10, r10, r11
-	add r4, r4, r10
 	add r4, r4, r9
+	add r4, r4, r10
+	add r3, r3, #1
 	add r4, r5, r4, ROR #26 /* 6, 10, 15, 21 */
 
-	add r3, r3, #1
 
 	/* 2. iteration */
-	mvn r8, r6
-	orr r8, r8, r4
-	eor r9, r8, r5
-
 	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-
+	mvn r8, r6
 	add r12, r12, #7
+	orr r8, r8, r4
 	and r12, r12, #0x0F
-
+	eor r9, r8, r5
 	add r10, r10, r11
-	add r7, r7, r10
 	add r7, r7, r9
-	add r7, r4, r7, ROR #22
+	add r7, r7, r10
 	add r3, r3, #1
+	add r7, r4, r7, ROR #22
 
 	/* 3. iteration */
-	mvn r8, r5
-	orr r8, r8, r7
-	eor r9, r8, r4
-
 	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-
+	mvn r8, r5
 	add r12, r12, #7
+	orr r8, r8, r7
 	and r12, r12, #0x0F
-
+	eor r9, r8, r4
 	add r10, r10, r11
-	add r6, r6, r10
 	add r6, r6, r9
-	add r6, r7, r6, ROR #17
+	add r6, r6, r10
 	add r3, r3, #1
+	add r6, r7, r6, ROR #17
 
 	/* 4. iteration */
-	mvn r8, r4
-	orr r8, r8, r6
-	eor r9, r8, r7
-
 	ldr r10, [r1, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
-
+	mvn r8, r4
 	add r12, r12, #7
+	orr r8, r8, r6
 	and r12, r12, #0x0F
-
+	eor r9, r8, r7
 	add r10, r10, r11
-	add r5, r5, r10
 	add r5, r5, r9
-	add r5, r6, r5, ROR #11
+	add r5, r5, r10
 	add r3, r3, #1
+	add r5, r6, r5, ROR #11
+
 loop3_check:
 	cmp r3, #64
 	blt loop3_start
