@@ -77,7 +77,7 @@ md5_table:
 .text
 .global md5_process_block_asm
 md5_process_block_asm: /* (uint32_t hash[4], uint8_t block[64]) */
-	push {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
+	push {r4, r5, r6, r7, r8, r9, r10, r11, r12}
 	ldr r2, addr_table
 	mov r3, #0 /* loop counter */
 	mov r12, #0 /* block index */
@@ -328,7 +328,7 @@ loop3_check:
 	add r7, r7, r11
 	stmia r0, {r4, r5, r6, r7}
 
-	pop {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
+	pop {r4, r5, r6, r7, r8, r9, r10, r11, r12}
 	bx lr
 
 addr_table:

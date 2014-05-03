@@ -34,18 +34,22 @@ uint32_t md5_shift[16] = {
 };
 
 void process_block (uint8_t block[64], void* data) {
+#ifdef MD5_USE_ASM
+	md5_process_block_asm ((uint32_t*)data, block);
+#else
 	md5_process_block (block, (uint32_t*)data);
+#endif
 }
 
 void md5_init (md5_context* ctxt) {
 	if (ctxt == NULL)
 		return;
-	
+
 	ctxt->hash[0] = 0x67452301;
 	ctxt->hash[1] = 0xEFCDAB89;
 	ctxt->hash[2] = 0x98BADCFE;
 	ctxt->hash[3] = 0x10325476;
-	
+
 	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
 }
 
@@ -68,7 +72,7 @@ void md5_process_block (uint8_t block[64], uint32_t hash[4]) {
 	uint32_t b = hash[1];
 	uint32_t c = hash[2];
 	uint32_t d = hash[3];
-	
+
 	for (int i = 0; i < 16; i++) {
 		uint32_t f = ((c ^ d) & b) ^ d;
 		a += f + md5_table[i] + ((uint32_t*)(block))[i];
@@ -125,7 +129,7 @@ void md5_process_block (uint8_t block[64], uint32_t hash[4]) {
 		c = b;
 		b = temp;
 	}
-	
+
 	hash[0] += a;
 	hash[1] += b;
 	hash[2] += c;
