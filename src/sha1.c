@@ -8,7 +8,11 @@
 #include "int_util.h"
 
 void process_block (uint8_t block[64], void* data) {
+#ifdef SHA1_USE_ASM
+	sha1_process_block_asm (block, (uint32_t*)data);
+#else
 	sha1_process_block (block, (uint32_t*)data);
+#endif
 }
 
 void sha1_init (sha1_context* ctxt) {
