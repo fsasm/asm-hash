@@ -76,17 +76,17 @@ md5_table:
 
 .text
 .global md5_process_block_asm
-md5_process_block_asm: /* (uint32_t hash[4], uint8_t block[64]) */
+md5_process_block_asm: /* (uint8_t block[64], uint32_t hash[4]) */
 	push {r4, r5, r6, r7, r8, r9, r10, r11, r12}
 	ldr r2, addr_table
 	mov r3, #0 /* loop counter */
 	mov r12, #0 /* block index */
 	/* r4 = h0; r5 = h1; r6 = h2; r7 = h3 */
-	ldmia  r0, {r4, r5, r6, r7}
+	ldmia  r1, {r4, r5, r6, r7}
 
 loop0_start:
 	/* 1. iteration */
-	ldr r10, [r1, r3, LSL #2]
+	ldr r10, [r0, r3, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	bic r9, r7, r5
 	and r8, r5, r6
@@ -98,7 +98,7 @@ loop0_start:
 	add r4, r5, r4, ROR #25
 
 	/* 2. iteration */
-	ldr r10, [r1, r3, LSL #2]
+	ldr r10, [r0, r3, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	bic r9, r6, r4
 	and r8, r4, r5
@@ -110,7 +110,7 @@ loop0_start:
 	add r7, r4, r7, ROR #20
 
 	/* 3. iteration */
-	ldr r10, [r1, r3, LSL #2]
+	ldr r10, [r0, r3, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	bic r9, r5, r7
 	and r8, r7, r4
@@ -122,7 +122,7 @@ loop0_start:
 	add r6, r7, r6, ROR #15
 
 	/* 4. iteration */
-	ldr r10, [r1, r3, LSL #2]
+	ldr r10, [r0, r3, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	bic r9, r4, r6
 	and r8, r6, r7
@@ -141,7 +141,7 @@ loop0_check:
 loop1_start:
 	/* 1. iteration */
 	ldr r11, [r2, r3, LSL #2]
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	bic r9, r6, r7
 	and r8, r7, r5
 	orr r9, r8, r9
@@ -156,7 +156,7 @@ loop1_start:
 
 	/* 2. iteration */
 	ldr r11, [r2, r3, LSL #2]
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	bic r9, r5, r6
 	and r8, r6, r4
 	orr r9, r8, r9
@@ -171,7 +171,7 @@ loop1_start:
 
 	/* 3. iteration */
 	ldr r11, [r2, r3, LSL #2]
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	bic r9, r4, r5
 	and r8, r5, r7
 	orr r9, r8, r9
@@ -185,7 +185,7 @@ loop1_start:
 	add r6, r7, r6, ROR #18
 
 	/* 4. iteration */
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	bic r9, r7, r4
 	and r8, r4, r6
@@ -205,7 +205,7 @@ loop1_check:
 loop2_start:
 	/* 1. iteration */
 	ldr r11, [r2, r3, LSL #2]
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	eor r8, r5, r6
 	add r12, r12, #3
 	eor r9, r8, r7
@@ -217,7 +217,7 @@ loop2_start:
 	add r4, r5, r4, ROR #28 /* 4, 11, 16, 23 */
 
 	/* 2. iteration */
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	eor r8, r4, r5
 	add r12, r12, #3
@@ -229,7 +229,7 @@ loop2_start:
 	add r7, r4, r7, ROR #21
 
 	/* 3. iteration */
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	eor r8, r7, r4
 	add r12, r12, #3
@@ -242,7 +242,7 @@ loop2_start:
 	add r6, r7, r6, ROR #16
 
 	/* 4. iteration */
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	eor r8, r6, r7
 	add r12, r12, #3
@@ -262,7 +262,7 @@ loop2_check:
 loop3_start:
 	/* 1. iteration */
 	ldr r11, [r2, r3, LSL #2]
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	mvn r8, r7
 	add r12, r12, #7
 	orr r8, r5, r8
@@ -276,7 +276,7 @@ loop3_start:
 
 
 	/* 2. iteration */
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	mvn r8, r6
 	add r12, r12, #7
@@ -290,7 +290,7 @@ loop3_start:
 	add r7, r4, r7, ROR #22
 
 	/* 3. iteration */
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	mvn r8, r5
 	add r12, r12, #7
@@ -304,7 +304,7 @@ loop3_start:
 	add r6, r7, r6, ROR #17
 
 	/* 4. iteration */
-	ldr r10, [r1, r12, LSL #2]
+	ldr r10, [r0, r12, LSL #2]
 	ldr r11, [r2, r3, LSL #2]
 	mvn r8, r4
 	add r12, r12, #7
@@ -321,12 +321,12 @@ loop3_check:
 	cmp r3, #64
 	blt loop3_start
 
-	ldmia r0, {r8, r9, r10, r11}
+	ldmia r1, {r8, r9, r10, r11}
 	add r4, r4, r8
 	add r5, r5, r9
 	add r6, r6, r10
 	add r7, r7, r11
-	stmia r0, {r4, r5, r6, r7}
+	stmia r1, {r4, r5, r6, r7}
 
 	pop {r4, r5, r6, r7, r8, r9, r10, r11, r12}
 	bx lr

@@ -28,7 +28,7 @@ void benchmark (void) {
 		clock_gettime (CLOCK_REALTIME, &start_time);
 
 		for (uint_fast32_t i = 0; i < N; i++) {
-			md5_process_block_asm (hash, test_block);
+			md5_process_block_asm (test_block, hash);
 		}
 
 		struct timespec stop_time;

@@ -35,7 +35,7 @@ uint32_t md5_shift[16] = {
 
 void process_block (uint8_t block[64], void* data) {
 #ifdef MD5_USE_ASM
-	md5_process_block_asm ((uint32_t*)data, block);
+	md5_process_block_asm (block, (uint32_t*)data);
 #else
 	md5_process_block (block, (uint32_t*)data);
 #endif
