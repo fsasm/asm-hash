@@ -33,11 +33,11 @@ uint32_t md5_shift[16] = {
 	6, 10, 15, 21
 };
 
-void process_block (uint8_t block[64], void* data) {
+void process_block (uint8_t block[], void* data, unsigned int n) {
 #ifdef MD5_USE_ASM
-	md5_process_block_asm (block, (uint32_t*)data);
+	md5_process_blocks_asm (block, (uint32_t*)data);
 #else
-	md5_process_block (block, (uint32_t*)data);
+	md5_process_blocks (block, (uint32_t*)data, n);
 #endif
 }
 
@@ -67,72 +67,75 @@ void md5_get_digest (md5_context* ctxt, uint8_t digest[MD5_DIGEST_SIZE]) {
 	}
 }
 
-void md5_process_block (uint8_t block[64], uint32_t hash[4]) {
-	uint32_t a = hash[0];
-	uint32_t b = hash[1];
-	uint32_t c = hash[2];
-	uint32_t d = hash[3];
+void md5_process_blocks (uint8_t block[], uint32_t hash[4], unsigned int n) {
 
-	for (int i = 0; i < 16; i++) {
-		uint32_t f = ((c ^ d) & b) ^ d;
-		a += f + md5_table[i] + ((uint32_t*)(block))[i];
-		uint32_t shift = md5_shift[i & 0x03];
-		a = b + ((a << shift) | (a >> (32 - shift)));
+	for (unsigned int j = 0; j < n; j++) {
+		uint8_t* block1 = &block[j * 64];
+		
+		uint32_t a = hash[0];
+		uint32_t b = hash[1];
+		uint32_t c = hash[2];
+		uint32_t d = hash[3];
+		
+		for (int i = 0; i < 16; i++) {
+			uint32_t f = ((c ^ d) & b) ^ d;
+			a += f + md5_table[i] + ((uint32_t*)(block1))[i];
+			uint32_t shift = md5_shift[i & 0x03];
+			a = b + ((a << shift) | (a >> (32 - shift)));
 
-		uint32_t temp = a;
-		a = d;
-		d = c;
-		c = b;
-		b = temp;
+			uint32_t temp = a;
+			a = d;
+			d = c;
+			c = b;
+			b = temp;
+		}
+
+		for (int i = 16; i < 32; i++) {
+			uint32_t f = (d & b) | (~d & c);
+			a += f + md5_table[i];
+			int block_index = (i * 5 + 1) & 0x0F;
+			a += ((uint32_t*)block1)[block_index];
+			uint32_t shift = md5_shift[(i & 0x03) + 4];
+			a = b + ((a << shift) | (a >> (32 - shift)));
+
+			uint32_t temp = a;
+			a = d;
+			d = c;
+			c = b;
+			b = temp;
+		}
+
+		for (int i = 32; i < 48; i++) {
+			uint32_t f = b ^ c ^ d;
+			a += f + md5_table[i];
+			int block_index = (i * 3 + 5) & 0x0F;
+			a += ((uint32_t*)block1) [block_index];
+			uint32_t shift = md5_shift[(i & 0x03) + 8];
+			a = b + ((a << shift) | (a >> (32 - shift)));
+
+			uint32_t temp = a;
+			a = d;
+			d = c;
+			c = b;
+			b = temp;
+		}
+		for (int i = 48; i < 64; i++) {
+			uint32_t f = c ^ (b | ~d);
+			a += f + md5_table[i];
+			int block_index = (i * 7) & 0x0F;
+			a+= ((uint32_t*)block1)[block_index];
+			uint32_t shift = md5_shift[(i & 0x03) + 12];
+			a = b + ((a << shift) | (a >> (32 - shift)));
+
+			uint32_t temp = a;
+			a = d;
+			d = c;
+			c = b;
+			b = temp;
+		}
+		hash[0] += a;
+		hash[1] += b;
+		hash[2] += c;
+		hash[3] += d;
 	}
-
-	for (int i = 16; i < 32; i++) {
-		uint32_t f = (d & b) | (~d & c);
-		a += f + md5_table[i];
-		int block_index = (i * 5 + 1) & 0x0F;
-		a += ((uint32_t*)block)[block_index];
-		uint32_t shift = md5_shift[(i & 0x03) + 4];
-		a = b + ((a << shift) | (a >> (32 - shift)));
-
-		uint32_t temp = a;
-		a = d;
-		d = c;
-		c = b;
-		b = temp;
-	}
-
-	for (int i = 32; i < 48; i++) {
-		uint32_t f = b ^ c ^ d;
-		a += f + md5_table[i];
-		int block_index = (i * 3 + 5) & 0x0F;
-		a += ((uint32_t*)block) [block_index];
-		uint32_t shift = md5_shift[(i & 0x03) + 8];
-		a = b + ((a << shift) | (a >> (32 - shift)));
-
-		uint32_t temp = a;
-		a = d;
-		d = c;
-		c = b;
-		b = temp;
-	}
-	for (int i = 48; i < 64; i++) {
-		uint32_t f = c ^ (b | ~d);
-		a += f + md5_table[i];
-		int block_index = (i * 7) & 0x0F;
-		a+= ((uint32_t*)block)[block_index];
-		uint32_t shift = md5_shift[(i & 0x03) + 12];
-		a = b + ((a << shift) | (a >> (32 - shift)));
-
-		uint32_t temp = a;
-		a = d;
-		d = c;
-		c = b;
-		b = temp;
-	}
-
-	hash[0] += a;
-	hash[1] += b;
-	hash[2] += c;
-	hash[3] += d;
 }
-

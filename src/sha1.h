@@ -25,7 +25,8 @@ void sha1_add (sha1_context* ctxt, uint8_t data[], uint64_t length);
 void sha1_finalize (sha1_context* ctxt);
 void sha1_get_digest (sha1_context* ctxt, uint8_t digest[SHA1_DIGEST_SIZE]);
 
-void sha1_process_block (uint8_t block[64], uint32_t hash[5]);
+void sha1_process_blocks (uint8_t block[], uint32_t hash[5], unsigned int n);
+
 #ifdef SHA1_USE_ASM 
 extern void sha1_process_block_asm (uint8_t* block, uint32_t* hash);
 #endif

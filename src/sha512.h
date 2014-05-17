@@ -31,6 +31,6 @@ void sha512_get_digest (sha512_context* ctxt, uint8_t digest[SHA512_DIGEST_SIZE]
 void sha512_224_get_digest (sha512_context* ctxt, uint8_t digest[SHA512_224_DIGEST_SIZE]);
 void sha512_256_get_digest (sha512_context* ctxt, uint8_t digest[SHA512_256_DIGEST_SIZE]);
 
-void sha512_process_block (uint8_t block[64], uint64_t hash[8]);
+void sha512_process_blocks (uint8_t block[], uint64_t hash[8], unsigned int n);
 #endif
 

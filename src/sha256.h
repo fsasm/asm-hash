@@ -25,7 +25,7 @@ void sha256_add (sha256_context* ctxt, uint8_t data[], size_t length);
 void sha256_finalize (sha256_context* ctxt);
 void sha256_get_digest (sha256_context* ctxt, uint8_t digest[SHA256_DIGEST_SIZE]);
 
-void sha256_process_block (uint8_t block[64], uint32_t hash[8]);
+void sha256_process_blocks (uint8_t block[], uint32_t hash[8], unsigned int n);
 #ifdef SHA256_USE_ASM
 extern void sha256_process_block_asm (uint8_t block[64], uint32_t hash[8]);
 #endif 

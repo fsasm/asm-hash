@@ -43,15 +43,18 @@ void block_add (block* b, size_t size, uint8_t data[]) {
 	if (block_size > 0) {
 		size_t trailing_size = max_size - block_size;
 		memcpy (&buffer[block_size], data, trailing_size);
-		b->func (buffer, b->func_data);
+		b->func (buffer, b->func_data, 1);
 		data += trailing_size;
 		size -= trailing_size;
 	}
 	
+	/*
 	for (size_t i = 0; i < (size / max_size); i++) {
 		b->func (data, b->func_data);
 		data += max_size;
-	}
+	}*/
+	b->func (data, b->func_data, (size / max_size));
+	data += max_size * (size / max_size);
 	
 	memcpy (b->buffer, data, size % max_size);
 	b->size = size % max_size;
@@ -72,7 +75,7 @@ void block_util_finalize (block* b, bool little_endian, bool length_128) {
 	if (size > length_index) {
 		memset (&buffer[size], 0, max_size - size + 1);
 		size = 0;
-		b->func (buffer, b->func_data);
+		b->func (buffer, b->func_data, 1);
 	}
 	
 	memset (&buffer[size], 0, length_index - size + 1);
@@ -92,5 +95,5 @@ void block_util_finalize (block* b, bool little_endian, bool length_128) {
 		u64_to_u8_be (full_size, &buffer[size]);
 	}
 	
-	b->func (buffer, b->func_data);
+	b->func (buffer, b->func_data, 1);
 }

@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef void (*process_func)(uint8_t buffer[], void* data);
+typedef void (*process_func)(uint8_t buffer[], void* data, unsigned int n);
 
 typedef struct {
 	uint8_t* buffer;

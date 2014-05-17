@@ -34,8 +34,8 @@ const uint64_t sha512_table[80] = {
 	0x4CC5D4BECB3E42B6, 0x597F299CFC657E2A, 0x5FCB6FAB3AD6FAEC, 0x6C44198C4A475817  /* 80 */
 };
 
-void process_block (uint8_t block[128], void* data) {
-	sha512_process_block (block, (uint64_t*)data);
+void process_block (uint8_t block[], void* data, unsigned int n) {
+	sha512_process_blocks (block, (uint64_t*)data, n);
 }
 
 void sha512_init (sha512_context* ctxt) {
@@ -87,77 +87,80 @@ void sha512_256_init (sha512_context* ctxt) {
 }
 
 /* ch */
-uint64_t f1 (uint64_t x, uint64_t y, uint64_t z) {
+static uint64_t f1 (uint64_t x, uint64_t y, uint64_t z) {
 	return (x & y) ^ (~x & z);
 }
 
 /* maj */
-uint64_t f2 (uint64_t x, uint64_t y, uint64_t z) {
+static uint64_t f2 (uint64_t x, uint64_t y, uint64_t z) {
 	return (x & y) ^ (x & z) ^ (y & z);
 }
 
 /* e_0 */
-uint64_t f3 (uint64_t x) {
+static uint64_t f3 (uint64_t x) {
 	return rotate_right_64 (x, 28) ^ rotate_right_64 (x, 34) ^ rotate_right_64 (x, 39);
 }
 
 /* e_1 */
-uint64_t f4 (uint64_t x) {
+static uint64_t f4 (uint64_t x) {
 	return rotate_right_64 (x, 14) ^ rotate_right_64 (x, 18) ^ rotate_right_64 (x, 41);
 }
 
-uint64_t f5 (uint64_t x) {
+static uint64_t f5 (uint64_t x) {
 	return rotate_right_64 (x, 1) ^ rotate_right_64 (x, 8) ^ (x >> 7);
 }
 
-uint64_t f6 (uint64_t x) {
+static uint64_t f6 (uint64_t x) {
 	return rotate_right_64 (x, 19) ^ rotate_right_64 (x, 61) ^ (x >> 6);
 }
 
-void sha512_process_block (uint8_t block[128], uint64_t hash[8]) {
-	uint64_t a = hash[0];
-	uint64_t b = hash[1];
-	uint64_t c = hash[2];
-	uint64_t d = hash[3];
-	uint64_t e = hash[4];
-	uint64_t f = hash[5];
-	uint64_t g = hash[6];
-	uint64_t h = hash[7];
-	
-	uint64_t temp1;
-	uint64_t temp2;
-	uint64_t W[80];
-	
-	for (uint_fast8_t i = 0; i < 16; i++) {
-		W[i] = u8_to_u64_be (&block[i * 8]);
-	}
-	
-	for (uint_fast8_t i = 16; i < 80; i++) {
-		W[i] = f6 (W[i - 2]) + W[i - 7] + f5 (W[i - 15]) + W[i - 16];
-	}
-	
-	for (uint_fast8_t t = 0; t < 80; t++) {
-		temp1 = h + f4 (e) + f1 (e, f, g) + sha512_table[t] + W[t];
-		temp2 = f3 (a) + f2 (a, b, c);
+void sha512_process_blocks (uint8_t block[], uint64_t hash[8], unsigned int n) {
+	for (unsigned int j = 0; j < n; j++) {
+		uint8_t* block1 = &block[j * 128];
+		uint64_t a = hash[0];
+		uint64_t b = hash[1];
+		uint64_t c = hash[2];
+		uint64_t d = hash[3];
+		uint64_t e = hash[4];
+		uint64_t f = hash[5];
+		uint64_t g = hash[6];
+		uint64_t h = hash[7];
 		
-		h = g;
-		g = f;
-		f = e;
-		e = d + temp1;
-		d = c;
-		c = b;
-		b = a;
-		a = temp1 + temp2;
+		uint64_t temp1;
+		uint64_t temp2;
+		uint64_t W[80];
+		
+		for (uint_fast8_t i = 0; i < 16; i++) {
+			W[i] = u8_to_u64_be (&block1[i * 8]);
+		}
+		
+		for (uint_fast8_t i = 16; i < 80; i++) {
+			W[i] = f6 (W[i - 2]) + W[i - 7] + f5 (W[i - 15]) + W[i - 16];
+		}
+		
+		for (uint_fast8_t t = 0; t < 80; t++) {
+			temp1 = h + f4 (e) + f1 (e, f, g) + sha512_table[t] + W[t];
+			temp2 = f3 (a) + f2 (a, b, c);
+			
+			h = g;
+			g = f;
+			f = e;
+			e = d + temp1;
+			d = c;
+			c = b;
+			b = a;
+			a = temp1 + temp2;
+		}
+		
+		hash[0] += a;
+		hash[1] += b;
+		hash[2] += c;
+		hash[3] += d;
+		hash[4] += e;
+		hash[5] += f;
+		hash[6] += g;
+		hash[7] += h;
 	}
-	
-	hash[0] += a;
-	hash[1] += b;
-	hash[2] += c;
-	hash[3] += d;
-	hash[4] += e;
-	hash[5] += f;
-	hash[6] += g;
-	hash[7] += h;
 }
 
 void sha512_add (sha512_context* ctxt, uint8_t data[], size_t length) {
