@@ -75,14 +75,20 @@ md5_table:
 	.word 0xEB86D391 /* 64 */
 
 .text
-.global md5_process_block_asm
-md5_process_block_asm: /* (uint8_t block[64], uint32_t hash[4]) */
-	push {r4, r5, r6, r7, r8, r9, r10, r11, r12}
-	ldr r2, addr_table
-	mov r3, #0 /* loop counter */
-	mov r12, #0 /* block index */
+.global md5_process_blocks_asm
+md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
+	push {r4 - r12, lr}
+	cmp r2, #0
+	beq .Lend
+	
+	mov lr, r2
+	ldr r2, addr_table	
+	
+.Lstart:
 	/* r4 = h0; r5 = h1; r6 = h2; r7 = h3 */
 	ldmia  r1, {r4, r5, r6, r7}
+	mov r3, #0 /* loop counter */
+	mov r12, #0 /* block index */
 
 loop0_start:
 	/* 1. iteration */
@@ -327,8 +333,13 @@ loop3_check:
 	add r6, r6, r10
 	add r7, r7, r11
 	stmia r1, {r4, r5, r6, r7}
+	
+	subs lr, lr, #1
+	addne r0, r0, #64
+	bne .Lstart
+.Lend:
 
-	pop {r4, r5, r6, r7, r8, r9, r10, r11, r12}
+	pop {r4 - r12, lr}
 	bx lr
 
 addr_table:

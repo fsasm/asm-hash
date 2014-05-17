@@ -28,7 +28,7 @@ void md5_get_digest (md5_context* ctxt, uint8_t digest[MD5_DIGEST_SIZE]);
 void md5_process_blocks (uint8_t block[], uint32_t hash[4], unsigned int n);
 
 #ifdef MD5_USE_ASM
-extern void md5_process_block_asm (uint8_t* block, uint32_t* hash);
+extern void md5_process_blocks_asm (uint8_t* block, uint32_t* hash, unsigned int n);
 #endif
 
 #endif

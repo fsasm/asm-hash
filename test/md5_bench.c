@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
+#define MD5_USE_ASM
 #include "md5.h"
 
-extern void md5_process_block_asm (uint32_t* hash, uint8_t* block);
 #define NUM_SAMPLES 128
-#define N 100000u
+#define N 10000u
 
-uint8_t test_block[] = {
+uint8_t test_block[64 * 10] = {
 	1, 2, 3, 4, 5, 6, 7, 8,
 	9, 10, 11, 12, 13, 14, 15, 16,
 	17, 18, 19, 20, 21, 22, 23, 24,
@@ -28,7 +28,7 @@ void benchmark (void) {
 		clock_gettime (CLOCK_REALTIME, &start_time);
 
 		for (uint_fast32_t i = 0; i < N; i++) {
-			md5_process_block_asm (test_block, hash);
+			md5_process_blocks_asm (test_block, hash, 10);
 		}
 
 		struct timespec stop_time;

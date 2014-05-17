@@ -7,7 +7,7 @@
 #include "md5.h"
 #include "int_util.h"
 
-uint32_t md5_table[64] = {
+static const uint32_t md5_table[64] = {
 	0xD76AA478, 0xE8C7B756, 0x242070DB, 0xC1BDCEEE,
 	0xF57C0FAF, 0x4787C62A, 0xA8304613, 0xFD469501, /*  8 */
 	0x698098D8, 0x8B44F7AF, 0xFFFF5BB1, 0x895CD7BE,
@@ -26,7 +26,7 @@ uint32_t md5_table[64] = {
 	0xF7537E82, 0xBD3AF235, 0x2AD7D2BB, 0xEB86D391  /* 64 */
 };
 
-uint32_t md5_shift[16] = {
+static const uint32_t md5_shift[16] = {
 	7, 12, 17, 22,
 	5,  9, 14, 20,
 	4, 11, 16, 23,
@@ -35,7 +35,7 @@ uint32_t md5_shift[16] = {
 
 void process_block (uint8_t block[], void* data, unsigned int n) {
 #ifdef MD5_USE_ASM
-	md5_process_blocks_asm (block, (uint32_t*)data);
+	md5_process_blocks_asm (block, (uint32_t*)data, n);
 #else
 	md5_process_blocks (block, (uint32_t*)data, n);
 #endif
