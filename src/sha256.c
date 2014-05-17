@@ -26,12 +26,16 @@ uint32_t table[64] = {
 	0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070, /* 48 */
 	0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5,
 	0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3, /* 56 */
-	0x748F82EE, 0x78A5636f, 0x84C87814, 0x8cc70208,
+	0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208,
 	0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2  /* 64 */
 };
 
 void process_block (uint8_t block[64], void* data) {
+#ifdef SHA256_USE_ASM
+	sha256_process_block_asm (block, (uint32_t*)data);
+#else
 	sha256_process_block (block, (uint32_t*)data);
+#endif
 }
 
 void sha256_init (sha256_context* ctxt) {
