@@ -13,17 +13,71 @@ sha1_process_block_asm: /* (uint8_t block[64], uint32_t hash[5]) */
 	ldmia r1, {r2 - r6}	
 	mov r7, #0
 	sub sp, sp, #320
-	
+
+	ldr r10, =0x5A827999
 .Lloop0_start:
-	ldr r8, [r0, r7, LSL #2]
-	rev r8, r8
-	str r8, [sp, r7, LSL #2]
+	/* r8 = f */
+	and r8, r3, r4
+	bic r9, r5, r3
+	orr r8, r8, r9
+	ldr r9, [r0, r7, LSL #2]
+	add r8, r8, r10
+	add r8, r8, r2, ROR #27
+	add r8, r8, r6
+	rev r9, r9
+	mov r6, r5
+	mov r5, r4
+	add r8, r8, r9
+	str r9, [sp, r7, LSL #2]
+	mov r4, r3, ROR #2
+	mov r3, r2
+	mov r2, r8
+	
 	add r7, r7, #1
 .Lloop0_check:
 	cmp r7, #16
 	blt .Lloop0_start
 
+	ldr r0, =0x5A827999
 .Lloop1_start:
+	/* r8 = f */
+	and r8, r3, r4
+	bic r9, r5, r3
+	orr r8, r8, r9
+	add r8, r8, r0
+	add r8, r8, r2, ROR #27
+	add r11, r8, r6
+	
+	sub r8, r7, #3
+	ldr r9, [sp, r8, LSL #2]
+	sub r8, r7, #8
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	sub r8, r7, #14
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	sub r8, r7, #16
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	ror r9, r9, #31
+	str r9, [sp, r7, LSL #2]
+	
+	add r8, r11, r9
+	
+	mov r6, r5
+	mov r5, r4
+	mov r4, r3, ROR #2
+	mov r3, r2
+	mov r2, r8
+	
+	add r7, r7, #1
+	
+.Lloop1_check:
+	cmp r7, #20
+	blt .Lloop1_start
+
+	/*
+.Lloop2_start:
 	sub r8, r7, #3
 	ldr r9, [sp, r8, LSL #2]
 	sub r8, r7, #8
@@ -39,36 +93,11 @@ sha1_process_block_asm: /* (uint8_t block[64], uint32_t hash[5]) */
 	str r9, [sp, r7, LSL #2]
 	
 	add r7, r7, #1
-	
-.Lloop1_check:
-	cmp r7, #80
-	blt .Lloop1_start
-	
-	mov r7, #0
-.Lloop2_start:
-	/* r8 = f */
-	and r8, r3, r4
-	bic r9, r5, r3
-	orr r8, r8, r9
-	/* r9 = k (0x5A827999) */
-	ldr r9, =0x5A827999
-	add r8, r8, r9
-	add r8, r8, r2, ROR #27
-	add r8, r8, r6
-	ldr r9, [sp, r7, LSL #2]
-	add r8, r8, r9
-	
-	mov r6, r5
-	mov r5, r4
-	mov r4, r3, ROR #2
-	mov r3, r2
-	mov r2, r8
-	
-	add r7, r7, #1
-	
 .Lloop2_check:
-	cmp r7, #20
-	blt .Lloop2_start
+	cmp r7, #80
+	blt .Lloop2_start*/
+
+	mov r7, #20
 	
 .Lloop3_start:
 	/* r8 = f */
@@ -77,10 +106,24 @@ sha1_process_block_asm: /* (uint8_t block[64], uint32_t hash[5]) */
 	/* r9 = k (0x6ED9EBA1) */
 	ldr r9, =0x6ED9EBA1
 	add r8, r8, r9
-	add r8, r8, r2, ROR #27
-	add r8, r8, r6
-	ldr r9, [sp, r7, LSL #2]
-	add r8, r8, r9
+	add r8, r8, r2, ROR #27	
+	add r11, r8, r6
+	
+	sub r8, r7, #3
+	ldr r9, [sp, r8, LSL #2]
+	sub r8, r7, #8
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	sub r8, r7, #14
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	sub r8, r7, #16
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	ror r9, r9, #31
+	str r9, [sp, r7, LSL #2]
+	
+	add r8, r11, r9
 	
 	mov r6, r5
 	mov r5, r4
@@ -105,9 +148,23 @@ sha1_process_block_asm: /* (uint8_t block[64], uint32_t hash[5]) */
 	ldr r9, =0x8F1BBCDC
 	add r8, r8, r9
 	add r8, r8, r2, ROR #27
-	add r8, r8, r6
-	ldr r9, [sp, r7, LSL #2]
-	add r8, r8, r9
+	add r11, r8, r6
+	
+	sub r8, r7, #3
+	ldr r9, [sp, r8, LSL #2]
+	sub r8, r7, #8
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	sub r8, r7, #14
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	sub r8, r7, #16
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	ror r9, r9, #31
+	str r9, [sp, r7, LSL #2]
+	
+	add r8, r11, r9
 	
 	mov r6, r5
 	mov r5, r4
@@ -129,10 +186,23 @@ sha1_process_block_asm: /* (uint8_t block[64], uint32_t hash[5]) */
 	ldr r9, =0xCA62C1D6
 	add r8, r8, r9
 	add r8, r8, r2, ROR #27
-	add r8, r8, r6
-	ldr r9, [sp, r7, LSL #2]
-	add r8, r8, r9
+	add r11, r8, r6
 	
+	sub r8, r7, #3
+	ldr r9, [sp, r8, LSL #2]
+	sub r8, r7, #8
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	sub r8, r7, #14
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	sub r8, r7, #16
+	ldr r10, [sp, r8, LSL #2]
+	eor r9, r9, r10
+	ror r9, r9, #31
+	str r9, [sp, r7, LSL #2]
+	
+	add r8, r11, r9
 	mov r6, r5
 	mov r5, r4
 	mov r4, r3, ROR #2
