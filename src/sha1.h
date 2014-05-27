@@ -21,7 +21,7 @@ typedef struct {
 } sha1_context;
 
 void sha1_init (sha1_context* ctxt);
-void sha1_add (sha1_context* ctxt, uint8_t data[], uint64_t length);
+void sha1_add (sha1_context* ctxt, uint8_t data[], size_t length);
 void sha1_finalize (sha1_context* ctxt);
 void sha1_get_digest (sha1_context* ctxt, uint8_t digest[SHA1_DIGEST_SIZE]);
 

@@ -19,16 +19,16 @@ void sha1_init (sha1_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 	
-	ctxt->hash[0] = 0x67452301;
-	ctxt->hash[1] = 0xEFCDAB89;
-	ctxt->hash[2] = 0x98BADCFE;
-	ctxt->hash[3] = 0x10325476;
-	ctxt->hash[4] = 0xC3D2E1F0;
+	ctxt->hash[0] = UINT32_C (0x67452301);
+	ctxt->hash[1] = UINT32_C (0xEFCDAB89);
+	ctxt->hash[2] = UINT32_C (0x98BADCFE);
+	ctxt->hash[3] = UINT32_C (0x10325476);
+	ctxt->hash[4] = UINT32_C (0xC3D2E1F0);
 	
 	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
 }
 
-void sha1_add (sha1_context* ctxt, uint8_t data[], uint64_t length) {
+void sha1_add (sha1_context* ctxt, uint8_t data[], size_t length) {
 	block_add (&ctxt->b, length, data);
 }
 
@@ -37,7 +37,7 @@ void sha1_finalize (sha1_context* ctxt) {
 }
 
 void sha1_get_digest (sha1_context* ctxt, uint8_t digest[SHA1_DIGEST_SIZE]) {
-	for (int i = 0; i < 5; i++) {
+	for (size_t i = 0; i < 5; i++) {
 		u32_to_u8_be (ctxt->hash[i], &digest[i * 4]);
 	}
 }
@@ -57,30 +57,66 @@ void sha1_process_blocks (uint8_t block[], uint32_t hash[5], unsigned int n) {
 		uint32_t f;
 		uint32_t W[80];
 		
+		k = UINT32_C (0x5A827999);
 		for (uint_fast8_t i = 0; i < 16; i++) {
 			W[i] = u8_to_u32_be (&block1[i * 4]);
-		}
-		
-		for (uint_fast8_t i = 16; i < 80; i++) {
-			W[i] = rotate_left_32 (W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
-		}
-		
-		for (uint_fast8_t t = 0; t < 80; t++) {
-			if (t < 20) {
-				f = (b & c) | ((~b) & d);
-				k = 0x5A827999;
-			} else if (t < 40) {
-				f = b ^ c ^ d; 
-				k = 0x6ED9EBA1;
-			} else if (t < 60) {
-				f = (b & c) | (b & d) | (c & d);
-				k = 0x8F1BBCDC;
-			} else {
-				f = b ^ c ^ d;
-				k = 0xCA62C1D6;
-			}
 			
-			temp = W[t] + f + k + rotate_left_32 (a, 5) + e;
+			f = (b & c) | ((~b) & d);
+			temp = W[i] + f + k + rotate_left_32 (a, 5) + e;
+			
+			e = d;
+			d = c;
+			c = rotate_left_32 (b, 30);
+			b = a;
+			a = temp;
+		}
+		for (uint_fast8_t i = 16; i < 20; i++) {
+			W[i] = rotate_left_32 (W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+			
+			f = (b & c) | ((~b) & d);
+			temp = W[i] + f + k + rotate_left_32 (a, 5) + e;
+			
+			e = d;
+			d = c;
+			c = rotate_left_32 (b, 30);
+			b = a;
+			a = temp;
+		}
+		
+		k = UINT32_C (0x6ED9EBA1);
+		for (uint_fast8_t i = 20; i < 40; i++) {
+			W[i] = rotate_left_32 (W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+			
+			f = b ^ c ^ d; 
+			temp = W[i] + f + k + rotate_left_32 (a, 5) + e;
+			
+			e = d;
+			d = c;
+			c = rotate_left_32 (b, 30);
+			b = a;
+			a = temp;
+		}
+		
+		k = UINT32_C (0x8F1BBCDC);
+		for (uint_fast8_t i = 40; i < 60; i++) {
+			W[i] = rotate_left_32 (W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+			
+			f = (b & c) | (b & d) | (c & d);
+			temp = W[i] + f + k + rotate_left_32 (a, 5) + e;
+			
+			e = d;
+			d = c;
+			c = rotate_left_32 (b, 30);
+			b = a;
+			a = temp;
+		}
+		
+		k = UINT32_C (0xCA62C1D6);
+		for (uint_fast8_t i = 60; i < 80; i++) {
+			W[i] = rotate_left_32 (W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+			
+			f = b ^ c ^ d; 
+			temp = W[i] + f + k + rotate_left_32 (a, 5) + e;
 			
 			e = d;
 			d = c;

@@ -42,14 +42,14 @@ void sha512_init (sha512_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 	
-	ctxt->hash[0] = 0x6A09E667F3BCC908;
-	ctxt->hash[1] = 0xBB67AE8584CAA73B;
-	ctxt->hash[2] = 0x3C6EF372FE94F82B;
-	ctxt->hash[3] = 0xA54FF53A5F1D36F1;
-	ctxt->hash[4] = 0x510E527FADE682D1;
-	ctxt->hash[5] = 0x9B05688C2B3E6C1F;
-	ctxt->hash[6] = 0x1F83D9ABFB41BD6B;
-	ctxt->hash[7] = 0x5BE0CD19137E2179;
+	ctxt->hash[0] = UINT64_C (0x6A09E667F3BCC908);
+	ctxt->hash[1] = UINT64_C (0xBB67AE8584CAA73B);
+	ctxt->hash[2] = UINT64_C (0x3C6EF372FE94F82B);
+	ctxt->hash[3] = UINT64_C (0xA54FF53A5F1D36F1);
+	ctxt->hash[4] = UINT64_C (0x510E527FADE682D1);
+	ctxt->hash[5] = UINT64_C (0x9B05688C2B3E6C1F);
+	ctxt->hash[6] = UINT64_C (0x1F83D9ABFB41BD6B);
+	ctxt->hash[7] = UINT64_C (0x5BE0CD19137E2179);
 	
 	block_init (&ctxt->b, 128, ctxt->buffer, process_block, ctxt->hash);
 }
@@ -58,14 +58,14 @@ void sha512_224_init (sha512_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 		
-	ctxt->hash[0] = 0x8C3D37C819544DA2;
-	ctxt->hash[1] = 0x73E1996689DCD4D6;
-	ctxt->hash[2] = 0x1DFAB7AE32FF9C82;
-	ctxt->hash[3] = 0x679DD514582F9FCF;
-	ctxt->hash[4] = 0x0F6D2B697BD44DA8;
-	ctxt->hash[5] = 0x77E36F7304C48942;
-	ctxt->hash[6] = 0x3F9D85A86A1D36C8;
-	ctxt->hash[7] = 0x1112E6AD91D692A1;
+	ctxt->hash[0] = UINT64_C (0x8C3D37C819544DA2);
+	ctxt->hash[1] = UINT64_C (0x73E1996689DCD4D6);
+	ctxt->hash[2] = UINT64_C (0x1DFAB7AE32FF9C82);
+	ctxt->hash[3] = UINT64_C (0x679DD514582F9FCF);
+	ctxt->hash[4] = UINT64_C (0x0F6D2B697BD44DA8);
+	ctxt->hash[5] = UINT64_C (0x77E36F7304C48942);
+	ctxt->hash[6] = UINT64_C (0x3F9D85A86A1D36C8);
+	ctxt->hash[7] = UINT64_C (0x1112E6AD91D692A1);
 	
 	block_init (&ctxt->b, 128, ctxt->buffer, process_block, ctxt->hash);
 }
@@ -74,14 +74,14 @@ void sha512_256_init (sha512_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 		
-	ctxt->hash[0] = 0x22312194FC2BF72C;
-	ctxt->hash[1] = 0x9F555FA3C84C64C2;
-	ctxt->hash[2] = 0x2393B86B6F53B151;
-	ctxt->hash[3] = 0x963877195940EABD;
-	ctxt->hash[4] = 0x96283EE2A88EFFE3;
-	ctxt->hash[5] = 0xBE5E1E2553863992;
-	ctxt->hash[6] = 0x2B0199FC2C85B8AA;
-	ctxt->hash[7] = 0x0EB72DDC81C52CA2;
+	ctxt->hash[0] = UINT64_C (0x22312194FC2BF72C);
+	ctxt->hash[1] = UINT64_C (0x9F555FA3C84C64C2);
+	ctxt->hash[2] = UINT64_C (0x2393B86B6F53B151);
+	ctxt->hash[3] = UINT64_C (0x963877195940EABD);
+	ctxt->hash[4] = UINT64_C (0x96283EE2A88EFFE3);
+	ctxt->hash[5] = UINT64_C (0xBE5E1E2553863992);
+	ctxt->hash[6] = UINT64_C (0x2B0199FC2C85B8AA);
+	ctxt->hash[7] = UINT64_C (0x0EB72DDC81C52CA2);
 	
 	block_init (&ctxt->b, 128, ctxt->buffer, process_block, ctxt->hash);
 }

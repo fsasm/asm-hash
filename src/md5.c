@@ -45,10 +45,10 @@ void md5_init (md5_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 
-	ctxt->hash[0] = 0x67452301;
-	ctxt->hash[1] = 0xEFCDAB89;
-	ctxt->hash[2] = 0x98BADCFE;
-	ctxt->hash[3] = 0x10325476;
+	ctxt->hash[0] = UINT32_C (0x67452301);
+	ctxt->hash[1] = UINT32_C (0xEFCDAB89);
+	ctxt->hash[2] = UINT32_C (0x98BADCFE);
+	ctxt->hash[3] = UINT32_C (0x10325476);
 
 	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
 }

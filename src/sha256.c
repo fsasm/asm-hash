@@ -42,14 +42,14 @@ void sha256_init (sha256_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 	
-	ctxt->hash[0] = 0x6A09E667;
-	ctxt->hash[1] = 0xBB67AE85;
-	ctxt->hash[2] = 0x3C6EF372;
-	ctxt->hash[3] = 0xA54FF53A;
-	ctxt->hash[4] = 0x510E527F;
-	ctxt->hash[5] = 0x9B05688C;
-	ctxt->hash[6] = 0x1F83D9AB;
-	ctxt->hash[7] = 0x5BE0CD19;
+	ctxt->hash[0] = UINT32_C (0x6A09E667);
+	ctxt->hash[1] = UINT32_C (0xBB67AE85);
+	ctxt->hash[2] = UINT32_C (0x3C6EF372);
+	ctxt->hash[3] = UINT32_C (0xA54FF53A);
+	ctxt->hash[4] = UINT32_C (0x510E527F);
+	ctxt->hash[5] = UINT32_C (0x9B05688C);
+	ctxt->hash[6] = UINT32_C (0x1F83D9AB);
+	ctxt->hash[7] = UINT32_C (0x5BE0CD19);
 	
 	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
 }
