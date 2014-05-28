@@ -9,7 +9,7 @@
 
 void process_block (uint8_t block[], void* data, unsigned int n) {
 #ifdef SHA1_USE_ASM
-	sha1_process_block_asm (block, (uint32_t*)data);
+	sha1_process_blocks_asm (block, (uint32_t*)data, n);
 #else
 	sha1_process_blocks (block, (uint32_t*)data, n);
 #endif
