@@ -37,7 +37,7 @@ static const uint8_t test_block_128[128] = {
 	104, 105, 106, 107, 108, 109, 110, 111,
 	112, 113, 114, 115, 116, 117, 118, 119,
 	120, 121, 122, 123, 124, 125, 126, 127
-}
+};
 
 static void test_block_init (uint8_t block[], size_t block_size) {
 	for (size_t i = 0; i < block_size; i++) {

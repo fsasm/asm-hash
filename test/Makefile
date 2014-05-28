@@ -8,6 +8,9 @@ md5_test: md5_test.c
 sha1_test: sha1_test.c
 	$(CC) -std=c99 -o sha1_test sha1_test.c ../src/sha1.c ../src/sha1_block.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
+sha256_test: sha256_test.c
+	$(CC) -std=c99 -o sha256_test sha256_test.c ../src/sha256.c ../src/sha256_block.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
+
 int_util_test: int_util_test.c
 	$(CC) -std=c99 -o int_util_test int_util_test.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
