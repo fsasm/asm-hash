@@ -21,13 +21,14 @@ typedef struct {
 } md5_context;
 
 void md5_init (md5_context* ctxt);
+void md5_init_hash (uint32_t hash[4]);
 void md5_add (md5_context* ctxt, uint8_t data[], size_t length);
 void md5_finalize (md5_context* ctxt);
 void md5_get_digest (md5_context* ctxt, uint8_t digest[MD5_DIGEST_SIZE]);
 
 void md5_process_blocks (uint8_t block[], uint32_t hash[4], unsigned int n);
 
-#ifdef MD5_USE_ASM
+#if defined (MD5_USE_ASM) || defined (MD5_ENABLE_ASM)
 extern void md5_process_blocks_asm (uint8_t* block, uint32_t* hash, unsigned int n);
 #endif
 

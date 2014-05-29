@@ -38,20 +38,24 @@ void process_block (uint8_t block[], void* data, unsigned int n) {
 #endif
 }
 
+/* SHA-256 */
 void sha256_init (sha256_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 	
-	ctxt->hash[0] = UINT32_C (0x6A09E667);
-	ctxt->hash[1] = UINT32_C (0xBB67AE85);
-	ctxt->hash[2] = UINT32_C (0x3C6EF372);
-	ctxt->hash[3] = UINT32_C (0xA54FF53A);
-	ctxt->hash[4] = UINT32_C (0x510E527F);
-	ctxt->hash[5] = UINT32_C (0x9B05688C);
-	ctxt->hash[6] = UINT32_C (0x1F83D9AB);
-	ctxt->hash[7] = UINT32_C (0x5BE0CD19);
-	
+	sha256_init_hash (ctxt->hash);	
 	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
+}
+
+void sha256_init_hash (uint32_t hash[8]) {
+	hash[0] = UINT32_C (0x6A09E667);
+	hash[1] = UINT32_C (0xBB67AE85);
+	hash[2] = UINT32_C (0x3C6EF372);
+	hash[3] = UINT32_C (0xA54FF53A);
+	hash[4] = UINT32_C (0x510E527F);
+	hash[5] = UINT32_C (0x9B05688C);
+	hash[6] = UINT32_C (0x1F83D9AB);
+	hash[7] = UINT32_C (0x5BE0CD19);
 }
 
 void sha256_finalize (sha256_context* ctxt) {
@@ -139,4 +143,40 @@ void sha256_process_blocks (uint8_t block[], uint32_t hash[5], unsigned int n) {
 		hash[6] += g;
 		hash[7] += h;
 	}
+}
+
+/* SHA-224 */
+void sha224_init (sha256_context* ctxt) {
+	if (ctxt == NULL)
+		return;
+	
+	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
+	sha224_init_hash (ctxt->hash);
+}
+
+void sha224_init_hash (uint32_t hash[8]) {
+	hash[0] = UINT32_C (0xC1059ED8);
+	hash[1] = UINT32_C (0x367CD507);
+	hash[2] = UINT32_C (0x3070DD17);
+	hash[3] = UINT32_C (0xF70E5939);
+	hash[4] = UINT32_C (0xFFC00B31);
+	hash[5] = UINT32_C (0x68581511);
+	hash[6] = UINT32_C (0x64F98FA7);
+	hash[7] = UINT32_C (0xBEFA4FA4);	
+}
+
+void sha224_add (sha224_context* ctxt, uint8_t data[], uint64_t length) {
+	sha256_add (ctxt, data, length);
+}
+
+void sha224_finalize (sha224_context* ctxt) {
+	sha256_finalize (ctxt);
+}
+
+void sha224_get_digest (sha256_context* ctxt, uint8_t digest[SHA224_DIGEST_SIZE]) {
+	if (ctxt == NULL)
+		return;
+		
+	for (uint_fast8_t i = 0; i < 7; i++)
+		u32_to_u8_be (ctxt->hash[i], &digest[i * 4]);
 }

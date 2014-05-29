@@ -19,13 +19,16 @@ void sha1_init (sha1_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 	
-	ctxt->hash[0] = UINT32_C (0x67452301);
-	ctxt->hash[1] = UINT32_C (0xEFCDAB89);
-	ctxt->hash[2] = UINT32_C (0x98BADCFE);
-	ctxt->hash[3] = UINT32_C (0x10325476);
-	ctxt->hash[4] = UINT32_C (0xC3D2E1F0);
-	
+	sha1_init_hash (ctxt->hash);	
 	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
+}
+
+void sha1_init_hash (uint32_t hash[5]) {
+	hash[0] = UINT32_C (0x67452301);
+	hash[1] = UINT32_C (0xEFCDAB89);
+	hash[2] = UINT32_C (0x98BADCFE);
+	hash[3] = UINT32_C (0x10325476);
+	hash[4] = UINT32_C (0xC3D2E1F0);
 }
 
 void sha1_add (sha1_context* ctxt, uint8_t data[], size_t length) {

@@ -31,7 +31,7 @@
 
 #elif HASH_SHA224
 
-#include "sha224.h"
+#include "sha256.h"
 #define DIGEST_SIZE SHA224_DIGEST_SIZE
 #define CONTEXT sha224_context
 #define INIT sha224_init
@@ -41,7 +41,7 @@
 
 #elif HASH_SHA384
 
-#include "sha384.h"
+#include "sha512.h"
 #define DIGEST_SIZE SHA384_DIGEST_SIZE
 #define CONTEXT sha384_context
 #define INIT sha384_init

@@ -41,15 +41,18 @@ void process_block (uint8_t block[], void* data, unsigned int n) {
 #endif
 }
 
+void md5_init_hash (uint32_t hash[4]) {
+	hash[0] = UINT32_C (0x67452301);
+	hash[1] = UINT32_C (0xEFCDAB89);
+	hash[2] = UINT32_C (0x98BADCFE);
+	hash[3] = UINT32_C (0x10325476);
+}
+
 void md5_init (md5_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 
-	ctxt->hash[0] = UINT32_C (0x67452301);
-	ctxt->hash[1] = UINT32_C (0xEFCDAB89);
-	ctxt->hash[2] = UINT32_C (0x98BADCFE);
-	ctxt->hash[3] = UINT32_C (0x10325476);
-
+	md5_init_hash (ctxt->hash);
 	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
 }
 
