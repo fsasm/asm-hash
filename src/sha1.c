@@ -7,7 +7,7 @@
 #include "sha1.h"
 #include "int_util.h"
 
-void process_block (uint8_t block[], void* data, unsigned int n) {
+void process_block (const uint8_t block[], void* data, unsigned int n) {
 #ifdef SHA1_USE_ASM
 	sha1_process_blocks_asm (block, (uint32_t*)data, n);
 #else
@@ -31,7 +31,7 @@ void sha1_init_hash (uint32_t hash[5]) {
 	hash[4] = UINT32_C (0xC3D2E1F0);
 }
 
-void sha1_add (sha1_context* ctxt, uint8_t data[], size_t length) {
+void sha1_add (sha1_context* ctxt, const uint8_t data[], size_t length) {
 	block_add (&ctxt->b, length, data);
 }
 
@@ -45,9 +45,9 @@ void sha1_get_digest (sha1_context* ctxt, uint8_t digest[SHA1_DIGEST_SIZE]) {
 	}
 }
 
-void sha1_process_blocks (uint8_t block[], uint32_t hash[5], unsigned int n) {
+void sha1_process_blocks (const uint8_t block[], uint32_t hash[5], unsigned int n) {
 	for (unsigned int j = 0; j < n; j++) {
-		uint8_t* block1 = &block[j * 64];
+		const uint8_t* block1 = &block[j * 64];
 		
 		uint32_t a = hash[0];
 		uint32_t b = hash[1];

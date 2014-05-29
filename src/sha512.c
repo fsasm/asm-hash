@@ -34,7 +34,7 @@ const uint64_t sha512_table[80] = {
 	0x4CC5D4BECB3E42B6, 0x597F299CFC657E2A, 0x5FCB6FAB3AD6FAEC, 0x6C44198C4A475817  /* 80 */
 };
 
-void process_block (uint8_t block[], void* data, unsigned int n) {
+void process_block (const uint8_t block[], void* data, unsigned int n) {
 	sha512_process_blocks (block, (uint64_t*)data, n);
 }
 
@@ -123,9 +123,9 @@ static uint64_t f6 (uint64_t x) {
 	return rotate_right_64 (x, 19) ^ rotate_right_64 (x, 61) ^ (x >> 6);
 }
 
-void sha512_process_blocks (uint8_t block[], uint64_t hash[8], unsigned int n) {
+void sha512_process_blocks (const uint8_t block[], uint64_t hash[8], unsigned int n) {
 	for (unsigned int j = 0; j < n; j++) {
-		uint8_t* block1 = &block[j * 128];
+		const uint8_t* block1 = &block[j * 128];
 		uint64_t a = hash[0];
 		uint64_t b = hash[1];
 		uint64_t c = hash[2];
@@ -172,7 +172,7 @@ void sha512_process_blocks (uint8_t block[], uint64_t hash[8], unsigned int n) {
 	}
 }
 
-void sha512_add (sha512_context* ctxt, uint8_t data[], size_t length) {
+void sha512_add (sha512_context* ctxt, const uint8_t data[], size_t length) {
 	block_add (&ctxt->b, length, data);
 }
 
@@ -221,7 +221,7 @@ void sha384_init_hash (uint64_t hash[8]) {
 	hash[7] = UINT64_C (0x47B5481DBEFA4FA4);
 }
 
-void sha384_add (sha384_context* ctxt, uint8_t data[], size_t length) {
+void sha384_add (sha384_context* ctxt, const uint8_t data[], size_t length) {
 	sha512_add (ctxt, data, length);
 }
 

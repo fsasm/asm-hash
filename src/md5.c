@@ -33,7 +33,7 @@ static const uint32_t md5_shift[16] = {
 	6, 10, 15, 21
 };
 
-void process_block (uint8_t block[], void* data, unsigned int n) {
+void process_block (const uint8_t block[], void* data, unsigned int n) {
 #ifdef MD5_USE_ASM
 	md5_process_blocks_asm (block, (uint32_t*)data, n);
 #else
@@ -56,7 +56,7 @@ void md5_init (md5_context* ctxt) {
 	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
 }
 
-void md5_add (md5_context* ctxt, uint8_t data[], size_t length) {
+void md5_add (md5_context* ctxt, const uint8_t data[], size_t length) {
 	block_add (&ctxt->b, length, data);
 }
 
@@ -70,10 +70,10 @@ void md5_get_digest (md5_context* ctxt, uint8_t digest[MD5_DIGEST_SIZE]) {
 	}
 }
 
-void md5_process_blocks (uint8_t block[], uint32_t hash[4], unsigned int n) {
+void md5_process_blocks (const uint8_t block[], uint32_t hash[4], unsigned int n) {
 
 	for (unsigned int j = 0; j < n; j++) {
-		uint8_t* block1 = &block[j * 64];
+		const uint8_t* block1 = &block[j * 64];
 		
 		uint32_t a = hash[0];
 		uint32_t b = hash[1];

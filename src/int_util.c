@@ -34,7 +34,7 @@ void u32_to_u8_be (uint32_t from, uint8_t to[4]) {
 	}
 }
 
-uint32_t u8_to_u32_le (uint8_t from[4]) {
+uint32_t u8_to_u32_le (const uint8_t from[4]) {
 	uint32_t to = 0;
 	for (int i = 0; i < 4; i++) {
 		to = (to << 8) | from[3 - i];
@@ -42,7 +42,7 @@ uint32_t u8_to_u32_le (uint8_t from[4]) {
 	return to;
 }
 
-uint32_t u8_to_u32_be (uint8_t from[4]) {
+uint32_t u8_to_u32_be (const uint8_t from[4]) {
 	uint32_t to = 0;
 	for (int i = 0; i < 4; i++) {
 		to = (to << 8) | from[i];
@@ -50,7 +50,7 @@ uint32_t u8_to_u32_be (uint8_t from[4]) {
 	return to;
 }
 
-uint64_t u8_to_u64_le (uint8_t from[8]) {
+uint64_t u8_to_u64_le (const uint8_t from[8]) {
 	uint64_t to = 0;
 	for (int i = 0; i < 8; i++) {
 		to = (to << 8) | from[7 - i];
@@ -58,7 +58,7 @@ uint64_t u8_to_u64_le (uint8_t from[8]) {
 	return to;
 }
 
-uint64_t u8_to_u64_be (uint8_t from[8]) {
+uint64_t u8_to_u64_be (const uint8_t from[8]) {
 	uint64_t to = 0;
 	for (int i = 0; i < 8; i++) {
 		to = (to << 8) | from[i];

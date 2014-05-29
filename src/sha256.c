@@ -30,7 +30,7 @@ uint32_t table[64] = {
 	0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2  /* 64 */
 };
 
-void process_block (uint8_t block[], void* data, unsigned int n) {
+void process_block (const uint8_t block[], void* data, unsigned int n) {
 #ifdef SHA256_USE_ASM
 	for (unsigned int i = 0; i < n; i++) {
 		sha256_process_block_asm (&block[i * 64], (uint32_t*)data);
@@ -64,7 +64,7 @@ void sha256_finalize (sha256_context* ctxt) {
 	block_util_finalize (&ctxt->b, false, false);
 }
 
-void sha256_add (sha256_context* ctxt, uint8_t data[], size_t length) {
+void sha256_add (sha256_context* ctxt, const uint8_t data[], size_t length) {
 	block_add (&ctxt->b, length, data);
 }
 
@@ -98,9 +98,9 @@ static uint32_t f6 (uint32_t x) {
 	return rotate_right_32 (x, 17) ^ rotate_right_32 (x, 19) ^ (x >> 10);
 }
 
-void sha256_process_blocks (uint8_t block[], uint32_t hash[5], unsigned int n) {
+void sha256_process_blocks (const uint8_t block[], uint32_t hash[5], unsigned int n) {
 	for (unsigned int j = 0; j < n; j++) {
-		uint8_t* block1 = &block[j * 64];
+		const uint8_t* block1 = &block[j * 64];
 		uint32_t a = hash[0];
 		uint32_t b = hash[1];
 		uint32_t c = hash[2];
@@ -167,7 +167,7 @@ void sha224_init_hash (uint32_t hash[8]) {
 	hash[7] = UINT32_C (0xBEFA4FA4);	
 }
 
-void sha224_add (sha224_context* ctxt, uint8_t data[], uint64_t length) {
+void sha224_add (sha224_context* ctxt, const uint8_t data[], uint64_t length) {
 	sha256_add (ctxt, data, length);
 }
 

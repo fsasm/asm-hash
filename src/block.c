@@ -22,7 +22,7 @@ void block_init (block* b, size_t max_size, uint8_t buffer[], process_func func,
 	b->func_data = func_data;
 }
 
-void block_add (block* b, size_t size, uint8_t data[]) {
+void block_add (block* b, size_t size, const uint8_t data[]) {
 	if (b == NULL)
 		return;
 	
@@ -47,12 +47,7 @@ void block_add (block* b, size_t size, uint8_t data[]) {
 		data += trailing_size;
 		size -= trailing_size;
 	}
-	
-	/*
-	for (size_t i = 0; i < (size / max_size); i++) {
-		b->func (data, b->func_data);
-		data += max_size;
-	}*/
+
 	b->func (data, b->func_data, (size / max_size));
 	data += max_size * (size / max_size);
 	

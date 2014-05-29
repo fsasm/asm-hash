@@ -22,14 +22,14 @@ typedef struct {
 
 void sha1_init (sha1_context* ctxt);
 void sha1_init_hash (uint32_t hash[5]);
-void sha1_add (sha1_context* ctxt, uint8_t data[], size_t length);
+void sha1_add (sha1_context* ctxt, const uint8_t data[], size_t length);
 void sha1_finalize (sha1_context* ctxt);
 void sha1_get_digest (sha1_context* ctxt, uint8_t digest[SHA1_DIGEST_SIZE]);
 
-void sha1_process_blocks (uint8_t block[], uint32_t hash[5], unsigned int n);
+void sha1_process_blocks (const uint8_t block[], uint32_t hash[5], unsigned int n);
 
 #if defined (SHA1_USE_ASM) || defined (SHA1_ENABLE_ASM)
-extern void sha1_process_blocks_asm (uint8_t* block, uint32_t* hash, unsigned int n);
+extern void sha1_process_blocks_asm (const uint8_t block[], uint32_t hash[5], unsigned int n);
 #endif
 
 #endif

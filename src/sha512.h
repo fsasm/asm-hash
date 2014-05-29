@@ -30,13 +30,13 @@ void sha512_init_hash (uint64_t hash[8]);
 void sha512_224_init_hash (uint64_t hash[8]);
 void sha512_256_init_hash (uint64_t hash[8]);
 
-void sha512_add (sha512_context* ctxt, uint8_t data[], size_t length);
+void sha512_add (sha512_context* ctxt, const uint8_t data[], size_t length);
 void sha512_finalize (sha512_context* ctxt);
 void sha512_get_digest (sha512_context* ctxt, uint8_t digest[SHA512_DIGEST_SIZE]);
 void sha512_224_get_digest (sha512_context* ctxt, uint8_t digest[SHA512_224_DIGEST_SIZE]);
 void sha512_256_get_digest (sha512_context* ctxt, uint8_t digest[SHA512_256_DIGEST_SIZE]);
 
-void sha512_process_blocks (uint8_t block[], uint64_t hash[8], unsigned int n);
+void sha512_process_blocks (const uint8_t block[], uint64_t hash[8], unsigned int n);
 
 /* SHA-384 */
 #define SHA384_BLOCK_SIZE 128
@@ -47,7 +47,7 @@ typedef sha512_context sha384_context;
 
 void sha384_init (sha384_context* ctxt);
 void sha384_init_hash (uint64_t hash[8]);
-void sha384_add (sha384_context* ctxt, uint8_t data[], size_t length);
+void sha384_add (sha384_context* ctxt, const uint8_t data[], size_t length);
 void sha384_finalize (sha384_context* ctxt);
 void sha384_get_digest (sha384_context* ctxt, uint8_t digest[SHA384_DIGEST_SIZE]);
 #endif
