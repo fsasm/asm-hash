@@ -66,6 +66,38 @@ uint64_t u8_to_u64_be (const uint8_t from[8]) {
 	return to;
 }
 
+uint8_t rotate_left_8 (uint8_t value, unsigned int times) {
+	times %= 8;
+	if (times == 0)
+		return value;
+	
+	return (value << times) | (value >> (8 - times));
+}
+
+uint8_t rotate_right_8 (uint8_t value, unsigned int times) {
+	times %= 8;
+	if (times == 0)
+		return value;
+	
+	return (value >> times) | (value << (8 - times));
+}
+
+uint16_t rotate_left_16 (uint16_t value, unsigned int times) {
+	times %= 16;
+	if (times == 0)
+		return value;
+	
+	return (value << times) | (value >> (16 - times));
+}
+
+uint16_t rotate_right_16 (uint16_t value, unsigned int times) {
+	times %= 16;
+	if (times == 0)
+		return value;
+	
+	return (value >> times) | (value << (16 - times));
+}
+
 uint32_t rotate_left_32 (uint32_t value, unsigned int times) {
 	times %= 32;
 	if (times == 0)
