@@ -78,125 +78,363 @@ sha256_table:
 .text
 .global sha256_process_block_asm
 sha256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8]) */
-	push {r4 - r12, lr}
+	push {r4 - r12}
 	sub sp, sp, #256 /* 4 * 64 = 256 */
-	mov r2, #0
 	
-.Lloop0_start:
-	ldr r3, [r0, r2, LSL #2]
+	/* loop 1a */
+	ldmia r0!, {r3 - r10}
 	rev r3, r3
-	str r3, [sp, r2, LSL #2]
+	rev r4, r4
+	rev r5, r5
+	rev r6, r6
+	rev r7, r7
+	rev r8, r8
+	rev r9, r9
+	rev r10, r10
+	stmia sp!, {r3 - r10}
 	
-	add r2, r2, #1
-.Lloop0_end:
-	cmp r2, #16
-	blt .Lloop0_start
+	ldmia r0!, {r3 - r10}
+	rev r3, r3
+	rev r4, r4
+	rev r5, r5
+	rev r6, r6
+	rev r7, r7
+	rev r8, r8
+	rev r9, r9
+	rev r10, r10
+	stmia sp, {r3 - r10}
+	sub sp, sp, #32
 	
+	mov r2, #12
+	/* loop 1b */
 .Lloop1_start:
-	sub r4, r2, #7
-	ldr r3, [sp, r4, LSL #2]
-	sub r4, r2, #16
-	ldr r5, [sp, r4, LSL #2]
-	add r3, r3, r5
-	/* f6 */
-	sub r4, r2, #2
-	ldr r5, [sp, r4, LSL #2]
-	ror r4, r5, #17
-	ror r6, r5, #19
-	eor r4, r4, r6
-	lsr r6, r5, #10
-	eor r4, r4, r6
+	ldr r3, [sp, +#56]
+	ldr r6, [sp, +#36]
+	ldrd r4, r5, [sp, +#0] 
+	ror r7, r3, #17
+	ror r8, r3, #19
+	lsr r9, r3, #10
+	eor r7, r7, r8
+	eor r7, r7, r9
+	add r3, r6, r7
 	add r3, r3, r4
-	
-	/* f5 */
-	sub r4, r2, #15
-	ldr r5, [sp, r4, LSL #2]
-	ror r4, r5, #7
-	ror r6, r5, #18
-	eor r4, r4, r6
-	lsr r6, r5, #3
-	eor r4, r4, r6
-	add r3, r3, r4
-	str r3, [sp, r2, LSL #2]
-	
-	add r2, r2, #1
-.Lloop1_end:
-	cmp r2, #64
-	blt .Lloop1_start
+	ror r7, r5, #7
+	ror r8, r5, #18
+	lsr r9, r5, #3
+	eor r7, r7, r8
+	eor r7, r7, r9
+	add r3, r3, r7
+	str r3, [sp, +#64]
 
-	mov r10, #0 /* counter */
+	ldr r3, [sp, +#60]
+	ldr r6, [sp, +#40]
+	ldrd r4, r5, [sp, +#4]
+	ror r7, r3, #17
+	ror r8, r3, #19
+	lsr r9, r3, #10
+	eor r7, r7, r8
+	eor r7, r7, r9
+	add r3, r6, r7
+	add r3, r3, r4
+	ror r7, r5, #7
+	ror r8, r5, #18
+	lsr r9, r5, #3
+	eor r7, r7, r8
+	eor r7, r7, r9
+	add r3, r3, r7
+	str r3, [sp, +#68]
+	
+	ldr r3, [sp, +#64]
+	ldr r6, [sp, +#44]
+	ldrd r4, r5, [sp, +#8]
+	ror r7, r3, #17
+	ror r8, r3, #19
+	lsr r9, r3, #10
+	eor r7, r7, r8
+	eor r7, r7, r9
+	add r3, r6, r7
+	add r3, r3, r4
+	ror r7, r5, #7
+	ror r8, r5, #18
+	lsr r9, r5, #3
+	eor r7, r7, r8
+	eor r7, r7, r9
+	add r3, r3, r7
+	str r3, [sp, +#72]
+
+	ldr r3, [sp, +#68]
+	ldr r6, [sp, +#48]
+	ldrd r4, r5, [sp, +#12]
+	ror r7, r3, #17
+	ror r8, r3, #19
+	lsr r9, r3, #10
+	eor r7, r7, r8
+	eor r7, r7, r9
+	add r3, r6, r7
+	add r3, r3, r4
+	ror r7, r5, #7
+	ror r8, r5, #18
+	lsr r9, r5, #3
+	eor r7, r7, r8
+	eor r7, r7, r9
+	add r3, r3, r7
+	str r3, [sp, +#76]
+	
+	subs r2, r2, #1
+	add sp, sp, #16
+.Lloop1_check:
+	bne .Lloop1_start
+	sub sp, sp, #192
+	
+	mov r2, #8 /* counter */
 	ldr r0, addr_table
-	ldmia r1, {r2 - r9} /* hash */
+	ldmia r1, {r3 - r10} /* hash */
 
 .Lloop2_start:
-	/* h = temp1 */
-	ldr r11, [r0, r10, LSL #2]
-	add r9, r9, r11
-	ldr r11, [sp, r10, LSL #2]
-	add r9, r9, r11
+	ldr r11, [r0], +#4
+	ldr r12, [sp], +#4
+	add r10, r10, r11
+	ror r11, r7, #6
+	add r10, r10, r12 	
+	ror r12, r7, #11
+	eor r11, r11, r12
+	ror r12, r7, #25
+	eor r11, r11, r12
+	add r10, r10, r11
+	and r11, r7, r8
+	bic r12, r9, r7
+	eor r11, r11, r12
+	add r10, r10, r11
+	add r6, r6, r10
+	ror r11, r3, #2
+	ror r12, r3, #13
+	eor r11, r11, r12
+	ror r12, r3, #22
+	eor r11, r11, r12
+	add r10, r10, r11
+	and r11, r3, r4
+	and r12, r3, r5
+	eor r11, r11, r12
+	and r12, r4, r5
+	eor r11, r11, r12
+	add r10, r10, r11
 	
-	/* f4 (e) */
+	ldr r11, [r0], +#4
+	ldr r12, [sp], +#4
+	add r9, r9, r11
 	ror r11, r6, #6
+	add r9, r9, r12 
 	ror r12, r6, #11
 	eor r11, r11, r12
 	ror r12, r6, #25
 	eor r11, r11, r12
 	add r9, r9, r11
-	
-	/* f1 (e, f, g) */
 	and r11, r6, r7
 	bic r12, r8, r6
 	eor r11, r11, r12
 	add r9, r9, r11
-	
-	/* r11 = temp2 */
-	ror r11, r2, #2
-	ror r12, r2, #13
+	add r5, r5, r9
+	ror r11, r10, #2
+	ror r12, r10, #13
 	eor r11, r11, r12
-	ror r12, r2, #22
+	ror r12, r10, #22
 	eor r11, r11, r12
+	add r9, r9, r11
+	and r11, r10, r3
+	and r12, r10, r4
+	eor r11, r11, r12
+	and r12, r3, r4
+	eor r11, r11, r12
+	add r9, r9, r11
 	
-	/* f2 (a, b, c) */
-	and r12, r2, r3
-	and lr, r3, r4
-	eor r12, r12, lr
-	and lr, r2, r4
-	eor r12, r12, lr
-	add r11, r11, r12
+	ldr r11, [r0], +#4
+	ldr r12, [sp], +#4
+	add r8, r8, r11
+	ror r11, r5, #6
+	add r8, r8, r12 
+	ror r12, r5, #11
+	eor r11, r11, r12
+	ror r12, r5, #25
+	eor r11, r11, r12
+	add r8, r8, r11
+	and r11, r5, r6
+	bic r12, r7, r5
+	eor r11, r11, r12
+	add r8, r8, r11
+	add r4, r4, r8
+	ror r11, r9, #2
+	ror r12, r9, #13
+	eor r11, r11, r12
+	ror r12, r9, #22
+	eor r11, r11, r12
+	add r8, r8, r11
+	and r11, r9, r10
+	and r12, r9, r3
+	eor r11, r11, r12
+	and r12, r10, r3
+	eor r11, r11, r12
+	add r8, r8, r11
 	
-	/* permutation */
-	mov r12, r9	
-	mov r9, r8
-	mov r8, r7
-	mov r7, r6
-	add r6, r5, r12
-	mov r5, r4
-	mov r4, r3
-	mov r3, r2
-	add r2, r11, r12
+	ldr r11, [r0], +#4
+	ldr r12, [sp], +#4
+	add r7, r7, r11
+	ror r11, r4, #6
+	add r7, r7, r12 
+	ror r12, r4, #11
+	eor r11, r11, r12
+	ror r12, r4, #25
+	eor r11, r11, r12
+	add r7, r7, r11
+	and r11, r4, r5
+	bic r12, r6, r4
+	eor r11, r11, r12
+	add r7, r7, r11
+	add r3, r3, r7
+	ror r11, r8, #2
+	ror r12, r8, #13
+	eor r11, r11, r12
+	ror r12, r8, #22
+	eor r11, r11, r12
+	add r7, r7, r11
+	and r11, r8, r9
+	and r12, r8, r10
+	eor r11, r11, r12
+	and r12, r9, r10
+	eor r11, r11, r12
+	add r7, r7, r11
 	
-	add r10, r10, #1
-.Lloop2_end:
-	cmp r10, #64
-	blt .Lloop2_start
-	add sp, sp, #256
-	/* end */
-	ldmia r1, {r0, r10 - r12}
-	add r2, r2, r0
-	add r3, r3, r10
+	ldr r11, [r0], +#4
+	ldr r12, [sp], +#4
+	add r6, r6, r11
+	ror r11, r3, #6
+	add r6, r6, r12 
+	ror r12, r3, #11
+	eor r11, r11, r12
+	ror r12, r3, #25
+	eor r11, r11, r12
+	add r6, r6, r11
+	and r11, r3, r4
+	bic r12, r5, r3
+	eor r11, r11, r12
+	add r6, r6, r11
+	add r10, r10, r6
+	ror r11, r7, #2
+	ror r12, r7, #13
+	eor r11, r11, r12
+	ror r12, r7, #22
+	eor r11, r11, r12
+	add r6, r6, r11
+	and r11, r7, r8
+	and r12, r7, r9
+	eor r11, r11, r12
+	and r12, r8, r9
+	eor r11, r11, r12
+	add r6, r6, r11
+
+	ldr r11, [r0], +#4
+	ldr r12, [sp], +#4
+	add r5, r5, r11
+	ror r11, r10, #6
+	add r5, r5, r12 
+	ror r12, r10, #11
+	eor r11, r11, r12
+	ror r12, r10, #25
+	eor r11, r11, r12
+	add r5, r5, r11
+	and r11, r10, r3
+	bic r12, r4, r10
+	eor r11, r11, r12
+	add r5, r5, r11
+	add r9, r9, r5
+	ror r11, r6, #2
+	ror r12, r6, #13
+	eor r11, r11, r12
+	ror r12, r6, #22
+	eor r11, r11, r12
+	add r5, r5, r11
+	and r11, r6, r7
+	and r12, r6, r8
+	eor r11, r11, r12
+	and r12, r7, r8
+	eor r11, r11, r12
+	add r5, r5, r11
+	
+	ldr r11, [r0], +#4
+	ldr r12, [sp], +#4
 	add r4, r4, r11
-	add r5, r5, r12
-	stmia r1, {r2 - r5}
-	add r1, r1, #16
+	ror r11, r9, #6
+	add r4, r4, r12 
+	ror r12, r9, #11
+	eor r11, r11, r12
+	ror r12, r9, #25
+	eor r11, r11, r12
+	add r4, r4, r11
+	and r11, r9, r10
+	bic r12, r3, r9
+	eor r11, r11, r12
+	add r4, r4, r11
+	add r8, r8, r4
+	ror r11, r5, #2
+	ror r12, r5, #13
+	eor r11, r11, r12
+	ror r12, r5, #22
+	eor r11, r11, r12
+	add r4, r4, r11
+	and r11, r5, r6
+	and r12, r5, r7
+	eor r11, r11, r12
+	and r12, r6, r7
+	eor r11, r11, r12
+	add r4, r4, r11
 	
-	ldmia r1, {r0, r10 - r12}
-	add r2, r6, r0
-	add r3, r7, r10
-	add r4, r8, r11
-	add r5, r9, r12
-	stmia r1, {r2 - r5}
+	ldr r11, [r0], +#4
+	ldr r12, [sp], +#4
+	add r3, r3, r11
+	ror r11, r8, #6
+	add r3, r3, r12 
+	ror r12, r8, #11
+	eor r11, r11, r12
+	ror r12, r8, #25
+	eor r11, r11, r12
+	add r3, r3, r11
+	and r11, r8, r9
+	bic r12, r10, r8
+	eor r11, r11, r12
+	add r3, r3, r11
+	add r7, r7, r3
+	ror r11, r4, #2
+	ror r12, r4, #13
+	eor r11, r11, r12
+	ror r12, r4, #22
+	eor r11, r11, r12
+	add r3, r3, r11
+	and r11, r4, r5
+	and r12, r4, r6
+	eor r11, r11, r12
+	and r12, r5, r6
+	eor r11, r11, r12
+	add r3, r3, r11
+
+	subs r2, r2, #1
+.Lloop2_end:
+	bne .Lloop2_start
+
+	/* end */
+	ldmia r1, {r0, r2, r11, r12}
+	add r3, r3, r0
+	add r4, r4, r2
+	add r5, r5, r11
+	add r6, r6, r12
+	stmia r1!, {r3 - r6}
 	
-	pop {r4 - r12, lr}
+	ldmia r1, {r3 - r6}
+	add r7, r7, r3
+	add r8, r8, r4
+	add r9, r9, r5
+	add r10, r10, r6
+	stmia r1, {r7 - r10}
+	
+	pop {r4 - r12}
 	bx lr
 
 addr_table:
