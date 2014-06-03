@@ -2,7 +2,7 @@
 A collection of common [cryptographic hash functions](https://en.wikipedia.org/wiki/Cryptographic_hash) written in C and assembly.
 
 ## Goal
-This project began as a exercise to learn and practice assembly for ARMv6-CPUs and also to learn about cryptographic hash functions. Because these hash functions only need simple arithmetic and logical integer operations, it's a great exercise for beginners. In order to be portable and fast, everything is written in portable C and the speed critical parts are written in assembly. The assembly code is tested on the [Raspberry Pi](http://www.raspberrypi.org/). 
+This project began as an exercise to learn and practice assembly for ARMv6-CPUs and also to learn about cryptographic hash functions. Because these hash functions only need simple arithmetic and logical integer operations, it's a great exercise for beginners. In order to be portable and fast, everything is written in portable C and the critical parts are written in assembly. The assembly code is tested on the [Raspberry Pi](http://www.raspberrypi.org/). 
 
 ## Implemented Hash Algorithms
 * MD5
