@@ -177,7 +177,7 @@ void sha512_add (sha512_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void sha512_finalize (sha512_context* ctxt) {
-	block_util_finalize (&ctxt->b, false, true);
+	block_util_finalize (&ctxt->b, false, BLOCK_LENGTH_128);
 }
 
 void sha512_get_digest (sha512_context* ctxt, uint8_t digest[SHA512_DIGEST_SIZE]) {

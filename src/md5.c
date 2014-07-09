@@ -61,7 +61,7 @@ void md5_add (md5_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void md5_finalize (md5_context* ctxt) {
-	block_util_finalize (&ctxt->b, true, false);
+	block_util_finalize (&ctxt->b, true, BLOCK_LENGTH_64);
 }
 
 void md5_get_digest (md5_context* ctxt, uint8_t digest[MD5_DIGEST_SIZE]) {

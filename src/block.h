@@ -25,6 +25,13 @@ typedef struct {
 void block_init (block* b, size_t max_size, uint8_t buffer[], process_func func, void* func_data);
 void block_add (block* b, size_t size, const uint8_t data[]);
 
-void block_util_finalize (block* b, bool little_endian, bool length_128);
+/* size in bits */
+typedef enum {
+	BLOCK_LENGTH_64,
+	BLOCK_LENGTH_128,
+	BLOCK_LENGTH_256
+} block_length;
+
+void block_util_finalize (block* b, bool little_endian, block_length length);
 
 #endif

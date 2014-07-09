@@ -61,7 +61,7 @@ void sha256_init_hash (uint32_t hash[8]) {
 }
 
 void sha256_finalize (sha256_context* ctxt) {
-	block_util_finalize (&ctxt->b, false, false);
+	block_util_finalize (&ctxt->b, false, BLOCK_LENGTH_64);
 }
 
 void sha256_add (sha256_context* ctxt, const uint8_t data[], size_t length) {

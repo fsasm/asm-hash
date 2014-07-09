@@ -55,7 +55,7 @@ void block_add (block* b, size_t size, const uint8_t data[]) {
 	b->size = size % max_size;
 }
 
-void block_util_finalize (block* b, bool little_endian, bool length_128) {
+void block_util_finalize (block* b, bool little_endian, block_length length) {
 	if (b == NULL)
 		return;
 	
@@ -65,7 +65,20 @@ void block_util_finalize (block* b, bool little_endian, bool length_128) {
 	buffer[size] = 0x80;
 	size++;
 
-	size_t length_index = max_size - (length_128 ? 16 : 8);
+	size_t length_index;
+	switch (length) {
+		case BLOCK_LENGTH_64:
+			length_index = max_size - 8;
+			break;
+		
+		case BLOCK_LENGTH_128:
+			length_index = max_size - 16;
+			break;
+			
+		case BLOCK_LENGTH_256:
+			length_index = max_size - 32;
+			break;
+	}
 	
 	if (size > length_index) {
 		memset (&buffer[size], 0, max_size - size + 1);
@@ -79,13 +92,27 @@ void block_util_finalize (block* b, bool little_endian, bool length_128) {
 	uint64_t full_size = b->full_size * 8;
 	if (little_endian) {
 		u64_to_u8_le (full_size, &buffer[size]);
-		if (length_128) {
-			memset (&buffer[size + 8], 0, 8);
+		
+		switch (length) {
+			case BLOCK_LENGTH_128:
+				memset (&buffer[size + 8], 0, 8);
+				break;
+			
+			case BLOCK_LENGTH_256:
+				memset (&buffer[size + 8], 0, 24);
+				break;
 		}
 	} else {
-		if (length_128) {
-			memset (&buffer[size], 0, 8);
-			size += 8;
+		switch (length) {
+			case BLOCK_LENGTH_128:
+				memset (&buffer[size], 0, 8);
+				size += 8;
+				break;
+				
+			case BLOCK_LENGTH_256:
+				memset (&buffer[size], 0, 24);
+				size += 24;
+				break;
 		}
 		u64_to_u8_be (full_size, &buffer[size]);
 	}

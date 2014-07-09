@@ -36,7 +36,7 @@ void sha1_add (sha1_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void sha1_finalize (sha1_context* ctxt) {
-	block_util_finalize (&ctxt->b, false, false);
+	block_util_finalize (&ctxt->b, false, BLOCK_LENGTH_64);
 }
 
 void sha1_get_digest (sha1_context* ctxt, uint8_t digest[SHA1_DIGEST_SIZE]) {
