@@ -79,6 +79,16 @@
 #define FINALIZE sha512_finalize
 #define GET_DIGEST sha512_256_get_digest
 
+#elif HASH_WHIRLPOOL
+
+#include "whirlpool.h"
+#define DIGEST_SIZE WHIRLPOOL_DIGEST_SIZE
+#define CONTEXT whirlpool_context
+#define INIT whirlpool_init
+#define UPDATE whirlpool_add
+#define FINALIZE whirlpool_finalize
+#define GET_DIGEST whirlpool_get_digest
+
 #endif
 
 #define BUFFER_SIZE 4096
