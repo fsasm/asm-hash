@@ -81,12 +81,12 @@ void block_util_finalize (block* b, bool little_endian, block_length length) {
 	}
 	
 	if (size > length_index) {
-		memset (&buffer[size], 0, max_size - size + 1);
+		memset (&buffer[size], 0, max_size - size);
 		size = 0;
 		b->func (buffer, b->func_data, 1);
 	}
 	
-	memset (&buffer[size], 0, length_index - size + 1);
+	memset (&buffer[size], 0, length_index - size);
 	size = length_index;
 	
 	uint64_t full_size = b->full_size * 8;
