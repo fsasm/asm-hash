@@ -7,11 +7,12 @@
 #include "sha1.h"
 #include "int_util.h"
 
-void process_block (const uint8_t block[], void* data, unsigned int n) {
+void process_block (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
+	(void)data_bits;
 #ifdef SHA1_USE_ASM
-	sha1_process_blocks_asm (block, (uint32_t*)data, n);
+	sha1_process_blocks_asm (block, (uint32_t*)(b->func_data), n);
 #else
-	sha1_process_blocks (block, (uint32_t*)data, n);
+	sha1_process_blocks (block, (uint32_t*)(b->func_data), n);
 #endif
 }
 
@@ -20,7 +21,7 @@ void sha1_init (sha1_context* ctxt) {
 		return;
 	
 	sha1_init_hash (ctxt->hash);	
-	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_512, ctxt->buffer, process_block, ctxt->hash);
 }
 
 void sha1_init_hash (uint32_t hash[5]) {
@@ -36,7 +37,7 @@ void sha1_add (sha1_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void sha1_finalize (sha1_context* ctxt) {
-	block_util_finalize (&ctxt->b, false, BLOCK_LENGTH_64);
+	block_util_finalize (&ctxt->b, BLOCK_LENGTH_64 | BLOCK_BIG_ENDIAN | BLOCK_SIMPLE_PADDING);
 }
 
 void sha1_get_digest (sha1_context* ctxt, uint8_t digest[SHA1_DIGEST_SIZE]) {

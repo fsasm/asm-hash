@@ -89,6 +89,16 @@
 #define FINALIZE whirlpool_finalize
 #define GET_DIGEST whirlpool_get_digest
 
+#elif HASH_BLAKE256
+
+#include "blake.h"
+#define DIGEST_SIZE BLAKE256_DIGEST_SIZE
+#define CONTEXT blake256_context
+#define INIT blake256_init
+#define UPDATE blake256_add
+#define FINALIZE blake256_finalize
+#define GET_DIGEST blake256_get_digest
+
 #endif
 
 #define BUFFER_SIZE 4096

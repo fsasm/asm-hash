@@ -34,8 +34,9 @@ const uint64_t sha512_table[80] = {
 	0x4CC5D4BECB3E42B6, 0x597F299CFC657E2A, 0x5FCB6FAB3AD6FAEC, 0x6C44198C4A475817  /* 80 */
 };
 
-void process_block (const uint8_t block[], void* data, unsigned int n) {
-	sha512_process_blocks (block, (uint64_t*)data, n);
+void process_block (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
+	(void)data_bits;
+	sha512_process_blocks (block, (uint64_t*)(b->func_data), n);
 }
 
 void sha512_init (sha512_context* ctxt) {
@@ -43,7 +44,7 @@ void sha512_init (sha512_context* ctxt) {
 		return;
 	
 	sha512_init_hash (ctxt->hash);	
-	block_init (&ctxt->b, 128, ctxt->buffer, process_block, ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_1024, ctxt->buffer, process_block, ctxt->hash);
 }
 
 void sha512_224_init (sha512_context* ctxt) {
@@ -51,7 +52,7 @@ void sha512_224_init (sha512_context* ctxt) {
 		return;
 		
 	sha512_224_init_hash (ctxt->hash);	
-	block_init (&ctxt->b, 128, ctxt->buffer, process_block, ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_1024, ctxt->buffer, process_block, ctxt->hash);
 }
 
 void sha512_256_init (sha512_context* ctxt) {
@@ -59,7 +60,7 @@ void sha512_256_init (sha512_context* ctxt) {
 		return;
 		
 	sha512_256_init_hash (ctxt->hash);
-	block_init (&ctxt->b, 128, ctxt->buffer, process_block, ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_1024, ctxt->buffer, process_block, ctxt->hash);
 }
 
 void sha512_init_hash (uint64_t hash[8]) {
@@ -177,7 +178,7 @@ void sha512_add (sha512_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void sha512_finalize (sha512_context* ctxt) {
-	block_util_finalize (&ctxt->b, false, BLOCK_LENGTH_128);
+	block_util_finalize (&ctxt->b, BLOCK_LENGTH_128 | BLOCK_BIG_ENDIAN | BLOCK_SIMPLE_PADDING);
 }
 
 void sha512_get_digest (sha512_context* ctxt, uint8_t digest[SHA512_DIGEST_SIZE]) {
@@ -207,7 +208,7 @@ void sha384_init (sha384_context* ctxt) {
 		return;
 
 	sha384_init_hash (ctxt->hash);
-	block_init (&ctxt->b, 128, ctxt->buffer, process_block, ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_1024, ctxt->buffer, process_block, ctxt->hash);
 }
 
 void sha384_init_hash (uint64_t hash[8]) {

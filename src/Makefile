@@ -32,5 +32,9 @@ sha512_224sum: sha512.c block.c hashsum.c int_util.c
 sha512_256sum: sha512.c block.c hashsum.c int_util.c
 	$(CC) -std=c99 -o sha512_256sum sha512.c block.c int_util.c hashsum.c -DHASH_SHA512_256 $(INCLUDE_PATH) $(CFLAGS)
 
-whirlpoolsum: whirlpool.c block.c. hashsum.c int_util.c
+whirlpoolsum: whirlpool.c block.c hashsum.c int_util.c
 	$(CC) -std=c99 -o whirlpoolsum whirlpool.c block.c int_util.c hashsum.c -DHASH_WHIRLPOOL $(INCLUDE_PATH) $(CFLAGS)
+
+blake256sum: blake.c block.c hashsum.c int_util.c
+	$(CC) -std=c99 -o blake256sum blake.c block.c int_util.c hashsum.c -DHASH_BLAKE256 $(INCLUDE_PATH) $(CFLAGS)
+	

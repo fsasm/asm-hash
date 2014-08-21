@@ -7,9 +7,10 @@
 #include "whirlpool.h"
 #include <string.h>
 
-void process_blocks (const uint8_t block[], void* data, unsigned int n) {
+void process_blocks (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
+	(void)data_bits;
 	for (unsigned int i = 0; i < n; i++) {
-		whirlpool_process_blocks (&block[i * 64], (uint8_t(*)[8])data, 0);
+		whirlpool_process_blocks (&block[i * 64], (uint8_t(*)[8])(b->func_data), n);
 	}
 }
 
@@ -17,7 +18,7 @@ void whirlpool_init (whirlpool_context* ctxt) {
 	if(ctxt == NULL)
 		return;
 	
-	block_init (&ctxt->b, 64, ctxt->buffer, process_blocks, ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_512, ctxt->buffer, process_blocks, ctxt->hash);
 	whirlpool_init_hash(ctxt->hash);
 }
 
@@ -26,7 +27,7 @@ void whirlpool_init_hash (uint8_t hash[8][8]) {
 }
 
 void whirlpool_finalize (whirlpool_context* ctxt) {
-	block_util_finalize (&ctxt->b, false, BLOCK_LENGTH_256);
+	block_util_finalize (&ctxt->b, BLOCK_LENGTH_256 | BLOCK_BIG_ENDIAN | BLOCK_SIMPLE_PADDING);
 }
 
 void whirlpool_add (whirlpool_context* ctxt, const uint8_t data[], size_t length) {

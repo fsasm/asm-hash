@@ -30,13 +30,14 @@ uint32_t table[64] = {
 	0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2  /* 64 */
 };
 
-void process_block (const uint8_t block[], void* data, unsigned int n) {
+void process_block (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
+	(void)data_bits;
 #ifdef SHA256_USE_ASM
 	for (unsigned int i = 0; i < n; i++) {
-		sha256_process_block_asm (&block[i * 64], (uint32_t*)data);
+		sha256_process_block_asm (&block[i * 64], (uint32_t*)(b->func_data));
 	}
 #else
-	sha256_process_blocks (block, (uint32_t*)data, n);
+	sha256_process_blocks (block, (uint32_t*)(b->func_data), n);
 #endif
 }
 
@@ -46,7 +47,7 @@ void sha256_init (sha256_context* ctxt) {
 		return;
 	
 	sha256_init_hash (ctxt->hash);	
-	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_512, ctxt->buffer, process_block, ctxt->hash);
 }
 
 void sha256_init_hash (uint32_t hash[8]) {
@@ -61,7 +62,7 @@ void sha256_init_hash (uint32_t hash[8]) {
 }
 
 void sha256_finalize (sha256_context* ctxt) {
-	block_util_finalize (&ctxt->b, false, BLOCK_LENGTH_64);
+	block_util_finalize (&ctxt->b, BLOCK_LENGTH_64 | BLOCK_BIG_ENDIAN | BLOCK_SIMPLE_PADDING);
 }
 
 void sha256_add (sha256_context* ctxt, const uint8_t data[], size_t length) {
@@ -152,7 +153,7 @@ void sha224_init (sha256_context* ctxt) {
 	if (ctxt == NULL)
 		return;
 	
-	block_init (&ctxt->b, 64, ctxt->buffer, process_block, ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_512, ctxt->buffer, process_block, ctxt->hash);
 	sha224_init_hash (ctxt->hash);
 }
 
