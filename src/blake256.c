@@ -4,7 +4,7 @@
  * Date: 2014-07-09 
  */
 
-#include "blake.h"
+#include "blake256.h"
 #include "int_util.h"
 #include <string.h>
 #include <stdio.h>
@@ -30,12 +30,25 @@ static const unsigned int permutations[10][16] = {
 };
 
 void process_block (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
-	uint32_t salt[4] = {0, 0, 0, 0};
 	void* data = b->func_data;
 	uint64_t full_size = b->full_size - (n - 1) * 64;
 	
 	for (unsigned int i = 0; i < n; i++) {
-		blake256_process_block (block, data, salt, data_bits ? full_size : 0);
+		blake256_process_block (block, data, data_bits ? full_size : 0);
+		block += 64;
+		full_size += 64;
+	}
+}
+
+void process_block_with_salt (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
+	blake256_context* ctxt = (blake256_context*)b->func_data;
+	uint64_t full_size = b->full_size - (n - 1) * 64;
+	
+	uint32_t* salt = (uint32_t*)ctxt->salt;
+	uint32_t* hash = ctxt->hash;
+	
+	for (unsigned int i = 0; i < n; i++) {
+		blake256_process_block_with_salt (block, hash, salt, data_bits ? full_size : 0);
 		block += 64;
 		full_size += 64;
 	}
@@ -67,7 +80,7 @@ void blake256_init_with_salt (blake256_context* ctxt, uint8_t salt[16]) {
 		return;
 	
 	blake256_init_hash (ctxt->hash);
-	block_init (&ctxt->b, BLOCK_SIZE_512, ctxt->buffer, process_block, ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_512, ctxt->buffer, process_block_with_salt, ctxt);
 	memcpy (ctxt->salt, salt, sizeof (ctxt->salt));
 }
 
@@ -106,16 +119,7 @@ static void blake256_g (uint32_t* v1, uint32_t* v2, uint32_t* v3, uint32_t* v4, 
 	*v4 = d;
 }
 
-void blake256_process_block (const uint8_t block[64], uint32_t hash[8], const uint32_t salt[4], uint64_t counter) {
-	uint32_t counter1 = (uint32_t)((counter >> 29) & UINT32_MAX);
-	uint32_t counter0 = (uint32_t)((counter <<  3) & UINT32_MAX);
-	uint32_t state[16] = {
-		hash[0], hash[1], hash[2], hash[3],
-		hash[4], hash[5], hash[6], hash[7],
-		salt[0] ^ table[0], salt[1] ^ table[1], salt[2] ^ table[2], salt[3] ^ table[3],
-		counter0 ^ table[4], counter0 ^ table[5], counter1 ^ table[6], counter1 ^ table[7]
-	};
-	
+static void process_state (const uint8_t block[64], uint32_t state[16]) {
 	for (uint_fast8_t round = 0; round < 14; round++) {
 		uint_fast8_t r = round % 10;
 		
@@ -141,9 +145,40 @@ void blake256_process_block (const uint8_t block[64], uint32_t hash[8], const ui
 			blake256_g (&state[i], &state[4 + (i + 1) % 4], &state[8 + (i + 2) % 4], &state[12 + (i + 3) % 4], mc1, mc2);
 		}
 	}
+}
+
+void blake256_process_block (const uint8_t block[64], uint32_t hash[8], uint64_t counter) {
+	uint32_t counter1 = (uint32_t)((counter >> 29) & UINT32_MAX);
+	uint32_t counter0 = (uint32_t)((counter <<  3) & UINT32_MAX);
+	
+	uint32_t state[16] = {
+		hash[0], hash[1], hash[2], hash[3],
+		hash[4], hash[5], hash[6], hash[7],
+		table[0], table[1], table[2], table[3],
+		counter0 ^ table[4], counter0 ^ table[5], counter1 ^ table[6], counter1 ^ table[7]
+	};
+	
+	process_state (block, state);
+	
+	for (uint_fast8_t i = 0; i < 8; i++) {
+		hash[i] ^= state[i] ^ state[i + 8];
+	}
+}
+
+void blake256_process_block_with_salt (const uint8_t block[64], uint32_t hash[8], const uint32_t salt[4], uint64_t counter) {
+	uint32_t counter1 = (uint32_t)((counter >> 29) & UINT32_MAX);
+	uint32_t counter0 = (uint32_t)((counter <<  3) & UINT32_MAX);
+	
+	uint32_t state[16] = {
+		hash[0], hash[1], hash[2], hash[3],
+		hash[4], hash[5], hash[6], hash[7],
+		salt[0] ^ table[0], salt[1] ^ table[1], salt[2] ^ table[2], salt[3] ^ table[3],
+		counter0 ^ table[4], counter0 ^ table[5], counter1 ^ table[6], counter1 ^ table[7]
+	};
+	
+	process_state (block, state);
 	
 	for (uint_fast8_t i = 0; i < 8; i++) {
 		hash[i] ^= salt[i % 4] ^ state[i] ^ state[i + 8];
 	}
-
 }

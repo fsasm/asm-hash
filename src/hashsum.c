@@ -91,7 +91,7 @@
 
 #elif HASH_BLAKE256
 
-#include "blake.h"
+#include "blake256.h"
 #define DIGEST_SIZE BLAKE256_DIGEST_SIZE
 #define CONTEXT blake256_context
 #define INIT blake256_init
