@@ -37,4 +37,6 @@ whirlpoolsum: whirlpool.c block.c hashsum.c int_util.c
 
 blake256sum: blake256.c block.c hashsum.c int_util.c
 	$(CC) -std=c99 -o blake256sum blake256.c block.c int_util.c hashsum.c -DHASH_BLAKE256 $(INCLUDE_PATH) $(CFLAGS)
-	
+
+blake512sum: blake512.c block.c hashsum.c int_util.c
+	$(CC) -std=c99 -o blake512sum blake512.c block.c int_util.c hashsum.c -DHASH_BLAKE512 $(INCLUDE_PATH) $(CFLAGS)

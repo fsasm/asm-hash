@@ -99,6 +99,16 @@
 #define FINALIZE blake256_finalize
 #define GET_DIGEST blake256_get_digest
 
+#elif HASH_BLAKE512
+
+#include "blake512.h"
+#define DIGEST_SIZE BLAKE512_DIGEST_SIZE
+#define CONTEXT blake512_context
+#define INIT blake512_init
+#define UPDATE blake512_add
+#define FINALIZE blake512_finalize
+#define GET_DIGEST blake512_get_digest
+
 #endif
 
 #define BUFFER_SIZE 4096
