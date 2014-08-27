@@ -7,7 +7,6 @@
 #include "blake256.h"
 #include "int_util.h"
 #include <string.h>
-#include <stdio.h>
 
 static const uint32_t table[16] = {
 	0x243F6A88, 0x85A308D3, 0x13198A2E, 0x03707344,
@@ -98,7 +97,7 @@ void blake256_finalize (blake256_context* ctxt) {
 	block_util_finalize (&ctxt->b, BLOCK_LENGTH_64 | BLOCK_BIG_ENDIAN | BLOCK_EXTENDED_PADDING);
 }
 
-static void blake256_g (uint32_t* v1, uint32_t* v2, uint32_t* v3, uint32_t* v4, uint32_t mc1, uint32_t mc2) {
+static void compress (uint32_t* v1, uint32_t* v2, uint32_t* v3, uint32_t* v4, uint32_t mc1, uint32_t mc2) {
 	uint32_t a = *v1;
 	uint32_t b = *v2;
 	uint32_t c = *v3;
@@ -132,7 +131,7 @@ static void process_state (const uint8_t block[64], uint32_t state[16]) {
 			uint32_t mc1 = table[index1] ^ u8_to_u32_be (&block[index0 * 4]);
 			uint32_t mc2 = table[index0] ^ u8_to_u32_be (&block[index1 * 4]);
 			
-			blake256_g (&state[i], &state[4 + i], &state[8 + i], &state[12 + i], mc1 , mc2);
+			compress (&state[i], &state[4 + i], &state[8 + i], &state[12 + i], mc1 , mc2);
 		}
 		
 		for (uint_fast8_t i = 0; i < 4; i++) {
@@ -142,7 +141,7 @@ static void process_state (const uint8_t block[64], uint32_t state[16]) {
 			uint32_t mc1 = table[index1] ^ u8_to_u32_be (&block[index0 * 4]);
 			uint32_t mc2 = table[index0] ^ u8_to_u32_be (&block[index1 * 4]);
 			
-			blake256_g (&state[i], &state[4 + (i + 1) % 4], &state[8 + (i + 2) % 4], &state[12 + (i + 3) % 4], mc1, mc2);
+			compress (&state[i], &state[4 + (i + 1) % 4], &state[8 + (i + 2) % 4], &state[12 + (i + 3) % 4], mc1, mc2);
 		}
 	}
 }
