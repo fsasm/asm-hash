@@ -4,6 +4,7 @@
  * Date: 2014-03-28
  */
 
+/* optimized for a ARM1176 as found on an Raspberry Pi */
 .arch armv6
 
 .section .rodata
