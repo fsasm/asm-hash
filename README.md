@@ -9,7 +9,7 @@ This project began as an exercise to learn and practice assembly for ARMv6-CPUs 
 * SHA-1
 * SHA-2 (224, 256, 384, 512, 512/224 and 512/256 variants)
 * Whirlpool
-* BLAKE-256 and BLAKE-512
+* BLAKE (224, 256 384 and 512 variants)
 
 ## License
 All the source code in this project is licensed under the 2-clause BSD License. The full text of the license can be found in the file LICENSE. 
