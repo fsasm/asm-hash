@@ -99,6 +99,16 @@
 #define FINALIZE blake256_finalize
 #define GET_DIGEST blake256_get_digest
 
+#elif HASH_BLAKE224
+
+#include "blake256.h"
+#define DIGEST_SIZE BLAKE224_DIGEST_SIZE
+#define CONTEXT blake224_context
+#define INIT blake224_init
+#define UPDATE blake224_add
+#define FINALIZE blake224_finalize
+#define GET_DIGEST blake224_get_digest
+
 #elif HASH_BLAKE512
 
 #include "blake512.h"
@@ -108,6 +118,16 @@
 #define UPDATE blake512_add
 #define FINALIZE blake512_finalize
 #define GET_DIGEST blake512_get_digest
+
+#elif HASH_BLAKE384
+
+#include "blake512.h"
+#define DIGEST_SIZE BLAKE384_DIGEST_SIZE
+#define CONTEXT blake384_context
+#define INIT blake384_init
+#define UPDATE blake384_add
+#define FINALIZE blake384_finalize
+#define GET_DIGEST blake384_get_digest
 
 #endif
 

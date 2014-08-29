@@ -180,3 +180,48 @@ void blake512_process_block_with_salt (const uint8_t block[128], uint64_t hash[8
 		hash[i] ^= salt[i % 4] ^ state[i] ^ state[i + 8];
 	}
 }
+
+/* BLAKE-384 */
+void blake384_init (blake384_context* ctxt) {
+	if (ctxt == NULL)
+		return;
+		
+	blake384_init_hash (ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_1024, ctxt->buffer, process_block, ctxt->hash);
+	memset (ctxt->salt, 0, sizeof (ctxt->salt));
+}
+
+void blake384_init_hash (uint64_t hash[8]) {
+	hash[0] = UINT64_C (0xCBBB9D5DC1059ED8);
+	hash[1] = UINT64_C (0x629A292A367CD507);
+	hash[2] = UINT64_C (0x9159015A3070DD17);
+	hash[3] = UINT64_C (0x152FECD8F70E5939);
+	hash[4] = UINT64_C (0x67332667FFC00B31);
+	hash[5] = UINT64_C (0x8EB44A8768581511);
+	hash[6] = UINT64_C (0xDB0C2E0D64F98FA7);
+	hash[7] = UINT64_C (0x47B5481DBEFA4FA4);
+}
+
+void blake384_init_with_salt (blake384_context* ctxt, uint8_t salt[32]) {
+	if (ctxt == NULL)
+		return;
+	
+	blake384_init_hash (ctxt->hash);
+	block_init (&ctxt->b, BLOCK_SIZE_1024, ctxt->buffer, process_block_with_salt, ctxt);
+	memcpy (ctxt->salt, salt, sizeof (ctxt->salt));
+}
+
+void blake384_add (blake384_context* ctxt, const uint8_t data[], size_t length) {
+	block_add (&ctxt->b, length, data);
+}
+
+void blake384_get_digest (blake384_context* ctxt, uint8_t digest[BLAKE384_DIGEST_SIZE]) {
+	for (int i = 0; i < 6; i++) {
+		u64_to_u8_be (ctxt->hash[i], &digest[i * 8]);
+	}
+}
+
+void blake384_finalize (blake384_context* ctxt) {
+	block_util_finalize (&ctxt->b, BLOCK_LENGTH_128 | BLOCK_BIG_ENDIAN | BLOCK_SIMPLE_PADDING);
+}
+
