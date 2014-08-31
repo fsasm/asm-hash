@@ -19,6 +19,7 @@
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 4
 #define DEFAULT_RUNS 10000
+#define NUM_BYTES 128
 
 #ifdef HASH_MD5
 #define PROCESS_BLOCKS(hash) md5_process_blocks (test_block_128, hash, 2)
@@ -34,6 +35,7 @@
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 5
 #define DEFAULT_RUNS 3000
+#define NUM_BYTES 128
 
 #ifdef HASH_SHA1
 #define PROCESS_BLOCKS(hash) sha1_process_blocks (test_block_128, hash, 2)
@@ -49,6 +51,7 @@
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 8
 #define DEFAULT_RUNS 1000
+#define NUM_BYTES 64
 
 #ifdef HASH_SHA256
 #define PROCESS_BLOCKS(hash) sha256_process_blocks (test_block_64, hash, 1)
@@ -109,10 +112,12 @@ int main (int argc, char* argv[]) {
 			samples[j] = duration_us;
 		}
 		
+		double datarate_factor = (num_runs * NUM_BYTES * 1000000.0) / (1024.0 * 1024.0);
+		
 		qsort (samples, num_samples, sizeof (uint64_t), compare);
 		uint64_t median = get_median (num_samples, samples);
-		printf ("min:    %" PRIu64 " µs\n", samples[0]);
-		printf ("median: %" PRIu64 " µs\n", median);
+		printf ("min:    %" PRIu64 " µs %.3f MiB/s\n", samples[0], datarate_factor / samples[0]);
+		printf ("median: %" PRIu64 " µs %.3f MiB/s\n", median, datarate_factor / median);
 	}
 
 	return 0;
