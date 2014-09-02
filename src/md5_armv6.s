@@ -76,17 +76,31 @@ md5_table:
 	.word 0xEB86D391 /* 64 */
 
 .text
+.arm
 .global md5_process_blocks_asm
 md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
 	push {r4 - r11}
 	cmp r2, #0
 	beq .Lend
 	
-	ldr r3, addr_table	
-	
-.Lstart:
+	ldr r3, addr_table
 	/* r4 = h0; r5 = h1; r6 = h2; r7 = h3 */
 	ldmia  r1, {r4, r5, r6, r7}
+	
+.Lstart:
+	
+.macro round a, b, c, d, offset_block, offset_table, shift
+	ldr r10, [r0, +#\offset_block]
+	ldr r11, [r3, +#\offset_table]
+	add \b, \c, \b, ROR #\shift
+	bic r9, \d, \b
+	and r8, \b, \c
+	orr r8, r8, r9
+	add \a, \a, r8
+	add r10, r10, r11
+	add \a, \a, r10
+.endm
+
 	/* first loop */
 	ldr r10, [r0, +#0]
 	ldr r11, [r3, +#0]
@@ -96,625 +110,132 @@ md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
 	add r4, r4, r8
 	add r10, r10, r11
 	add r4, r4, r10
+
+	round r7, r4, r5, r6,  4,   4, 25
+	round r6, r7, r4, r5,  8,   8, 20
+	round r5, r6, r7, r4, 12,  12, 15
 	
-	ldr r10, [r0, +#4]
-	ldr r11, [r3, +#4]
-	add r4, r5, r4, ROR #25
-	bic r9, r6, r4
-	and r8, r4, r5
-	orr r8, r8, r9
-	add r7, r7, r8
-	add r10, r10, r11
-	add r7, r7, r10
-
-	ldr r10, [r0, +#8]
-	ldr r11, [r3, +#8]
-	add r7, r4, r7, ROR #20
-	bic r9, r5, r7
-	and r8, r7, r4
-	orr r8, r8, r9
-	add r6, r6, r8
-	add r10, r10, r11
-	add r6, r6, r10
-
-	ldr r10, [r0, +#12]
-	ldr r11, [r3, +#12]
-	add r6, r7, r6, ROR #15
-	bic r9, r4, r6
-	and r8, r6, r7
-	orr r8, r8, r9
-	add r5, r5, r8
-	add r10, r10, r11
-	add r5, r5, r10
+	round r4, r5, r6, r7, 16,  16, 10
+	round r7, r4, r5, r6, 20,  20, 25
+	round r6, r7, r4, r5, 24,  24, 20
+	round r5, r6, r7, r4, 28,  28, 15
 	
-	ldr r10, [r0, +#16]
-	ldr r11, [r3, +#16]
-	add r5, r6, r5, ROR #10
-	bic r9, r7, r5
-	and r8, r5, r6
-	orr r8, r8, r9
-	add r4, r4, r8
-	add r10, r10, r11
-	add r4, r4, r10
+	round r4, r5, r6, r7, 32,  32, 10
+	round r7, r4, r5, r6, 36,  36, 25
+	round r6, r7, r4, r5, 40,  40, 20
+	round r5, r6, r7, r4, 44,  44, 15
 
-	ldr r10, [r0, +#20]
-	ldr r11, [r3, +#20]
-	add r4, r5, r4, ROR #25
-	bic r9, r6, r4
-	and r8, r4, r5
-	orr r8, r8, r9
-	add r7, r7, r8
-	add r10, r10, r11
-	add r7, r7, r10
-
-	ldr r10, [r0, +#24]
-	ldr r11, [r3, +#24]
-	add r7, r4, r7, ROR #20
-	bic r9, r5, r7
-	and r8, r7, r4
-	orr r8, r8, r9
-	add r6, r6, r8
-	add r10, r10, r11
-	add r6, r6, r10
-
-	ldr r10, [r0, +#28]
-	ldr r11, [r3, +#28]
-	add r6, r7, r6, ROR #15
-	bic r9, r4, r6
-	and r8, r6, r7
-	orr r8, r8, r9
-	add r5, r5, r8
-	add r10, r10, r11
-	add r5, r5, r10
-	
-	ldr r10, [r0, +#32]
-	ldr r11, [r3, +#32]
-	add r5, r6, r5, ROR #10
-	bic r9, r7, r5
-	and r8, r5, r6
-	orr r8, r8, r9
-	add r4, r4, r8
-	add r10, r10, r11
-	add r4, r4, r10
-
-	ldr r10, [r0, +#36]
-	ldr r11, [r3, +#36]
-	add r4, r5, r4, ROR #25
-	bic r9, r6, r4
-	and r8, r4, r5
-	orr r8, r8, r9
-	add r7, r7, r8
-	add r10, r10, r11
-	add r7, r7, r10
-
-	ldr r10, [r0, +#40]
-	ldr r11, [r3, +#40]
-	add r7, r4, r7, ROR #20
-	bic r9, r5, r7
-	and r8, r7, r4
-	orr r8, r8, r9
-	add r6, r6, r8
-	add r10, r10, r11
-	add r6, r6, r10
-
-	ldr r10, [r0, +#44]
-	ldr r11, [r3, +#44]
-	add r6, r7, r6, ROR #15
-	bic r9, r4, r6
-	and r8, r6, r7
-	orr r8, r8, r9
-	add r5, r5, r8
-	add r10, r10, r11
-	add r5, r5, r10
-	
-	ldr r10, [r0, +#48]
-	ldr r11, [r3, +#48]
-	add r5, r6, r5, ROR #10
-	bic r9, r7, r5
-	and r8, r5, r6
-	orr r8, r8, r9
-	add r4, r4, r8
-	add r10, r10, r11
-	add r4, r4, r10
-
-	ldr r10, [r0, +#52]
-	ldr r11, [r3, +#52]
-	add r4, r5, r4, ROR #25
-	bic r9, r6, r4
-	and r8, r4, r5
-	orr r8, r8, r9
-	add r7, r7, r8
-	add r10, r10, r11
-	add r7, r7, r10
-
-	ldr r10, [r0, +#56]
-	ldr r11, [r3, +#56]
-	add r7, r4, r7, ROR #20
-	bic r9, r5, r7
-	and r8, r7, r4
-	orr r8, r8, r9
-	add r6, r6, r8
-	add r10, r10, r11
-	add r6, r6, r10
-
-	ldr r10, [r0, +#60]
-	ldr r11, [r3, +#60]
-	add r6, r7, r6, ROR #15
-	bic r9, r4, r6
-	and r8, r6, r7
-	orr r8, r8, r9
-	add r5, r5, r8
-	add r10, r10, r11
-	add r5, r5, r10
+	round r4, r5, r6, r7, 48,  48, 10
+	round r7, r4, r5, r6, 52,  52, 25
+	round r6, r7, r4, r5, 56,  56, 20
+	round r5, r6, r7, r4, 60,  60, 15
 	
 	/* second loop */
-	ldr r11, [r3, +#64]
-	ldr r10, [r0, +#4]
-	add r5, r6, r5, ROR #10
-	bic r9, r6, r7
-	and r8, r7, r5
-	orr r9, r8, r9
+.purgem round
+.macro round a, b, c, d, offset_block, offset_table, shift
+	ldr r10, [r0, +#\offset_block]
+	ldr r11, [r3, +#\offset_table]
+	add \b, \c, \b, ROR #\shift
+	bic r9, \c, \d
+	and r8, \d, \b
+	orr r8, r8, r9
 	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
+	add \a, \a, r8
+	add \a, \a, r10
+.endm
 
-	ldr r11, [r3, +#68]
-	ldr r10, [r0, +#24]
-	add r4, r5, r4, ROR #27
-	bic r9, r5, r6
-	and r8, r6, r4
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r11, [r3, +#72]
-	ldr r10, [r0, +#44]
-	add r7, r4, r7, ROR #23
-	bic r9, r4, r5
-	and r8, r5, r7
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#76]
-	ldr r11, [r0, +#0]
-	add r6, r7, r6, ROR #18
-	bic r9, r7, r4
-	and r8, r4, r6
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
+	round r4, r5, r6, r7,  4,  64, 10
+	round r7, r4, r5, r6, 24,  68, 27
+	round r6, r7, r4, r5, 44,  72, 23
+	round r5, r6, r7, r4,  0,  76, 18
 	
-	ldr r11, [r3, +#80]
-	ldr r10, [r0, +#20]
-	add r5, r6, r5, ROR #12
-	bic r9, r6, r7
-	and r8, r7, r5
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
-
-	ldr r11, [r3, +#84]
-	ldr r10, [r0, +#40]
-	add r4, r5, r4, ROR #27
-	bic r9, r5, r6
-	and r8, r6, r4
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r11, [r3, +#88]
-	ldr r10, [r0, +#60]
-	add r7, r4, r7, ROR #23
-	bic r9, r4, r5
-	and r8, r5, r7
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#92]
-	ldr r11, [r0, +#16]
-	add r6, r7, r6, ROR #18
-	bic r9, r7, r4
-	and r8, r4, r6
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
+	round r4, r5, r6, r7, 20,  80, 12
+	round r7, r4, r5, r6, 40,  84, 27
+	round r6, r7, r4, r5, 60,  88, 23
+	round r5, r6, r7, r4, 16,  92, 18
 	
-	ldr r11, [r3, +#96]
-	ldr r10, [r0, +#36]
-	add r5, r6, r5, ROR #12
-	bic r9, r6, r7
-	and r8, r7, r5
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
+	round r4, r5, r6, r7, 36,  96, 12
+	round r7, r4, r5, r6, 56, 100, 27
+	round r6, r7, r4, r5, 12, 104, 23
+	round r5, r6, r7, r4, 32, 108, 18
 
-	ldr r11, [r3, +#100]
-	ldr r10, [r0, +#56]
-	add r4, r5, r4, ROR #27
-	bic r9, r5, r6
-	and r8, r6, r4
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r11, [r3, +#104]
-	ldr r10, [r0, +#12]
-	add r7, r4, r7, ROR #23
-	bic r9, r4, r5
-	and r8, r5, r7
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#108]
-	ldr r11, [r0, +#32]
-	add r6, r7, r6, ROR #18
-	bic r9, r7, r4
-	and r8, r4, r6
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
-	
-	ldr r11, [r3, +#112]
-	ldr r10, [r0, +#52]
-	add r5, r6, r5, ROR #12
-	bic r9, r6, r7
-	and r8, r7, r5
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
-
-	ldr r11, [r3, +#116]
-	ldr r10, [r0, +#8]
-	add r4, r5, r4, ROR #27
-	bic r9, r5, r6
-	and r8, r6, r4
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r11, [r3, +#120]
-	ldr r10, [r0, +#28]
-	add r7, r4, r7, ROR #23
-	bic r9, r4, r5
-	and r8, r5, r7
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#124]
-	ldr r11, [r0, +#48]
-	add r6, r7, r6, ROR #18
-	bic r9, r7, r4
-	and r8, r4, r6
-	orr r9, r8, r9
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
+	round r4, r5, r6, r7, 52, 112, 12
+	round r7, r4, r5, r6,  8, 116, 27
+	round r6, r7, r4, r5, 28, 120, 23
+	round r5, r6, r7, r4, 48, 124, 18
 
 	/* third loop */
-	ldr r11, [r3, +#128]
-	ldr r10, [r0, +#20]
-	add r5, r6, r5, ROR #12
-	eor r8, r5, r6
-	eor r9, r8, r7
+.purgem round
+.macro round a, b, c, d, offset_block, offset_table, shift
+	ldr r10, [r0, +#\offset_block]
+	ldr r11, [r3, +#\offset_table]
+	add \b, \c, \b, ROR #\shift
+	eor r8, \d, \c
+	eor r8, r8, \b
+	add \a, \a, r8
 	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
+	add \a, \a, r10
+.endm
 
-	ldr r10, [r3, +#132]
-	ldr r11, [r0, +#32]
-	add r4, r5, r4, ROR #28
-	eor r8, r4, r5
-	eor r9, r8, r6
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r10, [r3, +#136]
-	ldr r11, [r0, +#44]
-	add r7, r4, r7, ROR #21
-	eor r8, r7, r4
-	eor r9, r8, r5
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#140]
-	ldr r11, [r0, +#56]
-	add r6, r7, r6, ROR #16
-	eor r8, r6, r7
-	eor r9, r8, r4
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
-
-	ldr r11, [r3, +#144]
-	ldr r10, [r0, +#4]
-	add r5, r6, r5, ROR #9
-	eor r8, r5, r6
-	eor r9, r8, r7
-	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
-
-	ldr r10, [r3, +#148]
-	ldr r11, [r0, +#16]
-	add r4, r5, r4, ROR #28
-	eor r8, r4, r5
-	eor r9, r8, r6
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r10, [r3, +#152]
-	ldr r11, [r0, +#28]
-	add r7, r4, r7, ROR #21
-	eor r8, r7, r4
-	eor r9, r8, r5
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#156]
-	ldr r11, [r0, +#40]
-	add r6, r7, r6, ROR #16
-	eor r8, r6, r7
-	eor r9, r8, r4
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
+	round r4, r5, r6, r7, 20, 128, 12
+	round r7, r4, r5, r6, 32, 132, 28
+	round r6, r7, r4, r5, 44, 136, 21
+	round r5, r6, r7, r4, 56, 140, 16
 	
-	ldr r11, [r3, +#160]
-	ldr r10, [r0, +#52]
-	add r5, r6, r5, ROR #9
-	eor r8, r5, r6
-	eor r9, r8, r7
-	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
+	round r4, r5, r6, r7,  4, 144,  9
+	round r7, r4, r5, r6, 16, 148, 28
+	round r6, r7, r4, r5, 28, 152, 21
+	round r5, r6, r7, r4, 40, 156, 16
+	
+	round r4, r5, r6, r7, 52, 160,  9
+	round r7, r4, r5, r6,  0, 164, 28
+	round r6, r7, r4, r5, 12, 168, 21
+	round r5, r6, r7, r4, 24, 172, 16
 
-	ldr r10, [r3, +#164]
-	ldr r11, [r0, +#0]
-	add r4, r5, r4, ROR #28
-	eor r8, r4, r5
-	eor r9, r8, r6
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r10, [r3, +#168]
-	ldr r11, [r0, +#12]
-	add r7, r4, r7, ROR #21
-	eor r8, r7, r4
-	eor r9, r8, r5
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#172]
-	ldr r11, [r0, +#24]
-	add r6, r7, r6, ROR #16
-	eor r8, r6, r7
-	eor r9, r8, r4
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
-
-	ldr r11, [r3, +#176]
-	ldr r10, [r0, +#36]
-	add r5, r6, r5, ROR #9
-	eor r8, r5, r6
-	eor r9, r8, r7
-	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
-
-	ldr r10, [r3, +#180]
-	ldr r11, [r0, +#48]
-	add r4, r5, r4, ROR #28
-	eor r8, r4, r5
-	eor r9, r8, r6
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r10, [r3, +#184]
-	ldr r11, [r0, +#60]
-	add r7, r4, r7, ROR #21
-	eor r8, r7, r4
-	eor r9, r8, r5
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#188]
-	ldr r11, [r0, +#8]
-	add r6, r7, r6, ROR #16
-	eor r8, r6, r7
-	eor r9, r8, r4
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
+	round r4, r5, r6, r7, 36, 176,  9
+	round r7, r4, r5, r6, 48, 180, 28
+	round r6, r7, r4, r5, 60, 184, 21
+	round r5, r6, r7, r4,  8, 188, 16
 
 	/* fourth loop */
-	ldr r11, [r3, +#192]
-	ldr r10, [r0, +#0]
-	add r5, r6, r5, ROR #9
-	mvn r8, r7
-	orr r8, r5, r8
-	eor r9, r8, r6
+.purgem round
+.macro round a, b, c, d, offset_block, offset_table, shift
+	ldr r10, [r0, +#\offset_block]
+	ldr r11, [r3, +#\offset_table]
+	add \b, \c, \b, ROR #\shift
+	mvn r8, \d
+	orr r8, r8, \b
+	eor r8, r8, \c
+	add \a, \a, r8
 	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
+	add \a, \a, r10
+.endm
+
+	round r4, r5, r6, r7,  0, 192,  9
+	round r7, r4, r5, r6, 28, 196, 26
+	round r6, r7, r4, r5, 56, 200, 22
+	round r5, r6, r7, r4, 20, 204, 17
+
+	round r4, r5, r6, r7, 48, 208, 11
+	round r7, r4, r5, r6, 12, 212, 26
+	round r6, r7, r4, r5, 40, 216, 22
+	round r5, r6, r7, r4,  4, 220, 17
+
+	round r4, r5, r6, r7, 32, 224, 11
+	round r7, r4, r5, r6, 60, 228, 26
+	round r6, r7, r4, r5, 24, 232, 22
+	round r5, r6, r7, r4, 52, 236, 17
+
+	round r4, r5, r6, r7, 16, 240, 11
+	round r7, r4, r5, r6, 44, 244, 26
+	round r6, r7, r4, r5,  8, 248, 22
+	round r5, r6, r7, r4, 36, 252, 17
 	
-	ldr r10, [r3, +#196]
-	ldr r11, [r0, +#28]
-	add r4, r5, r4, ROR #26 
-	mvn r8, r6
-	orr r8, r8, r4
-	eor r9, r8, r5
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r10, [r3, +#200]
-	ldr r11, [r0, +#56]
-	add r7, r4, r7, ROR #22
-	mvn r8, r5
-	orr r8, r8, r7
-	eor r9, r8, r4
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#204]
-	ldr r11, [r0, +#20]
-	add r6, r7, r6, ROR #17
-	mvn r8, r4
-	orr r8, r8, r6
-	eor r9, r8, r7
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
-	
-	ldr r11, [r3, +#208]
-	ldr r10, [r0, +#48]
-	add r5, r6, r5, ROR #11
-	mvn r8, r7
-	orr r8, r5, r8
-	eor r9, r8, r6
-	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
-	
-	ldr r10, [r3, +#212]
-	ldr r11, [r0, +#12]
-	add r4, r5, r4, ROR #26 
-	mvn r8, r6
-	orr r8, r8, r4
-	eor r9, r8, r5
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r10, [r3, +#216]
-	ldr r11, [r0, +#40]
-	add r7, r4, r7, ROR #22
-	mvn r8, r5
-	orr r8, r8, r7
-	eor r9, r8, r4
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#220]
-	ldr r11, [r0, +#4]
-	add r6, r7, r6, ROR #17
-	mvn r8, r4
-	orr r8, r8, r6
-	eor r9, r8, r7
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
-	
-	ldr r11, [r3, +#224]
-	ldr r10, [r0, +#32]
-	add r5, r6, r5, ROR #11
-	mvn r8, r7
-	orr r8, r5, r8
-	eor r9, r8, r6
-	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
-	
-	ldr r10, [r3, +#228]
-	ldr r11, [r0, +#60]
-	add r4, r5, r4, ROR #26 
-	mvn r8, r6
-	orr r8, r8, r4
-	eor r9, r8, r5
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r10, [r3, +#232]
-	ldr r11, [r0, +#24]
-	add r7, r4, r7, ROR #22
-	mvn r8, r5
-	orr r8, r8, r7
-	eor r9, r8, r4
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#236]
-	ldr r11, [r0, +#52]
-	add r6, r7, r6, ROR #17
-	mvn r8, r4
-	orr r8, r8, r6
-	eor r9, r8, r7
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
-	
-	ldr r11, [r3, +#240]
-	ldr r10, [r0, +#16]
-	add r5, r6, r5, ROR #11
-	mvn r8, r7
-	orr r8, r5, r8
-	eor r9, r8, r6
-	add r10, r10, r11
-	add r4, r4, r9
-	add r4, r4, r10
-	
-	ldr r10, [r3, +#244]
-	ldr r11, [r0, +#44]
-	add r4, r5, r4, ROR #26 
-	mvn r8, r6
-	orr r8, r8, r4
-	eor r9, r8, r5
-	add r10, r10, r11
-	add r7, r7, r9
-	add r7, r7, r10
-
-	ldr r10, [r3, +#248]
-	ldr r11, [r0, +#8]
-	add r7, r4, r7, ROR #22
-	mvn r8, r5
-	orr r8, r8, r7
-	eor r9, r8, r4
-	add r10, r10, r11
-	add r6, r6, r9
-	add r6, r6, r10
-
-	ldr r10, [r3, +#252]
-	ldr r11, [r0, +#36]
-	add r6, r7, r6, ROR #17
-	mvn r8, r4
-	orr r8, r8, r6
-	eor r9, r8, r7
-	add r10, r10, r11
-	add r5, r5, r9
-	add r5, r5, r10
-
 	ldmia r1, {r8, r9, r10, r11}
+	
+	subs r2, r2, #1
+	addne r0, r0, #64
+	
 	add r5, r6, r5, ROR #11
 	add r4, r4, r8
 	add r5, r5, r9
@@ -722,11 +243,9 @@ md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
 	add r7, r7, r11
 	stmia r1, {r4, r5, r6, r7}
 	
-	subs r2, r2, #1
-	addne r0, r0, #64
 	bne .Lstart
+	
 .Lend:
-
 	pop {r4 - r11}
 	bx lr
 
