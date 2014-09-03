@@ -7,18 +7,18 @@
 .arch armv6
 
 .text
-/* FIXME: without this hack the assembler throws errors because the pool is too far */
+/* FIXME: without this hack the assembler throws errors because the pool is too far away */
 k1:
 	.word 0x5A827999
 k2:
 	.word 0x6ED9EBA1
-	
+
 .global sha1_process_blocks_asm
 sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 	push {r4 - r12}
 	cmp r2, #0
 	beq .Lend
-	sub sp, sp, #320
+	sub sp, sp, #64 /* alternative memory efficient SHA-1 algorithm */
 	
 	ldmia r1, {r3 - r7}	
 	
@@ -60,15 +60,15 @@ sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 	/* loop 1b */
 .purgem round
 .macro round a, b, c, d, e, temp, offset_stack
-	ldr \temp, [sp, +#(\offset_stack-12)]
-	ldr r10, [sp, +#(\offset_stack-32)]
-	ldr r11, [sp, +#(\offset_stack-56)]
-	ldr r12, [sp, +#(\offset_stack-64)]
+	ldr \temp, [sp, +#((\offset_stack + 52) & 63)]
+	ldr r10, [sp, +#((\offset_stack + 32) & 63)]
+	ldr r11, [sp, +#((\offset_stack + 8) & 63)]
+	ldr r12, [sp, +#(\offset_stack & 63)]
 	eor r10, r10, \temp
 	eor r11, r11, r12
 	eor r10, r10, r11
 	ror r10, r10, #31
-	str r10, [sp, +#\offset_stack]
+	str r10, [sp, +#(\offset_stack & 63)]
 	and \temp, \b, \c
 	bic r11, \d, \b
 	orr \temp, \temp, r11
@@ -87,15 +87,15 @@ sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 	ldr r8, k2
 .purgem round
 .macro round a, b, c, d, e, temp, offset_stack
-	ldr \temp, [sp, +#(\offset_stack-12)]
-	ldr r10, [sp, +#(\offset_stack-32)]
-	ldr r11, [sp, +#(\offset_stack-56)]
-	ldr r12, [sp, +#(\offset_stack-64)]
+	ldr \temp, [sp, +#((\offset_stack + 52) & 63)]
+	ldr r10, [sp, +#((\offset_stack + 32) & 63)]
+	ldr r11, [sp, +#((\offset_stack + 8) & 63)]
+	ldr r12, [sp, +#(\offset_stack & 63)]
 	eor r10, r10, \temp
 	eor r11, r11, r12
 	eor r10, r10, r11
 	ror r10, r10, #31
-	str r10, [sp, +#\offset_stack]
+	str r10, [sp, +#(\offset_stack & 63)]
 	eor \temp, \b, \c
 	eor \temp, \temp, \d
 	add \temp, \temp, r8
@@ -133,15 +133,15 @@ sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 	ldr r8, =0x8F1BBCDC
 .purgem round
 .macro round a, b, c, d, e, temp, offset_stack
-	ldr \temp, [sp, +#(\offset_stack-12)]
-	ldr r10, [sp, +#(\offset_stack-32)]
-	ldr r11, [sp, +#(\offset_stack-56)]
-	ldr r12, [sp, +#(\offset_stack-64)]
+	ldr \temp, [sp, +#((\offset_stack + 52) & 63)]
+	ldr r10, [sp, +#((\offset_stack + 32) & 63)]
+	ldr r11, [sp, +#((\offset_stack + 8) & 63)]
+	ldr r12, [sp, +#(\offset_stack & 63)]
 	eor r10, r10, \temp
 	eor r11, r11, r12
 	eor r10, r10, r11
 	ror r10, r10, #31
-	str r10, [sp, +#\offset_stack]
+	str r10, [sp, +#(\offset_stack & 63)]
 	and \temp, \b, \c
 	and r11, \b, \d
 	and r12, \c, \d
@@ -182,15 +182,15 @@ sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 	ldr r8, =0xCA62C1D6
 .purgem round
 .macro round a, b, c, d, e, temp, offset_stack
-	ldr \temp, [sp, +#(\offset_stack-12)]
-	ldr r10, [sp, +#(\offset_stack-32)]
-	ldr r11, [sp, +#(\offset_stack-56)]
-	ldr r12, [sp, +#(\offset_stack-64)]
+	ldr \temp, [sp, +#((\offset_stack + 52) & 63)]
+	ldr r10, [sp, +#((\offset_stack + 32) & 63)]
+	ldr r11, [sp, +#((\offset_stack + 8) & 63)]
+	ldr r12, [sp, +#(\offset_stack & 63)]
 	eor r10, r10, \temp
 	eor r11, r11, r12
 	eor r10, r10, r11
 	ror r10, r10, #31
-	str r10, [sp, +#\offset_stack]
+	str r10, [sp, +#(\offset_stack & 63)]
 	eor \temp, \b, \c
 	eor \temp, \temp, \d
 	add \temp, \temp, r8
@@ -224,7 +224,6 @@ sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 	round r3, r4, r5, r6, r7, r9, 312
 	round r9, r3, r4, r5, r6, r7, 316
 
-	/* FIXME: merge this mov block with the add block below */
 	mov r6, r4
 	mov r4, r9
 	mov r9, r7
@@ -241,10 +240,10 @@ sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 	add r6, r6, r11
 	add r7, r7, r12
 	stmia r1, {r3 - r7}
-	
+
 	bne .Lstart
 	
-	add sp, sp, #320
+	add sp, sp, #64
 .Lend:	
 	pop {r4 - r12}
 	bx lr
