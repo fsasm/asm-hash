@@ -37,7 +37,7 @@
 #define HASH_SIZE 8
 #define HASH_INIT sha256_init_hash
 #define PROCESS_BLOCKS(hash) sha256_process_blocks (test_block_64, hash, 1)
-#define PROCESS_BLOCKS_ASM(hash) sha256_process_block_asm (test_block_64, hash, 1)
+#define PROCESS_BLOCKS_ASM(hash) sha256_process_block_asm (test_block_64, hash)
 
 #endif
 
