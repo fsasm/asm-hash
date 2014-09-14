@@ -38,6 +38,10 @@ void sha512_256_get_digest (sha512_context* ctxt, uint8_t digest[SHA512_256_DIGE
 
 void sha512_process_blocks (const uint8_t block[], uint64_t hash[8], unsigned int n);
 
+#if defined (SHA512_USE_ASM) || defined (SHA512_ENABLE_ASM)
+extern void sha512_process_block_asm (const uint8_t block[64], uint64_t hash[8]);
+#endif
+
 /* SHA-384 */
 #define SHA384_BLOCK_SIZE 128
 #define SHA384_DIGEST_SIZE 48

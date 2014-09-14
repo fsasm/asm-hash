@@ -1,0 +1,27 @@
+x: r6, r7
+x >> 6:
+lsr r8, r6, #6
+orr r8, r8, r7, LSL #(32 - 6)=26
+lsr r9, r7, #6
+
+example r7:88776655 r6:44332211 
+target  r9:0221DD99 r8:5510CC88
+
+r8: 5510CC88 r9: 0221DD99 works :)
+
+x >>> 61: (61 - 32 = 29)
+lsr r8, r7, #29
+orr r8, r8, r6, LSL #(32 - 29)=3 /* low word */
+lsl r9, r7, #3
+orr r9, r9, r6, LSR #29
+
+example r7:88776655 r6:44332211 
+target  r9:43BB32AA r8:2199108C
+
+r8: 2199108C r9: 43BB32AA works :)
+
+x >>> 19: (32 - 19 = 13)
+lsr r9, r7, #19
+orr r9, r9, r6, LSL #13
+lsr r8, r6, #19
+orr r8, r8, r7, LSL #13

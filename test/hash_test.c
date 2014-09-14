@@ -5,6 +5,7 @@
  */
 
 #include <stdint.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include "test.h"
@@ -18,6 +19,7 @@
 #define HASH_INIT md5_init_hash
 #define PROCESS_BLOCKS(hash) md5_process_blocks (test_block_128, hash, 2)
 #define PROCESS_BLOCKS_ASM(hash) md5_process_blocks_asm (test_block_128, hash, 2)
+#define PRINTF_HASH "%8.8" PRIX32 " "
 
 #elif HASH_SHA1
 
@@ -28,6 +30,7 @@
 #define HASH_INIT sha1_init_hash
 #define PROCESS_BLOCKS(hash) sha1_process_blocks (test_block_128, hash, 2)
 #define PROCESS_BLOCKS_ASM(hash) sha1_process_blocks_asm (test_block_128, hash, 2)
+#define PRINTF_HASH "%8.8" PRIX32 " "
 
 #elif HASH_SHA256
 
@@ -38,6 +41,18 @@
 #define HASH_INIT sha256_init_hash
 #define PROCESS_BLOCKS(hash) sha256_process_blocks (test_block_64, hash, 1)
 #define PROCESS_BLOCKS_ASM(hash) sha256_process_block_asm (test_block_64, hash)
+#define PRINTF_HASH "%8.8" PRIX32 " "
+
+#elif HASH_SHA512
+
+#define SHA512_ENABLE_ASM
+#include "sha512.h"
+#define HASH_TYPE uint64_t
+#define HASH_SIZE 8
+#define HASH_INIT sha512_init_hash
+#define PROCESS_BLOCKS(hash) sha512_process_blocks (test_block_128, hash, 1)
+#define PROCESS_BLOCKS_ASM(hash) sha512_process_block_asm (test_block_128, hash)
+#define PRINTF_HASH "%16.16" PRIX64 " "
 
 #endif
 
@@ -53,12 +68,12 @@ int main (void) {
 	
 	printf ("asm: ");
 	for (int i = 0; i < HASH_SIZE; i++) {
-		printf ("%X ", hash_asm[i]);
+		printf (PRINTF_HASH, hash_asm[i]);
 	}
 	
 	printf ("\nref: ");
 	for (int i = 0; i < HASH_SIZE; i++) {
-		printf ("%X ", hash_ref[i]);
+		printf (PRINTF_HASH, hash_ref[i]);
 	}
 	
 	bool identical = true;

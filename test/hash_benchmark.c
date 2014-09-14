@@ -59,6 +59,22 @@
 #define PROCESS_BLOCKS(hash) sha256_process_block_asm (test_block_64, hash)
 #endif
 
+#elif defined(HASH_SHA512) || defined(HASH_SHA512_ASM)
+
+#define SHA512_ENABLE_ASM
+#include "sha512.h"
+
+#define HASH_TYPE uint64_t
+#define HASH_SIZE 8
+#define DEFAULT_RUNS 500
+#define NUM_BYTES 64
+
+#ifdef HASH_SHA512
+#define PROCESS_BLOCKS(hash) sha512_process_blocks (test_block_64, hash, 1)
+#else
+#define PROCESS_BLOCKS(hash) sha512_process_block_asm (test_block_64, hash)
+#endif
+
 #endif
 
 /* for quicksort */
