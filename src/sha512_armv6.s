@@ -170,17 +170,15 @@ sha512_table: /* uint64_t[80] (little endian) */
 	.word 0x4A475817
 	.word 0x6C44198C /* 80 */
 	
-hash_string: 
-	.asciz "%16.16llX "
-nl_string:
-	.asciz "\n"
-	
 .text
-.global sha512_process_block_asm
-sha512_process_block_asm: /* (uint8_t block[128], uint64_t hash[8], uint n) */
+.global sha512_process_blocks_asm
+sha512_process_blocks_asm: /* (uint8_t block[128], uint64_t hash[8], uint n) */
 	push {r4 - r12, lr}
+	cmp r2, #0
+	beq .Lend
 	sub sp, sp, #640 /* 8 * 80 = 640 */
 	
+.Lstart:
 	/* loop 1a */
 .macro rev_64 low, high
 	rev r11, \low
@@ -209,7 +207,7 @@ sha512_process_block_asm: /* (uint8_t block[128], uint64_t hash[8], uint n) */
 	rev_64 r9, r10
 	stmia sp!, {r3 - r10}
 	
-	ldmia r0, {r3 - r10}
+	ldmia r0!, {r3 - r10}
 	rev_64 r3, r4
 	rev_64 r5, r6
 	rev_64 r7, r8
@@ -217,17 +215,28 @@ sha512_process_block_asm: /* (uint8_t block[128], uint64_t hash[8], uint n) */
 	stmia sp!, {r3 - r10}
 	
 .macro ror_64 dst_low, dst_high, src_low, src_high, times
-.if \times < 32
+.if \times == 1
+	movs \dst_low, \src_low, LSR #1
+	mov \dst_high, \src_high, RRX
+	orr \dst_low, \dst_low, \src_high, LSR #31
+.elseif \times < 32
 	lsr \dst_high, \src_high, #\times
 	lsr \dst_low, \src_low, #\times
 	orr \dst_high, \dst_high, \src_low, LSL #(32 - \times)
 	orr \dst_low, \dst_low, \src_high, LSL #(32 - \times)
+.elseif \times == 32
+	mov \dst_low, \src_high
+	mov \dst_high, \src_low
+.elseif \times == 33
+	movs \dst_high, \src_low, LSR #1
+	mov \dst_low, \src_high, RRX
+	orr \dst_high, \dst_high, \src_high, LSR #31
 .else
 	lsr \dst_low, \src_high, #(\times - 32)
 	orr \dst_low, \dst_low, \src_low, LSL #(64 - \times)
 	lsl \dst_high, \src_high, #(64 - \times)
 	orr \dst_high, \dst_high, \src_low, LSR #(\times - 32)
-.endif /* FIXME add cases for 1, 32 and 33 */
+.endif /* FIXME add cases for 33 */
 .endm
 	
 .macro ror_xor_64 dst_low, dst_high, src_low, src_high, times
@@ -377,15 +386,15 @@ sha512_process_block_asm: /* (uint8_t block[128], uint64_t hash[8], uint n) */
 	add_hash2
 	add_hash2
 	
-	sub r1, r1, #64	
-	add sp, sp, #640
+	subs r2, r2, #1
+	sub r1, r1, #64
+	bne .Lstart
 	
+	add sp, sp, #640
+
+.Lend:
 	pop {r4 - r12, lr}
 	bx lr
 
 addr_table:
 	.word sha512_table
-addr_string:
-	.word hash_string
-addr_nl:
-	.word nl_string

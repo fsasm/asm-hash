@@ -67,12 +67,12 @@
 #define HASH_TYPE uint64_t
 #define HASH_SIZE 8
 #define DEFAULT_RUNS 500
-#define NUM_BYTES 64
+#define NUM_BYTES (128 * 2)
 
 #ifdef HASH_SHA512
-#define PROCESS_BLOCKS(hash) sha512_process_blocks (test_block_64, hash, 1)
+#define PROCESS_BLOCKS(hash) sha512_process_blocks (test_block_256, hash, 2)
 #else
-#define PROCESS_BLOCKS(hash) sha512_process_block_asm (test_block_64, hash)
+#define PROCESS_BLOCKS(hash) sha512_process_blocks_asm (test_block_256, hash, 2)
 #endif
 
 #endif

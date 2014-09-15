@@ -36,7 +36,11 @@ const uint64_t sha512_table[80] = {
 
 void process_block (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
 	(void)data_bits;
+#ifdef SHA512_USE_ASM
+	sha512_process_blocks_asm (block, (uint64_t*)(b->func_data), n);
+#else
 	sha512_process_blocks (block, (uint64_t*)(b->func_data), n);
+#endif
 }
 
 void sha512_init (sha512_context* ctxt) {
