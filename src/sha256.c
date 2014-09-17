@@ -33,9 +33,7 @@ uint32_t table[64] = {
 void process_block (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
 	(void)data_bits;
 #ifdef SHA256_USE_ASM
-	for (unsigned int i = 0; i < n; i++) {
-		sha256_process_block_asm (&block[i * 64], (uint32_t*)(b->func_data));
-	}
+	sha256_process_blocks_asm (block, (uint32_t*)(b->func_data), n);
 #else
 	sha256_process_blocks (block, (uint32_t*)(b->func_data), n);
 #endif

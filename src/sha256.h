@@ -30,7 +30,7 @@ void sha256_get_digest (sha256_context* ctxt, uint8_t digest[SHA256_DIGEST_SIZE]
 void sha256_process_blocks (const uint8_t block[], uint32_t hash[8], unsigned int n);
 
 #if defined (SHA256_USE_ASM) || defined (SHA256_ENABLE_ASM)
-extern void sha256_process_block_asm (const uint8_t block[64], uint32_t hash[8]);
+extern void sha256_process_blocks_asm (const uint8_t block[64], uint32_t hash[8], unsigned int n);
 #endif
 
 /* SHA-224 */

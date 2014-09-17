@@ -76,11 +76,16 @@ sha256_table:
 	.word 0xC67178F2 /* 64 */
 
 .text
-.global sha256_process_block_asm
-sha256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8]) */
+.global sha256_process_blocks_asm
+sha256_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[8], uint n) */
 	push {r4 - r12}
+	cmp r2, #0
+	beq .Lend
+	push {r0 - r2}
 	sub sp, sp, #256 /* 4 * 64 = 256 */
 	
+.Lstart:
+
 	/* loop 1a */
 	ldmia r0!, {r3 - r10}
 	rev r3, r3
@@ -93,7 +98,7 @@ sha256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8]) */
 	rev r10, r10
 	stmia sp!, {r3 - r10}
 	
-	ldmia r0!, {r3 - r10}
+	ldmia r0, {r3 - r10}
 	rev r3, r3
 	rev r4, r4
 	rev r5, r5
@@ -131,10 +136,9 @@ sha256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8]) */
 
 	subs r2, r2, #1
 	add sp, sp, #16
-.Lloop1_check:
 	bne .Lloop1_start
-	sub sp, sp, #192
 	
+	sub sp, sp, #192
 	mov r2, #8 /* counter */
 	ldr r0, addr_table
 	ldmia r1, {r3 - r10} /* hash */
@@ -176,9 +180,8 @@ sha256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8]) */
 	round r4, r5, r6, r7, r8, r9, r10, r3
 
 	subs r2, r2, #1
-.Lloop2_end:
 	bne .Lloop2_start
-
+	
 	/* end */
 	ldmia r1, {r0, r2, r11, r12}
 	add r3, r3, r0
@@ -194,6 +197,14 @@ sha256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8]) */
 	add r10, r10, r6
 	stmia r1, {r7 - r10}
 	
+	
+	pop {r0 - r2}
+	subs r2, r2, #1
+	addne r0, r0, #64
+	pushne {r0 - r2}
+	subne sp, sp, #256
+	bne .Lstart
+.Lend:
 	pop {r4 - r12}
 	bx lr
 

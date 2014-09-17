@@ -39,8 +39,8 @@
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 8
 #define HASH_INIT sha256_init_hash
-#define PROCESS_BLOCKS(hash) sha256_process_blocks (test_block_64, hash, 1)
-#define PROCESS_BLOCKS_ASM(hash) sha256_process_block_asm (test_block_64, hash)
+#define PROCESS_BLOCKS(hash) sha256_process_blocks (test_block_128, hash, 2)
+#define PROCESS_BLOCKS_ASM(hash) sha256_process_blocks_asm (test_block_128, hash, 2)
 #define PRINTF_HASH "%8.8" PRIX32 " "
 
 #elif HASH_SHA512

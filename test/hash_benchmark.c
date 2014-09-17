@@ -51,12 +51,12 @@
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 8
 #define DEFAULT_RUNS 1000
-#define NUM_BYTES 64
+#define NUM_BYTES (64 * 4)
 
 #ifdef HASH_SHA256
-#define PROCESS_BLOCKS(hash) sha256_process_blocks (test_block_64, hash, 1)
+#define PROCESS_BLOCKS(hash) sha256_process_blocks (test_block_256, hash, 4)
 #else
-#define PROCESS_BLOCKS(hash) sha256_process_block_asm (test_block_64, hash)
+#define PROCESS_BLOCKS(hash) sha256_process_blocks_asm (test_block_256, hash, 4)
 #endif
 
 #elif defined(HASH_SHA512) || defined(HASH_SHA512_ASM)
