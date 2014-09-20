@@ -33,6 +33,10 @@ void blake256_get_digest (blake256_context* ctxt, uint8_t digest[BLAKE256_DIGEST
 void blake256_process_block (const uint8_t block[64], uint32_t hash[8], uint64_t counter);
 void blake256_process_block_with_salt (const uint8_t block[64], uint32_t hash[8], const uint32_t salt[4], uint64_t counter);
 
+#if defined (BLAKE256_USE_ASM) || defined (BLAKE256_ENABLE_ASM)
+extern void blake256_process_block_asm (const uint8_t block[64], uint32_t hash[8], uint64_t counter);
+#endif
+
 /* BLAKE-224 */
 #define BLAKE224_BLOCK_SIZE 64
 #define BLAKE224_DIGEST_SIZE 28

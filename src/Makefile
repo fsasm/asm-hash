@@ -44,6 +44,9 @@ whirlpoolsum: whirlpool.c block.c hashsum.c int_util.c
 blake256sum: blake256.c block.c hashsum.c int_util.c
 	$(CC) -std=c99 -o blake256sum blake256.c block.c int_util.c hashsum.c -DHASH_BLAKE256 $(INCLUDE_PATH) $(CFLAGS)
 
+blake256sum_armv6: blake256.c blake256_armv6.s block.c hashsum.c int_util.c
+	$(CC) -std=c99 -o blake256sum blake256.c blake256_armv6.s -DBLAKE256_USE_ASM block.c int_util.c hashsum.c -DHASH_BLAKE256 $(INCLUDE_PATH) $(CFLAGS)
+
 blake224sum: blake256.c block.c hashsum.c int_util.c
 	$(CC) -std=c99 -o blake224sum blake256.c block.c int_util.c hashsum.c -DHASH_BLAKE224 $(INCLUDE_PATH) $(CFLAGS)
 

@@ -75,6 +75,22 @@
 #define PROCESS_BLOCKS(hash) sha512_process_blocks_asm (test_block_256, hash, 2)
 #endif
 
+#elif defined(HASH_BLAKE256) || defined(HASH_BLAKE256_ASM)
+
+#define BLAKE256_ENABLE_ASM
+#include "blake256.h"
+
+#define HASH_TYPE uint32_t
+#define HASH_SIZE 8
+#define DEFAULT_RUNS 1000
+#define NUM_BYTES (64)
+
+#ifdef HASH_BLAKE256
+#define PROCESS_BLOCKS(hash) blake256_process_block (test_block_64, hash, UINT64_C (0x6A09E667BB67AE85))
+#else
+#define PROCESS_BLOCKS(hash) blake256_process_block_asm (test_block_64, hash, UINT64_C (0x6A09E667BB67AE85))
+#endif
+
 #endif
 
 /* for quicksort */
