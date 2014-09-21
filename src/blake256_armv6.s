@@ -47,11 +47,20 @@ blake256_permutations: /* 8 digits packed in 32 bit */
 	.word 0x5A417D2C /* 8 */
 	.word 0x5167482A
 	.word 0x0DC3E9BF /* 9 */
+	
+	.word 0x76543210
+	.word 0xFEDCBA98 /* 0 */
+	.word 0x6DF984AE
+	.word 0x357B20C1 /* 1 */
+	.word 0xDF250C8B
+	.word 0x491763EA /* 2 */
+	.word 0xEBCD1397
+	.word 0x8F04A562 /* 3 */
 
 .text
 .global blake256_process_block_asm
 blake256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8], uint64_t counter) */
-	push {r4 - r12, lr}
+	push {r4 - r12}
 	sub sp, sp, #64
 	
 	ldr r12, addr_table
@@ -67,20 +76,21 @@ blake256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8], uint64_t co
 	stmia sp, {r4 - r11}
 	sub sp, sp, #32
 	
-	mov r3, #10
+	mov r2, #14
 	ldr r4, addr_permutations
 	ldr r5, addr_table
 .Lloop1:
 
 .macro round a, b, c, d
-	ldrb r6, [r4], #1
-	lsr r7, r6, #4
-	and r6, r6, #15
+	and r6, r3, #0x0F
+	and r7, r3, #0xF0
+	lsr r7, r7, #2
 	
-	ldr r9, [r0, +r7, LSL #2]
+	ldr r9, [r0, +r7]
 	ldr r8, [r0, +r6, LSL #2]
-	ldr r11, [r5, +r7, LSL #2]
+	ldr r11, [r5, +r7]
 	ldr r10, [r5, +r6, LSL #2]
+	lsr r3, r3, #8
 	rev r6, r8
 	rev r7, r9	
 	ldr r8, [sp, #(\a)]
@@ -110,36 +120,20 @@ blake256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8], uint64_t co
 	str r10, [sp, #(\c)]
 	str r11, [sp, #(\d)]
 .endm
-
+	ldr r3, [r4], #+4
 	round  0, 16, 32, 48
 	round  4, 20, 36, 52
 	round  8, 24, 40, 56
 	round 12, 28, 44, 60
 	
+	ldr r3, [r4], #+4
 	round  0, 20, 40, 60
 	round  4, 24, 44, 48
 	round  8, 28, 32, 52
 	round 12, 16, 36, 56
 	
-	subs r3, r3, #1
+	subs r2, r2, #1
 	bne .Lloop1
-	
-	ldr r4, addr_permutations
-	mov r3, #4
-	
-.Lloop2:
-	round  0, 16, 32, 48
-	round  4, 20, 36, 52
-	round  8, 24, 40, 56
-	round 12, 28, 44, 60
-	
-	round  0, 20, 40, 60
-	round  4, 24, 44, 48
-	round  8, 28, 32, 52
-	round 12, 16, 36, 56
-	
-	subs r3, r3, #1
-	bne .Lloop2
 
 .macro process_hash
 	ldmia r1, {r3 - r6}
@@ -162,7 +156,7 @@ blake256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8], uint64_t co
 	process_hash /* 4 - 7 */
 	add sp, sp, #32
 .Lend:
-	pop {r4 - r12, lr}
+	pop {r4 - r12}
 	bx lr
 
 addr_table:
