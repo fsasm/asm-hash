@@ -53,5 +53,8 @@ blake224sum: blake256.c block.c hashsum.c int_util.c
 blake512sum: blake512.c block.c hashsum.c int_util.c
 	$(CC) -std=c99 -o blake512sum blake512.c block.c int_util.c hashsum.c -DHASH_BLAKE512 $(INCLUDE_PATH) $(CFLAGS)
 
+blake512sum_armv6: blake512.c blake512_armv6.s block.c hashsum.c int_util.c
+	$(CC) -std=c99 -o blake512sum blake512.c blake512_armv6.s -DBLAKE512_USE_ASM block.c int_util.c hashsum.c -DHASH_BLAKE512 $(INCLUDE_PATH) $(CFLAGS)
+
 blake384sum: blake512.c block.c hashsum.c int_util.c
 	$(CC) -std=c99 -o blake384sum blake512.c block.c int_util.c hashsum.c -DHASH_BLAKE384 $(INCLUDE_PATH) $(CFLAGS)

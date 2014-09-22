@@ -33,6 +33,10 @@ void blake512_get_digest (blake512_context* ctxt, uint8_t digest[BLAKE512_DIGEST
 void blake512_process_block (const uint8_t block[128], uint64_t hash[8], uint64_t counter);
 void blake512_process_block_with_salt (const uint8_t block[128], uint64_t hash[8], const uint64_t salt[4], uint64_t counter);
 
+#if defined (BLAKE512_USE_ASM) || defined (BLAKE512_ENABLE_ASM)
+extern void blake512_process_block_asm (const uint8_t block[128], uint64_t hash[8], uint64_t counter);
+#endif
+
 /* BLAKE-384 */
 #define BLAKE384_BLOCK_SIZE 128
 #define BLAKE384_DIGEST_SIZE 48

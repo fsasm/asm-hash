@@ -33,7 +33,11 @@ void process_block (block* b, const uint8_t block[], unsigned int n, bool data_b
 	uint64_t full_size = b->full_size - (n - 1) * 128;
 	
 	for (unsigned int i = 0; i < n; i++) {
+#ifdef BLAKE512_USE_ASM
+		blake512_process_block_asm (block, data, data_bits ? full_size : 0);
+#else
 		blake512_process_block (block, data, data_bits ? full_size : 0);
+#endif
 		block += 128;
 		full_size += 128;
 	}

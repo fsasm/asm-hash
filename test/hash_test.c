@@ -65,6 +65,18 @@
 #define PROCESS_BLOCKS_ASM(hash) blake256_process_block_asm (test_block_64, hash, UINT64_C (0x6A09E667BB67AE85))
 #define PRINTF_HASH "%8.8" PRIX32 " "
 
+#elif HASH_BLAKE512
+
+#define BLAKE512_ENABLE_ASM
+#include "blake512.h"
+#define HASH_TYPE uint64_t
+#define HASH_SIZE 8
+#define HASH_INIT blake512_init_hash
+#define PROCESS_BLOCKS_ASM(hash) blake512_process_block_asm (test_block_128, hash, UINT64_C (0x6A09E667BB67AE85))
+#define PROCESS_BLOCKS(hash) blake512_process_block (test_block_128, hash, UINT64_C (0x6A09E667BB67AE85))
+#define PRINTF_HASH "%16.16" PRIX64 " "
+
+
 #endif
 
 int main (void) {

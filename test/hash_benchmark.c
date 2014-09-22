@@ -91,6 +91,22 @@
 #define PROCESS_BLOCKS(hash) blake256_process_block_asm (test_block_64, hash, UINT64_C (0x6A09E667BB67AE85))
 #endif
 
+#elif defined(HASH_BLAKE512) || defined(HASH_BLAKE512_ASM)
+
+#define BLAKE512_ENABLE_ASM
+#include "blake512.h"
+
+#define HASH_TYPE uint64_t
+#define HASH_SIZE 8
+#define DEFAULT_RUNS 1000
+#define NUM_BYTES (128)
+
+#ifdef HASH_BLAKE512
+#define PROCESS_BLOCKS(hash) blake512_process_block (test_block_128, hash, UINT64_C (0x6A09E667BB67AE85))
+#else
+#define PROCESS_BLOCKS(hash) blake512_process_block_asm (test_block_128, hash, UINT64_C (0x6A09E667BB67AE85))
+#endif
+
 #endif
 
 /* for quicksort */

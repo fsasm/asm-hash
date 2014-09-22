@@ -17,6 +17,9 @@ sha512_test: hash_test.c
 blake256_test: hash_test.c
 	$(CC) -std=c99 -o blake256_test hash_test.c -DHASH_BLAKE256 ../src/blake256.c ../src/blake256_armv6.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
+blake512_test: hash_test.c
+	$(CC) -std=c99 -o blake512_test hash_test.c -DHASH_BLAKE512 ../src/blake512.c ../src/blake512_armv6.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
+
 int_util_test: int_util_test.c
 	$(CC) -std=c99 -o int_util_test int_util_test.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
@@ -49,3 +52,9 @@ blake256_bench: hash_benchmark.c
 
 blake256_bench_armv6: hash_benchmark.c
 	$(CC) -std=gnu99 -lrt -o blake256_bench_armv6 hash_benchmark.c -DHASH_BLAKE256_ASM ../src/blake256.c ../src/blake256_armv6.s ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
+
+blake512_bench: hash_benchmark.c
+	$(CC) -std=gnu99 -lrt -o blake512_bench hash_benchmark.c -DHASH_BLAKE512 ../src/blake512.c ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
+
+blake512_bench_armv6: hash_benchmark.c
+	$(CC) -std=gnu99 -lrt -o blake512_bench_armv6 hash_benchmark.c -DHASH_BLAKE512_ASM ../src/blake512.c ../src/blake512_armv6.s ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
