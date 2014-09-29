@@ -129,6 +129,16 @@
 #define FINALIZE blake384_finalize
 #define GET_DIGEST blake384_get_digest
 
+#elif HASH_GROESTL256
+
+#include "groestl256.h"
+#define DIGEST_SIZE GROESTL256_DIGEST_SIZE
+#define CONTEXT groestl256_context
+#define INIT groestl256_init
+#define UPDATE groestl256_add
+#define FINALIZE groestl256_finalize
+#define GET_DIGEST groestl256_get_digest
+
 #endif
 
 #define BUFFER_SIZE 4096
