@@ -61,3 +61,6 @@ blake384sum: blake512.c block.c hashsum.c int_util.c
 
 groestl256sum: groestl256.c block.c hashsum.c int_util.c
 	$(CC) -std=c99 -o groestl256sum groestl256.c block.c int_util.c hashsum.c -DHASH_GROESTL256 $(INCLUDE_PATH) $(CFLAGS)
+
+groestl224sum: groestl256.c block.c hashsum.c int_util.c
+	$(CC) -std=c99 -o groestl224sum groestl256.c block.c int_util.c hashsum.c -DHASH_GROESTL224 $(INCLUDE_PATH) $(CFLAGS)

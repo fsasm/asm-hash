@@ -139,6 +139,16 @@
 #define FINALIZE groestl256_finalize
 #define GET_DIGEST groestl256_get_digest
 
+#elif HASH_GROESTL224
+
+#include "groestl256.h"
+#define DIGEST_SIZE GROESTL224_DIGEST_SIZE
+#define CONTEXT groestl224_context
+#define INIT groestl224_init
+#define UPDATE groestl224_add
+#define FINALIZE groestl224_finalize
+#define GET_DIGEST groestl224_get_digest
+
 #endif
 
 #define BUFFER_SIZE 4096

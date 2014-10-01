@@ -7,7 +7,6 @@
 #include "groestl256.h"
 #include "int_util.h"
 #include <string.h>
-#include <stdio.h>
 
 static const uint8_t diffusion_matrix[8][8];
 static const uint8_t table[256];
@@ -15,6 +14,7 @@ static const uint8_t table[256];
 void process_blocks (block* b, const uint8_t block[], unsigned int n, bool data_bits);
 void end_hash (block* b);
 
+/* GROESTL-256 */
 void groestl256_init (groestl256_context* ctxt) {
 	if (ctxt == NULL)
 		return;
@@ -50,6 +50,46 @@ void groestl256_get_digest (groestl256_context* ctxt, uint8_t digest[GROESTL256_
 	for (uint_fast8_t row = 0; row < 8; row++) {
 		for (uint_fast8_t column = 0; column < 4; column++) {
 			digest[column * 8 + row] = ctxt->hash[row][column + 4];
+		}
+	}
+}
+
+/* GROESTL-224 */
+void groestl224_init (groestl224_context* ctxt) {
+	if (ctxt == NULL)
+		return;
+	
+	block_init_with_end (
+		&ctxt->b, 
+		BLOCK_SIZE_512, 
+		ctxt->buffer, 
+		process_blocks, 
+		end_hash, 
+		ctxt->hash
+	);
+	groestl224_init_hash (ctxt->hash);
+}
+
+void groestl224_init_hash (uint8_t hash[8][8]) {
+	memset (hash, 0, GROESTL256_HASH_SIZE);
+	hash[7][7] = 0xe0;
+}
+
+void groestl224_add (groestl224_context* ctxt, const uint8_t data[], size_t length) {
+	groestl256_add (ctxt, data, length);
+}
+
+void groestl224_finalize (groestl224_context* ctxt) {
+	groestl256_finalize (ctxt);
+}
+
+void groestl224_get_digest (groestl224_context* ctxt, uint8_t digest[GROESTL224_DIGEST_SIZE]) {
+	for (uint_fast8_t row = 4; row < 8; row++) {
+			digest[row - 4] = ctxt->hash[row][4];
+		}
+	for (uint_fast8_t column = 1; column < 4; column++) {
+		for (uint_fast8_t row = 0; row < 8; row++) {
+			digest[column * 8 + row - 4] = ctxt->hash[row][column + 4];
 		}
 	}
 }
@@ -182,7 +222,6 @@ void groestl256_process_block (const uint8_t block[64], uint8_t hash[8][8], unsi
 		mix_bytes (state);
 	}
 	
-	print_matrix ("block", message);
 	for (uint_fast8_t r = 0; r < 10; r++) {
 		/* Q (message) */
 		add_round_constants_q (message, r);
