@@ -149,6 +149,26 @@
 #define FINALIZE groestl224_finalize
 #define GET_DIGEST groestl224_get_digest
 
+#elif HASH_GROESTL512
+
+#include "groestl512.h"
+#define DIGEST_SIZE GROESTL512_DIGEST_SIZE
+#define CONTEXT groestl512_context
+#define INIT groestl512_init
+#define UPDATE groestl512_add
+#define FINALIZE groestl512_finalize
+#define GET_DIGEST groestl512_get_digest
+
+#elif HASH_GROESTL384
+
+#include "groestl512.h"
+#define DIGEST_SIZE GROESTL384_DIGEST_SIZE
+#define CONTEXT groestl384_context
+#define INIT groestl384_init
+#define UPDATE groestl384_add
+#define FINALIZE groestl384_finalize
+#define GET_DIGEST groestl384_get_digest
+
 #endif
 
 #define BUFFER_SIZE 4096
