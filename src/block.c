@@ -96,7 +96,11 @@ void block_util_finalize (block* b, block_flag flags) {
 	uint64_t length_field = (flags & BLOCK_COUNT) != 0 ?
 		(b->full_size >> shift_from_size (b->max_size)) + 1 : b->full_size * 8;
 	
-	if ((flags & BLOCK_EXTENDED_PADDING) != 0 && block_size == length_index) {
+	if (
+		(flags & BLOCK_EXTENDED_PADDING) != 0 && 
+		(flags & BLOCK_EXTRA_PADDING) == 0 &&
+		block_size == length_index
+	) {
 		buffer[block_size] = 0x81;
 		block_size++;
 		
@@ -126,15 +130,31 @@ void block_util_finalize (block* b, block_flag flags) {
 		b->pfunc (b, buffer, 1, true);
 		data_bytes = false;
 		block_size = 0;
+		flags = flags & ~BLOCK_EXTRA_PADDING;
 		if ((flags & BLOCK_COUNT) != 0)
 			length_field++;
 	}
 	
 	if ((flags & BLOCK_EXTENDED_PADDING) != 0) {
-		memset (&buffer[block_size], 0, length_index - block_size - 1);
-		buffer[length_index - 1] = 0x01;
+		if ((flags & BLOCK_EXTRA_PADDING) != 0) {
+			memset (&buffer[block_size], 0, max_block_size - block_size);
+			b->pfunc (b, buffer, 1, data_bytes);
+			data_bytes = false;
+			memset (buffer, 0, length_index - 1);
+			buffer[length_index - 1] = 0x01;
+		} else {
+			memset (&buffer[block_size], 0, length_index - block_size - 1);
+			buffer[length_index - 1] = 0x01;
+		}
 	} else {
-		memset (&buffer[block_size], 0, length_index - block_size);
+		if ((flags & BLOCK_EXTRA_PADDING) != 0) {
+			memset (&buffer[block_size], 0, max_block_size - block_size);
+			b->pfunc (b, buffer, 1, data_bytes);
+			data_bytes = false;
+			memset (buffer, 0, length_index);
+		} else {
+			memset (&buffer[block_size], 0, length_index - block_size);
+		}
 	}
 	
 	block_size = length_index;
