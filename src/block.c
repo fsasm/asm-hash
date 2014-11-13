@@ -160,7 +160,6 @@ void block_util_finalize (block* b, block_flag flags) {
 	block_size = length_index;
 	
 	if ((flags & BLOCK_LITTLE_ENDIAN) != 0) {
-		if ((flags & BLOCK_COUNT) != 0)
 		u64_to_u8_le (length_field, &buffer[block_size]);
 		block_size += 8;
 		memset (&buffer[block_size], 0, max_block_size - block_size);
