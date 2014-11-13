@@ -29,7 +29,7 @@ typedef enum {
 	BLOCK_EXTENDED_PADDING = 0x10, /* adds 1 at the start and at the end of padding (blake256) */
 	
 	BLOCK_COUNT = 0x20, /* not the block length but the block count in the length field */
-	BLOCK_EXTRA_PADDING = 0x30 /* adds at least (BLOCK_SIZE - LENGTH_SIZE - 1) zero bits (jh256) */
+	BLOCK_EXTRA_PADDING = 0x40 /* adds at least (BLOCK_SIZE - LENGTH_SIZE - 1) zero bits (jh256) */
 } block_flag;
 
 struct block; 
