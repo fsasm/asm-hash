@@ -169,6 +169,46 @@
 #define FINALIZE groestl384_finalize
 #define GET_DIGEST groestl384_get_digest
 
+#elif HASH_JH256
+
+#include "jh.h"
+#define DIGEST_SIZE JH256_DIGEST_SIZE
+#define CONTEXT jh256_context
+#define INIT jh256_init
+#define UPDATE jh256_add
+#define FINALIZE jh256_finalize
+#define GET_DIGEST jh256_get_digest
+
+#elif HASH_JH224
+
+#include "jh.h"
+#define DIGEST_SIZE JH224_DIGEST_SIZE
+#define CONTEXT jh224_context
+#define INIT jh224_init
+#define UPDATE jh224_add
+#define FINALIZE jh224_finalize
+#define GET_DIGEST jh224_get_digest
+
+#elif HASH_JH384
+
+#include "jh.h"
+#define DIGEST_SIZE JH384_DIGEST_SIZE
+#define CONTEXT jh384_context
+#define INIT jh384_init
+#define UPDATE jh384_add
+#define FINALIZE jh384_finalize
+#define GET_DIGEST jh384_get_digest
+
+#elif HASH_JH512
+
+#include "jh.h"
+#define DIGEST_SIZE JH512_DIGEST_SIZE
+#define CONTEXT jh512_context
+#define INIT jh512_init
+#define UPDATE jh512_add
+#define FINALIZE jh512_finalize
+#define GET_DIGEST jh512_get_digest
+
 #endif
 
 #define BUFFER_SIZE 4096

@@ -118,3 +118,16 @@ groestl512sum: groestl512.c block.c hashsum.c int_util.c
 
 groestl384sum: groestl512.c block.c hashsum.c int_util.c
 	$(CC) -std=c99 -o groestl384sum groestl512.c block.c int_util.c hashsum.c -DHASH_GROESTL384 $(INCLUDE_PATH) $(CFLAGS)
+
+# JH	
+jh256sum: jh.c block.c hashsum.c int_util.c
+	$(CC) -std=c99 -o jh256sum jh.c block.c int_util.c hashsum.c -DHASH_JH256 $(INCLUDE_PATH) $(CFLAGS)
+
+jh224sum: jh.c block.c hashsum.c int_util.c
+	$(CC) -std=c99 -o jh224sum jh.c block.c int_util.c hashsum.c -DHASH_JH224 $(INCLUDE_PATH) $(CFLAGS)
+
+jh512sum: jh.c block.c hashsum.c int_util.c
+	$(CC) -std=c99 -o jh512sum jh.c block.c int_util.c hashsum.c -DHASH_JH512 $(INCLUDE_PATH) $(CFLAGS)
+
+jh384sum: jh.c block.c hashsum.c int_util.c
+	$(CC) -std=c99 -o jh384sum jh.c block.c int_util.c hashsum.c -DHASH_JH384 $(INCLUDE_PATH) $(CFLAGS)

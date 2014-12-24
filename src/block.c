@@ -136,7 +136,7 @@ void block_util_finalize (block* b, block_flag flags) {
 	}
 	
 	if ((flags & BLOCK_EXTENDED_PADDING) != 0) {
-		if ((flags & BLOCK_EXTRA_PADDING) != 0) {
+		if ((flags & BLOCK_EXTRA_PADDING) != 0 && data_bytes) {
 			memset (&buffer[block_size], 0, max_block_size - block_size);
 			b->pfunc (b, buffer, 1, data_bytes);
 			data_bytes = false;
@@ -147,7 +147,7 @@ void block_util_finalize (block* b, block_flag flags) {
 			buffer[length_index - 1] = 0x01;
 		}
 	} else {
-		if ((flags & BLOCK_EXTRA_PADDING) != 0) {
+		if ((flags & BLOCK_EXTRA_PADDING) != 0 && data_bytes) {
 			memset (&buffer[block_size], 0, max_block_size - block_size);
 			b->pfunc (b, buffer, 1, data_bytes);
 			data_bytes = false;
