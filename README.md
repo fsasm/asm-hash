@@ -11,6 +11,7 @@ This project began as an exercise to learn and practice assembly for ARMv6-CPUs 
 * Whirlpool
 * BLAKE (224, 256 384 and 512 variants)
 * Gr&#248;stl (224, 256 384 and 512 variants)
+* JH (224, 256 384 and 512 variants)
 
 ## License
 All the source code in this project is licensed under the 2-clause BSD License. The full text of the license can be found in the file LICENSE. 
