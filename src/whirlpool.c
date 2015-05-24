@@ -8,6 +8,7 @@
 #include "int_util.h"
 #include <string.h>
 
+#ifndef WHIRLPOOL_PRINT_TABLES
 void process_blocks (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
 	(void)data_bits;
 	for (unsigned int i = 0; i < n; i++) {
@@ -46,6 +47,7 @@ void whirlpool_get_digest (whirlpool_context* ctxt, uint8_t digest[WHIRLPOOL_DIG
 	}
 #endif
 }
+#endif
 
 #if defined (WHIRLPOOL_NAIVE) || defined (WHIRLPOOL_PRINT_TABLES)
 static const uint8_t s_box[256] = {
@@ -167,8 +169,43 @@ void build_tables (void) {
 
 int main (void) {
 	build_tables ();
-	
-	#ifndef WHIRLPOOL_ASM_TABLES
+	/* TODO WHIRLPOOL_SINGLE_TABLE */
+	#ifdef WHIRLPOOL_ASM_TABLES_32
+	/* WHIRLPOOL_ASM_TABLES_32 */
+	printf ("whirlpool_tables:\n");
+	for (uint_fast8_t table = 0; table < 8; table++) {
+		printf ("\nwhirlpool_table%d:\t/* table %d */\n", table, (table + 1));
+		for (uint_fast16_t i = 0; i < 256; i++) {
+			uint64_t entry = t[table][i];
+			uint32_t low = (uint32_t)entry;
+			uint32_t high = (uint32_t)(entry >> 32);
+			printf ("\t.long 0x%8.8" PRIX32 "\n", low); /* little endian */
+			printf ("\t.long 0x%8.8" PRIX32, high);
+			
+			if ((i + 1) % 4 == 0) {
+				printf (" /* %d */\n", i + 1);
+			} else {
+				printf ("\n");
+			}
+		}
+	}
+	#elif defined(WHIRLPOOL_ASM_TABLES_64)
+	/* WHIRLPOOL_ASM_TABLES32 */
+	printf ("whirlpool_tables:\n");
+	for (uint_fast8_t table = 0; table < 8; table++) {
+		printf ("\nwhirlpool_table%d:\t/* table %d */\n", table, (table + 1));
+		for (uint_fast16_t i = 0; i < 256; i++) {
+			uint64_t entry = t[table][i];
+			printf ("\t.quad 0x%16.16" PRIX64, entry);
+			
+			if ((i + 1) % 8 == 0) {
+				printf (" /* %d */\n", i + 1);
+			} else {
+				printf ("\n");
+			}
+		}
+	}
+	#else
 	/* WHIRLPOOL_C_TABLES */
 	/* print tables to copy in a c source file */
 	for (uint_fast8_t table = 0; table < 8; table++) {
@@ -188,26 +225,7 @@ int main (void) {
 			printf ("}\n");
 		else
 			printf ("},\n");
-	}
-	#else
-	/* WHIRLPOOL_ASM_TABLES */
-	printf ("whirlpool_tables:\n");
-	for (uint_fast8_t table = 0; table < 8; table++) {
-		printf ("\t/* table %d */\n", (table + 1));
-		for (uint_fast16_t i = 0; i < 256; i++) {
-			uint64_t entry = t[table][i];
-			uint32_t low = (uint32_t)entry;
-			uint32_t high = (uint32_t)(entry >> 32);
-			printf ("\t.word 0x%8.8" PRIX32 "\n", low); /* little endian */
-			printf ("\t.word 0x%8.8" PRIX32, high);
-			
-			if ((i + 1) % 4 == 0) {
-				printf (" /* %d */\n", i + 1);
-			} else {
-				printf ("\n");
-			}
-		}
-	}
+	}	
 	#endif
 	
 }

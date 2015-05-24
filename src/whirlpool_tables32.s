@@ -1,0 +1,4142 @@
+/*
+ * whirlpool_tables32.s
+ * Author: Fabjan Sukalia (fsukalia@gmail.com)
+ * Date: 2015-05-24
+ */
+
+.section .rodata
+.align 4
+whirlpool_round_const:
+	.long 0x87B8014F
+	.long 0x1823C6E8
+	.long 0x796F9152
+	.long 0x36A6D2F5
+	.long 0xA30C7B35
+	.long 0x60BC9B8E
+	.long 0x2E4BFE57
+	.long 0x1DE0D7C2 /*  4 */
+	.long 0x9FF04ADA
+	.long 0x157737E5
+	.long 0xB1A06B85
+	.long 0x58C9290A
+	.long 0xCB3E0567
+	.long 0xBD5D10F4
+	.long 0xA77D95D8
+	.long 0xE427418B /*  8 */
+	.long 0xDD17479E
+	.long 0xFBEE7C66
+	.long 0xAD5A8333
+	.long 0xCA2DBF07 /* 10 */
+
+whirlpool_tables:
+whirlpool_table0:	/* table 1 */
+	.long 0xC07830D8
+	.long 0x18186018
+	.long 0x05AF4626
+	.long 0x23238C23
+	.long 0x7EF991B8
+	.long 0xC6C63FC6
+	.long 0x136FCDFB
+	.long 0xE8E887E8 /* 4 */
+	.long 0x4CA113CB
+	.long 0x87872687
+	.long 0xA9626D11
+	.long 0xB8B8DAB8
+	.long 0x08050209
+	.long 0x01010401
+	.long 0x426E9E0D
+	.long 0x4F4F214F /* 8 */
+	.long 0xADEE6C9B
+	.long 0x3636D836
+	.long 0x590451FF
+	.long 0xA6A6A2A6
+	.long 0xDEBDB90C
+	.long 0xD2D26FD2
+	.long 0xFB06F70E
+	.long 0xF5F5F3F5 /* 12 */
+	.long 0xEF80F296
+	.long 0x7979F979
+	.long 0x5FCEDE30
+	.long 0x6F6FA16F
+	.long 0xFCEF3F6D
+	.long 0x91917E91
+	.long 0xAA07A4F8
+	.long 0x52525552 /* 16 */
+	.long 0x27FDC047
+	.long 0x60609D60
+	.long 0x89766535
+	.long 0xBCBCCABC
+	.long 0xACCD2B37
+	.long 0x9B9B569B
+	.long 0x048C018A
+	.long 0x8E8E028E /* 20 */
+	.long 0x71155BD2
+	.long 0xA3A3B6A3
+	.long 0x603C186C
+	.long 0x0C0C300C
+	.long 0xFF8AF684
+	.long 0x7B7BF17B
+	.long 0xB5E16A80
+	.long 0x3535D435 /* 24 */
+	.long 0xE8693AF5
+	.long 0x1D1D741D
+	.long 0x5347DDB3
+	.long 0xE0E0A7E0
+	.long 0xF6ACB321
+	.long 0xD7D77BD7
+	.long 0x5EED999C
+	.long 0xC2C22FC2 /* 28 */
+	.long 0x6D965C43
+	.long 0x2E2EB82E
+	.long 0x627A9629
+	.long 0x4B4B314B
+	.long 0xA321E15D
+	.long 0xFEFEDFFE
+	.long 0x8216AED5
+	.long 0x57574157 /* 32 */
+	.long 0xA8412ABD
+	.long 0x15155415
+	.long 0x9FB6EEE8
+	.long 0x7777C177
+	.long 0xA5EB6E92
+	.long 0x3737DC37
+	.long 0x7B56D79E
+	.long 0xE5E5B3E5 /* 36 */
+	.long 0x8CD92313
+	.long 0x9F9F469F
+	.long 0xD317FD23
+	.long 0xF0F0E7F0
+	.long 0x6A7F9420
+	.long 0x4A4A354A
+	.long 0x9E95A944
+	.long 0xDADA4FDA /* 40 */
+	.long 0xFA25B0A2
+	.long 0x58587D58
+	.long 0x06CA8FCF
+	.long 0xC9C903C9
+	.long 0x558D527C
+	.long 0x2929A429
+	.long 0x5022145A
+	.long 0x0A0A280A /* 44 */
+	.long 0xE14F7F50
+	.long 0xB1B1FEB1
+	.long 0x691A5DC9
+	.long 0xA0A0BAA0
+	.long 0x7FDAD614
+	.long 0x6B6BB16B
+	.long 0x5CAB17D9
+	.long 0x85852E85 /* 48 */
+	.long 0x8173673C
+	.long 0xBDBDCEBD
+	.long 0xD234BA8F
+	.long 0x5D5D695D
+	.long 0x80502090
+	.long 0x10104010
+	.long 0xF303F507
+	.long 0xF4F4F7F4 /* 52 */
+	.long 0x16C08BDD
+	.long 0xCBCB0BCB
+	.long 0xEDC67CD3
+	.long 0x3E3EF83E
+	.long 0x28110A2D
+	.long 0x05051405
+	.long 0x1FE6CE78
+	.long 0x67678167 /* 56 */
+	.long 0x7353D597
+	.long 0xE4E4B7E4
+	.long 0x25BB4E02
+	.long 0x27279C27
+	.long 0x32588273
+	.long 0x41411941
+	.long 0x2C9D0BA7
+	.long 0x8B8B168B /* 60 */
+	.long 0x510153F6
+	.long 0xA7A7A6A7
+	.long 0xCF94FAB2
+	.long 0x7D7DE97D
+	.long 0xDCFB3749
+	.long 0x95956E95
+	.long 0x8E9FAD56
+	.long 0xD8D847D8 /* 64 */
+	.long 0x8B30EB70
+	.long 0xFBFBCBFB
+	.long 0x2371C1CD
+	.long 0xEEEE9FEE
+	.long 0xC791F8BB
+	.long 0x7C7CED7C
+	.long 0x17E3CC71
+	.long 0x66668566 /* 68 */
+	.long 0xA68EA77B
+	.long 0xDDDD53DD
+	.long 0xB84B2EAF
+	.long 0x17175C17
+	.long 0x02468E45
+	.long 0x47470147
+	.long 0x84DC211A
+	.long 0x9E9E429E /* 72 */
+	.long 0x1EC589D4
+	.long 0xCACA0FCA
+	.long 0x75995A58
+	.long 0x2D2DB42D
+	.long 0x9179632E
+	.long 0xBFBFC6BF
+	.long 0x381B0E3F
+	.long 0x07071C07 /* 76 */
+	.long 0x012347AC
+	.long 0xADAD8EAD
+	.long 0xEA2FB4B0
+	.long 0x5A5A755A
+	.long 0x6CB51BEF
+	.long 0x83833683
+	.long 0x85FF66B6
+	.long 0x3333CC33 /* 80 */
+	.long 0x3FF2C65C
+	.long 0x63639163
+	.long 0x100A0412
+	.long 0x02020802
+	.long 0x39384993
+	.long 0xAAAA92AA
+	.long 0xAFA8E2DE
+	.long 0x7171D971 /* 84 */
+	.long 0x0ECF8DC6
+	.long 0xC8C807C8
+	.long 0xC87D32D1
+	.long 0x19196419
+	.long 0x7270923B
+	.long 0x49493949
+	.long 0x869AAF5F
+	.long 0xD9D943D9 /* 88 */
+	.long 0xC31DF931
+	.long 0xF2F2EFF2
+	.long 0x4B48DBA8
+	.long 0xE3E3ABE3
+	.long 0xE22AB6B9
+	.long 0x5B5B715B
+	.long 0x34920DBC
+	.long 0x88881A88 /* 92 */
+	.long 0xA4C8293E
+	.long 0x9A9A529A
+	.long 0x2DBE4C0B
+	.long 0x26269826
+	.long 0x8DFA64BF
+	.long 0x3232C832
+	.long 0xE94A7D59
+	.long 0xB0B0FAB0 /* 96 */
+	.long 0x1B6ACFF2
+	.long 0xE9E983E9
+	.long 0x78331E77
+	.long 0x0F0F3C0F
+	.long 0xE6A6B733
+	.long 0xD5D573D5
+	.long 0x74BA1DF4
+	.long 0x80803A80 /* 100 */
+	.long 0x997C6127
+	.long 0xBEBEC2BE
+	.long 0x26DE87EB
+	.long 0xCDCD13CD
+	.long 0xBDE46889
+	.long 0x3434D034
+	.long 0x7A759032
+	.long 0x48483D48 /* 104 */
+	.long 0xAB24E354
+	.long 0xFFFFDBFF
+	.long 0xF78FF48D
+	.long 0x7A7AF57A
+	.long 0xF4EA3D64
+	.long 0x90907A90
+	.long 0xC23EBE9D
+	.long 0x5F5F615F /* 108 */
+	.long 0x1DA0403D
+	.long 0x20208020
+	.long 0x67D5D00F
+	.long 0x6868BD68
+	.long 0xD07234CA
+	.long 0x1A1A681A
+	.long 0x192C41B7
+	.long 0xAEAE82AE /* 112 */
+	.long 0xC95E757D
+	.long 0xB4B4EAB4
+	.long 0x9A19A8CE
+	.long 0x54544D54
+	.long 0xECE53B7F
+	.long 0x93937693
+	.long 0x0DAA442F
+	.long 0x22228822 /* 116 */
+	.long 0x07E9C863
+	.long 0x64648D64
+	.long 0xDB12FF2A
+	.long 0xF1F1E3F1
+	.long 0xBFA2E6CC
+	.long 0x7373D173
+	.long 0x905A2482
+	.long 0x12124812 /* 120 */
+	.long 0x3A5D807A
+	.long 0x40401D40
+	.long 0x40281048
+	.long 0x08082008
+	.long 0x56E89B95
+	.long 0xC3C32BC3
+	.long 0x337BC5DF
+	.long 0xECEC97EC /* 124 */
+	.long 0x9690AB4D
+	.long 0xDBDB4BDB
+	.long 0x611F5FC0
+	.long 0xA1A1BEA1
+	.long 0x1C830791
+	.long 0x8D8D0E8D
+	.long 0xF5C97AC8
+	.long 0x3D3DF43D /* 128 */
+	.long 0xCCF1335B
+	.long 0x97976697
+	.long 0x00000000
+	.long 0x00000000
+	.long 0x36D483F9
+	.long 0xCFCF1BCF
+	.long 0x4587566E
+	.long 0x2B2BAC2B /* 132 */
+	.long 0x97B3ECE1
+	.long 0x7676C576
+	.long 0x64B019E6
+	.long 0x82823282
+	.long 0xFEA9B128
+	.long 0xD6D67FD6
+	.long 0xD87736C3
+	.long 0x1B1B6C1B /* 136 */
+	.long 0xC15B7774
+	.long 0xB5B5EEB5
+	.long 0x112943BE
+	.long 0xAFAF86AF
+	.long 0x77DFD41D
+	.long 0x6A6AB56A
+	.long 0xBA0DA0EA
+	.long 0x50505D50 /* 140 */
+	.long 0x124C8A57
+	.long 0x45450945
+	.long 0xCB18FB38
+	.long 0xF3F3EBF3
+	.long 0x9DF060AD
+	.long 0x3030C030
+	.long 0x2B74C3C4
+	.long 0xEFEF9BEF /* 144 */
+	.long 0xE5C37EDA
+	.long 0x3F3FFC3F
+	.long 0x921CAAC7
+	.long 0x55554955
+	.long 0x791059DB
+	.long 0xA2A2B2A2
+	.long 0x0365C9E9
+	.long 0xEAEA8FEA /* 148 */
+	.long 0x0FECCA6A
+	.long 0x65658965
+	.long 0xB9686903
+	.long 0xBABAD2BA
+	.long 0x65935E4A
+	.long 0x2F2FBC2F
+	.long 0x4EE79D8E
+	.long 0xC0C027C0 /* 152 */
+	.long 0xBE81A160
+	.long 0xDEDE5FDE
+	.long 0xE06C38FC
+	.long 0x1C1C701C
+	.long 0xBB2EE746
+	.long 0xFDFDD3FD
+	.long 0x52649A1F
+	.long 0x4D4D294D /* 156 */
+	.long 0xE4E03976
+	.long 0x92927292
+	.long 0x8FBCEAFA
+	.long 0x7575C975
+	.long 0x301E0C36
+	.long 0x06061806
+	.long 0x249809AE
+	.long 0x8A8A128A /* 160 */
+	.long 0xF940794B
+	.long 0xB2B2F2B2
+	.long 0x6359D185
+	.long 0xE6E6BFE6
+	.long 0x70361C7E
+	.long 0x0E0E380E
+	.long 0xF8633EE7
+	.long 0x1F1F7C1F /* 164 */
+	.long 0x37F7C455
+	.long 0x62629562
+	.long 0xEEA3B53A
+	.long 0xD4D477D4
+	.long 0x29324D81
+	.long 0xA8A89AA8
+	.long 0xC4F43152
+	.long 0x96966296 /* 168 */
+	.long 0x9B3AEF62
+	.long 0xF9F9C3F9
+	.long 0x66F697A3
+	.long 0xC5C533C5
+	.long 0x35B14A10
+	.long 0x25259425
+	.long 0xF220B2AB
+	.long 0x59597959 /* 172 */
+	.long 0x54AE15D0
+	.long 0x84842A84
+	.long 0xB7A7E4C5
+	.long 0x7272D572
+	.long 0xD5DD72EC
+	.long 0x3939E439
+	.long 0x5A619816
+	.long 0x4C4C2D4C /* 176 */
+	.long 0xCA3BBC94
+	.long 0x5E5E655E
+	.long 0xE785F09F
+	.long 0x7878FD78
+	.long 0xDDD870E5
+	.long 0x3838E038
+	.long 0x14860598
+	.long 0x8C8C0A8C /* 180 */
+	.long 0xC6B2BF17
+	.long 0xD1D163D1
+	.long 0x410B57E4
+	.long 0xA5A5AEA5
+	.long 0x434DD9A1
+	.long 0xE2E2AFE2
+	.long 0x2FF8C24E
+	.long 0x61619961 /* 184 */
+	.long 0xF1457B42
+	.long 0xB3B3F6B3
+	.long 0x15A54234
+	.long 0x21218421
+	.long 0x94D62508
+	.long 0x9C9C4A9C
+	.long 0xF0663CEE
+	.long 0x1E1E781E /* 188 */
+	.long 0x22528661
+	.long 0x43431143
+	.long 0x76FC93B1
+	.long 0xC7C73BC7
+	.long 0xB32BE54F
+	.long 0xFCFCD7FC
+	.long 0x20140824
+	.long 0x04041004 /* 192 */
+	.long 0xB208A2E3
+	.long 0x51515951
+	.long 0xBCC72F25
+	.long 0x99995E99
+	.long 0x4FC4DA22
+	.long 0x6D6DA96D
+	.long 0x68391A65
+	.long 0x0D0D340D /* 196 */
+	.long 0x8335E979
+	.long 0xFAFACFFA
+	.long 0xB684A369
+	.long 0xDFDF5BDF
+	.long 0xD79BFCA9
+	.long 0x7E7EE57E
+	.long 0x3DB44819
+	.long 0x24249024 /* 200 */
+	.long 0xC5D776FE
+	.long 0x3B3BEC3B
+	.long 0x313D4B9A
+	.long 0xABAB96AB
+	.long 0x3ED181F0
+	.long 0xCECE1FCE
+	.long 0x88552299
+	.long 0x11114411 /* 204 */
+	.long 0x0C890383
+	.long 0x8F8F068F
+	.long 0x4A6B9C04
+	.long 0x4E4E254E
+	.long 0xD1517366
+	.long 0xB7B7E6B7
+	.long 0x0B60CBE0
+	.long 0xEBEB8BEB /* 208 */
+	.long 0xFDCC78C1
+	.long 0x3C3CF03C
+	.long 0x7CBF1FFD
+	.long 0x81813E81
+	.long 0xD4FE3540
+	.long 0x94946A94
+	.long 0xEB0CF31C
+	.long 0xF7F7FBF7 /* 212 */
+	.long 0xA1676F18
+	.long 0xB9B9DEB9
+	.long 0x985F268B
+	.long 0x13134C13
+	.long 0x7D9C5851
+	.long 0x2C2CB02C
+	.long 0xD6B8BB05
+	.long 0xD3D36BD3 /* 216 */
+	.long 0x6B5CD38C
+	.long 0xE7E7BBE7
+	.long 0x57CBDC39
+	.long 0x6E6EA56E
+	.long 0x6EF395AA
+	.long 0xC4C437C4
+	.long 0x180F061B
+	.long 0x03030C03 /* 220 */
+	.long 0x8A13ACDC
+	.long 0x56564556
+	.long 0x1A49885E
+	.long 0x44440D44
+	.long 0xDF9EFEA0
+	.long 0x7F7FE17F
+	.long 0x21374F88
+	.long 0xA9A99EA9 /* 224 */
+	.long 0x4D825467
+	.long 0x2A2AA82A
+	.long 0xB16D6B0A
+	.long 0xBBBBD6BB
+	.long 0x46E29F87
+	.long 0xC1C123C1
+	.long 0xA202A6F1
+	.long 0x53535153 /* 228 */
+	.long 0xAE8BA572
+	.long 0xDCDC57DC
+	.long 0x58271653
+	.long 0x0B0B2C0B
+	.long 0x9CD32701
+	.long 0x9D9D4E9D
+	.long 0x47C1D82B
+	.long 0x6C6CAD6C /* 232 */
+	.long 0x95F562A4
+	.long 0x3131C431
+	.long 0x87B9E8F3
+	.long 0x7474CD74
+	.long 0xE309F115
+	.long 0xF6F6FFF6
+	.long 0x0A438C4C
+	.long 0x46460546 /* 236 */
+	.long 0x092645A5
+	.long 0xACAC8AAC
+	.long 0x3C970FB5
+	.long 0x89891E89
+	.long 0xA04428B4
+	.long 0x14145014
+	.long 0x5B42DFBA
+	.long 0xE1E1A3E1 /* 240 */
+	.long 0xB04E2CA6
+	.long 0x16165816
+	.long 0xCDD274F7
+	.long 0x3A3AE83A
+	.long 0x6FD0D206
+	.long 0x6969B969
+	.long 0x482D1241
+	.long 0x09092409 /* 244 */
+	.long 0xA7ADE0D7
+	.long 0x7070DD70
+	.long 0xD954716F
+	.long 0xB6B6E2B6
+	.long 0xCEB7BD1E
+	.long 0xD0D067D0
+	.long 0x3B7EC7D6
+	.long 0xEDED93ED /* 248 */
+	.long 0x2EDB85E2
+	.long 0xCCCC17CC
+	.long 0x2A578468
+	.long 0x42421542
+	.long 0xB4C22D2C
+	.long 0x98985A98
+	.long 0x490E55ED
+	.long 0xA4A4AAA4 /* 252 */
+	.long 0x5D885075
+	.long 0x2828A028
+	.long 0xDA31B886
+	.long 0x5C5C6D5C
+	.long 0x933FED6B
+	.long 0xF8F8C7F8
+	.long 0x44A411C2
+	.long 0x86862286 /* 256 */
+
+whirlpool_table1:	/* table 2 */
+	.long 0x18C07830
+	.long 0xD8181860
+	.long 0x2305AF46
+	.long 0x2623238C
+	.long 0xC67EF991
+	.long 0xB8C6C63F
+	.long 0xE8136FCD
+	.long 0xFBE8E887 /* 4 */
+	.long 0x874CA113
+	.long 0xCB878726
+	.long 0xB8A9626D
+	.long 0x11B8B8DA
+	.long 0x01080502
+	.long 0x09010104
+	.long 0x4F426E9E
+	.long 0x0D4F4F21 /* 8 */
+	.long 0x36ADEE6C
+	.long 0x9B3636D8
+	.long 0xA6590451
+	.long 0xFFA6A6A2
+	.long 0xD2DEBDB9
+	.long 0x0CD2D26F
+	.long 0xF5FB06F7
+	.long 0x0EF5F5F3 /* 12 */
+	.long 0x79EF80F2
+	.long 0x967979F9
+	.long 0x6F5FCEDE
+	.long 0x306F6FA1
+	.long 0x91FCEF3F
+	.long 0x6D91917E
+	.long 0x52AA07A4
+	.long 0xF8525255 /* 16 */
+	.long 0x6027FDC0
+	.long 0x4760609D
+	.long 0xBC897665
+	.long 0x35BCBCCA
+	.long 0x9BACCD2B
+	.long 0x379B9B56
+	.long 0x8E048C01
+	.long 0x8A8E8E02 /* 20 */
+	.long 0xA371155B
+	.long 0xD2A3A3B6
+	.long 0x0C603C18
+	.long 0x6C0C0C30
+	.long 0x7BFF8AF6
+	.long 0x847B7BF1
+	.long 0x35B5E16A
+	.long 0x803535D4 /* 24 */
+	.long 0x1DE8693A
+	.long 0xF51D1D74
+	.long 0xE05347DD
+	.long 0xB3E0E0A7
+	.long 0xD7F6ACB3
+	.long 0x21D7D77B
+	.long 0xC25EED99
+	.long 0x9CC2C22F /* 28 */
+	.long 0x2E6D965C
+	.long 0x432E2EB8
+	.long 0x4B627A96
+	.long 0x294B4B31
+	.long 0xFEA321E1
+	.long 0x5DFEFEDF
+	.long 0x578216AE
+	.long 0xD5575741 /* 32 */
+	.long 0x15A8412A
+	.long 0xBD151554
+	.long 0x779FB6EE
+	.long 0xE87777C1
+	.long 0x37A5EB6E
+	.long 0x923737DC
+	.long 0xE57B56D7
+	.long 0x9EE5E5B3 /* 36 */
+	.long 0x9F8CD923
+	.long 0x139F9F46
+	.long 0xF0D317FD
+	.long 0x23F0F0E7
+	.long 0x4A6A7F94
+	.long 0x204A4A35
+	.long 0xDA9E95A9
+	.long 0x44DADA4F /* 40 */
+	.long 0x58FA25B0
+	.long 0xA258587D
+	.long 0xC906CA8F
+	.long 0xCFC9C903
+	.long 0x29558D52
+	.long 0x7C2929A4
+	.long 0x0A502214
+	.long 0x5A0A0A28 /* 44 */
+	.long 0xB1E14F7F
+	.long 0x50B1B1FE
+	.long 0xA0691A5D
+	.long 0xC9A0A0BA
+	.long 0x6B7FDAD6
+	.long 0x146B6BB1
+	.long 0x855CAB17
+	.long 0xD985852E /* 48 */
+	.long 0xBD817367
+	.long 0x3CBDBDCE
+	.long 0x5DD234BA
+	.long 0x8F5D5D69
+	.long 0x10805020
+	.long 0x90101040
+	.long 0xF4F303F5
+	.long 0x07F4F4F7 /* 52 */
+	.long 0xCB16C08B
+	.long 0xDDCBCB0B
+	.long 0x3EEDC67C
+	.long 0xD33E3EF8
+	.long 0x0528110A
+	.long 0x2D050514
+	.long 0x671FE6CE
+	.long 0x78676781 /* 56 */
+	.long 0xE47353D5
+	.long 0x97E4E4B7
+	.long 0x2725BB4E
+	.long 0x0227279C
+	.long 0x41325882
+	.long 0x73414119
+	.long 0x8B2C9D0B
+	.long 0xA78B8B16 /* 60 */
+	.long 0xA7510153
+	.long 0xF6A7A7A6
+	.long 0x7DCF94FA
+	.long 0xB27D7DE9
+	.long 0x95DCFB37
+	.long 0x4995956E
+	.long 0xD88E9FAD
+	.long 0x56D8D847 /* 64 */
+	.long 0xFB8B30EB
+	.long 0x70FBFBCB
+	.long 0xEE2371C1
+	.long 0xCDEEEE9F
+	.long 0x7CC791F8
+	.long 0xBB7C7CED
+	.long 0x6617E3CC
+	.long 0x71666685 /* 68 */
+	.long 0xDDA68EA7
+	.long 0x7BDDDD53
+	.long 0x17B84B2E
+	.long 0xAF17175C
+	.long 0x4702468E
+	.long 0x45474701
+	.long 0x9E84DC21
+	.long 0x1A9E9E42 /* 72 */
+	.long 0xCA1EC589
+	.long 0xD4CACA0F
+	.long 0x2D75995A
+	.long 0x582D2DB4
+	.long 0xBF917963
+	.long 0x2EBFBFC6
+	.long 0x07381B0E
+	.long 0x3F07071C /* 76 */
+	.long 0xAD012347
+	.long 0xACADAD8E
+	.long 0x5AEA2FB4
+	.long 0xB05A5A75
+	.long 0x836CB51B
+	.long 0xEF838336
+	.long 0x3385FF66
+	.long 0xB63333CC /* 80 */
+	.long 0x633FF2C6
+	.long 0x5C636391
+	.long 0x02100A04
+	.long 0x12020208
+	.long 0xAA393849
+	.long 0x93AAAA92
+	.long 0x71AFA8E2
+	.long 0xDE7171D9 /* 84 */
+	.long 0xC80ECF8D
+	.long 0xC6C8C807
+	.long 0x19C87D32
+	.long 0xD1191964
+	.long 0x49727092
+	.long 0x3B494939
+	.long 0xD9869AAF
+	.long 0x5FD9D943 /* 88 */
+	.long 0xF2C31DF9
+	.long 0x31F2F2EF
+	.long 0xE34B48DB
+	.long 0xA8E3E3AB
+	.long 0x5BE22AB6
+	.long 0xB95B5B71
+	.long 0x8834920D
+	.long 0xBC88881A /* 92 */
+	.long 0x9AA4C829
+	.long 0x3E9A9A52
+	.long 0x262DBE4C
+	.long 0x0B262698
+	.long 0x328DFA64
+	.long 0xBF3232C8
+	.long 0xB0E94A7D
+	.long 0x59B0B0FA /* 96 */
+	.long 0xE91B6ACF
+	.long 0xF2E9E983
+	.long 0x0F78331E
+	.long 0x770F0F3C
+	.long 0xD5E6A6B7
+	.long 0x33D5D573
+	.long 0x8074BA1D
+	.long 0xF480803A /* 100 */
+	.long 0xBE997C61
+	.long 0x27BEBEC2
+	.long 0xCD26DE87
+	.long 0xEBCDCD13
+	.long 0x34BDE468
+	.long 0x893434D0
+	.long 0x487A7590
+	.long 0x3248483D /* 104 */
+	.long 0xFFAB24E3
+	.long 0x54FFFFDB
+	.long 0x7AF78FF4
+	.long 0x8D7A7AF5
+	.long 0x90F4EA3D
+	.long 0x6490907A
+	.long 0x5FC23EBE
+	.long 0x9D5F5F61 /* 108 */
+	.long 0x201DA040
+	.long 0x3D202080
+	.long 0x6867D5D0
+	.long 0x0F6868BD
+	.long 0x1AD07234
+	.long 0xCA1A1A68
+	.long 0xAE192C41
+	.long 0xB7AEAE82 /* 112 */
+	.long 0xB4C95E75
+	.long 0x7DB4B4EA
+	.long 0x549A19A8
+	.long 0xCE54544D
+	.long 0x93ECE53B
+	.long 0x7F939376
+	.long 0x220DAA44
+	.long 0x2F222288 /* 116 */
+	.long 0x6407E9C8
+	.long 0x6364648D
+	.long 0xF1DB12FF
+	.long 0x2AF1F1E3
+	.long 0x73BFA2E6
+	.long 0xCC7373D1
+	.long 0x12905A24
+	.long 0x82121248 /* 120 */
+	.long 0x403A5D80
+	.long 0x7A40401D
+	.long 0x08402810
+	.long 0x48080820
+	.long 0xC356E89B
+	.long 0x95C3C32B
+	.long 0xEC337BC5
+	.long 0xDFECEC97 /* 124 */
+	.long 0xDB9690AB
+	.long 0x4DDBDB4B
+	.long 0xA1611F5F
+	.long 0xC0A1A1BE
+	.long 0x8D1C8307
+	.long 0x918D8D0E
+	.long 0x3DF5C97A
+	.long 0xC83D3DF4 /* 128 */
+	.long 0x97CCF133
+	.long 0x5B979766
+	.long 0x00000000
+	.long 0x00000000
+	.long 0xCF36D483
+	.long 0xF9CFCF1B
+	.long 0x2B458756
+	.long 0x6E2B2BAC /* 132 */
+	.long 0x7697B3EC
+	.long 0xE17676C5
+	.long 0x8264B019
+	.long 0xE6828232
+	.long 0xD6FEA9B1
+	.long 0x28D6D67F
+	.long 0x1BD87736
+	.long 0xC31B1B6C /* 136 */
+	.long 0xB5C15B77
+	.long 0x74B5B5EE
+	.long 0xAF112943
+	.long 0xBEAFAF86
+	.long 0x6A77DFD4
+	.long 0x1D6A6AB5
+	.long 0x50BA0DA0
+	.long 0xEA50505D /* 140 */
+	.long 0x45124C8A
+	.long 0x57454509
+	.long 0xF3CB18FB
+	.long 0x38F3F3EB
+	.long 0x309DF060
+	.long 0xAD3030C0
+	.long 0xEF2B74C3
+	.long 0xC4EFEF9B /* 144 */
+	.long 0x3FE5C37E
+	.long 0xDA3F3FFC
+	.long 0x55921CAA
+	.long 0xC7555549
+	.long 0xA2791059
+	.long 0xDBA2A2B2
+	.long 0xEA0365C9
+	.long 0xE9EAEA8F /* 148 */
+	.long 0x650FECCA
+	.long 0x6A656589
+	.long 0xBAB96869
+	.long 0x03BABAD2
+	.long 0x2F65935E
+	.long 0x4A2F2FBC
+	.long 0xC04EE79D
+	.long 0x8EC0C027 /* 152 */
+	.long 0xDEBE81A1
+	.long 0x60DEDE5F
+	.long 0x1CE06C38
+	.long 0xFC1C1C70
+	.long 0xFDBB2EE7
+	.long 0x46FDFDD3
+	.long 0x4D52649A
+	.long 0x1F4D4D29 /* 156 */
+	.long 0x92E4E039
+	.long 0x76929272
+	.long 0x758FBCEA
+	.long 0xFA7575C9
+	.long 0x06301E0C
+	.long 0x36060618
+	.long 0x8A249809
+	.long 0xAE8A8A12 /* 160 */
+	.long 0xB2F94079
+	.long 0x4BB2B2F2
+	.long 0xE66359D1
+	.long 0x85E6E6BF
+	.long 0x0E70361C
+	.long 0x7E0E0E38
+	.long 0x1FF8633E
+	.long 0xE71F1F7C /* 164 */
+	.long 0x6237F7C4
+	.long 0x55626295
+	.long 0xD4EEA3B5
+	.long 0x3AD4D477
+	.long 0xA829324D
+	.long 0x81A8A89A
+	.long 0x96C4F431
+	.long 0x52969662 /* 168 */
+	.long 0xF99B3AEF
+	.long 0x62F9F9C3
+	.long 0xC566F697
+	.long 0xA3C5C533
+	.long 0x2535B14A
+	.long 0x10252594
+	.long 0x59F220B2
+	.long 0xAB595979 /* 172 */
+	.long 0x8454AE15
+	.long 0xD084842A
+	.long 0x72B7A7E4
+	.long 0xC57272D5
+	.long 0x39D5DD72
+	.long 0xEC3939E4
+	.long 0x4C5A6198
+	.long 0x164C4C2D /* 176 */
+	.long 0x5ECA3BBC
+	.long 0x945E5E65
+	.long 0x78E785F0
+	.long 0x9F7878FD
+	.long 0x38DDD870
+	.long 0xE53838E0
+	.long 0x8C148605
+	.long 0x988C8C0A /* 180 */
+	.long 0xD1C6B2BF
+	.long 0x17D1D163
+	.long 0xA5410B57
+	.long 0xE4A5A5AE
+	.long 0xE2434DD9
+	.long 0xA1E2E2AF
+	.long 0x612FF8C2
+	.long 0x4E616199 /* 184 */
+	.long 0xB3F1457B
+	.long 0x42B3B3F6
+	.long 0x2115A542
+	.long 0x34212184
+	.long 0x9C94D625
+	.long 0x089C9C4A
+	.long 0x1EF0663C
+	.long 0xEE1E1E78 /* 188 */
+	.long 0x43225286
+	.long 0x61434311
+	.long 0xC776FC93
+	.long 0xB1C7C73B
+	.long 0xFCB32BE5
+	.long 0x4FFCFCD7
+	.long 0x04201408
+	.long 0x24040410 /* 192 */
+	.long 0x51B208A2
+	.long 0xE3515159
+	.long 0x99BCC72F
+	.long 0x2599995E
+	.long 0x6D4FC4DA
+	.long 0x226D6DA9
+	.long 0x0D68391A
+	.long 0x650D0D34 /* 196 */
+	.long 0xFA8335E9
+	.long 0x79FAFACF
+	.long 0xDFB684A3
+	.long 0x69DFDF5B
+	.long 0x7ED79BFC
+	.long 0xA97E7EE5
+	.long 0x243DB448
+	.long 0x19242490 /* 200 */
+	.long 0x3BC5D776
+	.long 0xFE3B3BEC
+	.long 0xAB313D4B
+	.long 0x9AABAB96
+	.long 0xCE3ED181
+	.long 0xF0CECE1F
+	.long 0x11885522
+	.long 0x99111144 /* 204 */
+	.long 0x8F0C8903
+	.long 0x838F8F06
+	.long 0x4E4A6B9C
+	.long 0x044E4E25
+	.long 0xB7D15173
+	.long 0x66B7B7E6
+	.long 0xEB0B60CB
+	.long 0xE0EBEB8B /* 208 */
+	.long 0x3CFDCC78
+	.long 0xC13C3CF0
+	.long 0x817CBF1F
+	.long 0xFD81813E
+	.long 0x94D4FE35
+	.long 0x4094946A
+	.long 0xF7EB0CF3
+	.long 0x1CF7F7FB /* 212 */
+	.long 0xB9A1676F
+	.long 0x18B9B9DE
+	.long 0x13985F26
+	.long 0x8B13134C
+	.long 0x2C7D9C58
+	.long 0x512C2CB0
+	.long 0xD3D6B8BB
+	.long 0x05D3D36B /* 216 */
+	.long 0xE76B5CD3
+	.long 0x8CE7E7BB
+	.long 0x6E57CBDC
+	.long 0x396E6EA5
+	.long 0xC46EF395
+	.long 0xAAC4C437
+	.long 0x03180F06
+	.long 0x1B03030C /* 220 */
+	.long 0x568A13AC
+	.long 0xDC565645
+	.long 0x441A4988
+	.long 0x5E44440D
+	.long 0x7FDF9EFE
+	.long 0xA07F7FE1
+	.long 0xA921374F
+	.long 0x88A9A99E /* 224 */
+	.long 0x2A4D8254
+	.long 0x672A2AA8
+	.long 0xBBB16D6B
+	.long 0x0ABBBBD6
+	.long 0xC146E29F
+	.long 0x87C1C123
+	.long 0x53A202A6
+	.long 0xF1535351 /* 228 */
+	.long 0xDCAE8BA5
+	.long 0x72DCDC57
+	.long 0x0B582716
+	.long 0x530B0B2C
+	.long 0x9D9CD327
+	.long 0x019D9D4E
+	.long 0x6C47C1D8
+	.long 0x2B6C6CAD /* 232 */
+	.long 0x3195F562
+	.long 0xA43131C4
+	.long 0x7487B9E8
+	.long 0xF37474CD
+	.long 0xF6E309F1
+	.long 0x15F6F6FF
+	.long 0x460A438C
+	.long 0x4C464605 /* 236 */
+	.long 0xAC092645
+	.long 0xA5ACAC8A
+	.long 0x893C970F
+	.long 0xB589891E
+	.long 0x14A04428
+	.long 0xB4141450
+	.long 0xE15B42DF
+	.long 0xBAE1E1A3 /* 240 */
+	.long 0x16B04E2C
+	.long 0xA6161658
+	.long 0x3ACDD274
+	.long 0xF73A3AE8
+	.long 0x696FD0D2
+	.long 0x066969B9
+	.long 0x09482D12
+	.long 0x41090924 /* 244 */
+	.long 0x70A7ADE0
+	.long 0xD77070DD
+	.long 0xB6D95471
+	.long 0x6FB6B6E2
+	.long 0xD0CEB7BD
+	.long 0x1ED0D067
+	.long 0xED3B7EC7
+	.long 0xD6EDED93 /* 248 */
+	.long 0xCC2EDB85
+	.long 0xE2CCCC17
+	.long 0x422A5784
+	.long 0x68424215
+	.long 0x98B4C22D
+	.long 0x2C98985A
+	.long 0xA4490E55
+	.long 0xEDA4A4AA /* 252 */
+	.long 0x285D8850
+	.long 0x752828A0
+	.long 0x5CDA31B8
+	.long 0x865C5C6D
+	.long 0xF8933FED
+	.long 0x6BF8F8C7
+	.long 0x8644A411
+	.long 0xC2868622 /* 256 */
+
+whirlpool_table2:	/* table 3 */
+	.long 0x6018C078
+	.long 0x30D81818
+	.long 0x8C2305AF
+	.long 0x46262323
+	.long 0x3FC67EF9
+	.long 0x91B8C6C6
+	.long 0x87E8136F
+	.long 0xCDFBE8E8 /* 4 */
+	.long 0x26874CA1
+	.long 0x13CB8787
+	.long 0xDAB8A962
+	.long 0x6D11B8B8
+	.long 0x04010805
+	.long 0x02090101
+	.long 0x214F426E
+	.long 0x9E0D4F4F /* 8 */
+	.long 0xD836ADEE
+	.long 0x6C9B3636
+	.long 0xA2A65904
+	.long 0x51FFA6A6
+	.long 0x6FD2DEBD
+	.long 0xB90CD2D2
+	.long 0xF3F5FB06
+	.long 0xF70EF5F5 /* 12 */
+	.long 0xF979EF80
+	.long 0xF2967979
+	.long 0xA16F5FCE
+	.long 0xDE306F6F
+	.long 0x7E91FCEF
+	.long 0x3F6D9191
+	.long 0x5552AA07
+	.long 0xA4F85252 /* 16 */
+	.long 0x9D6027FD
+	.long 0xC0476060
+	.long 0xCABC8976
+	.long 0x6535BCBC
+	.long 0x569BACCD
+	.long 0x2B379B9B
+	.long 0x028E048C
+	.long 0x018A8E8E /* 20 */
+	.long 0xB6A37115
+	.long 0x5BD2A3A3
+	.long 0x300C603C
+	.long 0x186C0C0C
+	.long 0xF17BFF8A
+	.long 0xF6847B7B
+	.long 0xD435B5E1
+	.long 0x6A803535 /* 24 */
+	.long 0x741DE869
+	.long 0x3AF51D1D
+	.long 0xA7E05347
+	.long 0xDDB3E0E0
+	.long 0x7BD7F6AC
+	.long 0xB321D7D7
+	.long 0x2FC25EED
+	.long 0x999CC2C2 /* 28 */
+	.long 0xB82E6D96
+	.long 0x5C432E2E
+	.long 0x314B627A
+	.long 0x96294B4B
+	.long 0xDFFEA321
+	.long 0xE15DFEFE
+	.long 0x41578216
+	.long 0xAED55757 /* 32 */
+	.long 0x5415A841
+	.long 0x2ABD1515
+	.long 0xC1779FB6
+	.long 0xEEE87777
+	.long 0xDC37A5EB
+	.long 0x6E923737
+	.long 0xB3E57B56
+	.long 0xD79EE5E5 /* 36 */
+	.long 0x469F8CD9
+	.long 0x23139F9F
+	.long 0xE7F0D317
+	.long 0xFD23F0F0
+	.long 0x354A6A7F
+	.long 0x94204A4A
+	.long 0x4FDA9E95
+	.long 0xA944DADA /* 40 */
+	.long 0x7D58FA25
+	.long 0xB0A25858
+	.long 0x03C906CA
+	.long 0x8FCFC9C9
+	.long 0xA429558D
+	.long 0x527C2929
+	.long 0x280A5022
+	.long 0x145A0A0A /* 44 */
+	.long 0xFEB1E14F
+	.long 0x7F50B1B1
+	.long 0xBAA0691A
+	.long 0x5DC9A0A0
+	.long 0xB16B7FDA
+	.long 0xD6146B6B
+	.long 0x2E855CAB
+	.long 0x17D98585 /* 48 */
+	.long 0xCEBD8173
+	.long 0x673CBDBD
+	.long 0x695DD234
+	.long 0xBA8F5D5D
+	.long 0x40108050
+	.long 0x20901010
+	.long 0xF7F4F303
+	.long 0xF507F4F4 /* 52 */
+	.long 0x0BCB16C0
+	.long 0x8BDDCBCB
+	.long 0xF83EEDC6
+	.long 0x7CD33E3E
+	.long 0x14052811
+	.long 0x0A2D0505
+	.long 0x81671FE6
+	.long 0xCE786767 /* 56 */
+	.long 0xB7E47353
+	.long 0xD597E4E4
+	.long 0x9C2725BB
+	.long 0x4E022727
+	.long 0x19413258
+	.long 0x82734141
+	.long 0x168B2C9D
+	.long 0x0BA78B8B /* 60 */
+	.long 0xA6A75101
+	.long 0x53F6A7A7
+	.long 0xE97DCF94
+	.long 0xFAB27D7D
+	.long 0x6E95DCFB
+	.long 0x37499595
+	.long 0x47D88E9F
+	.long 0xAD56D8D8 /* 64 */
+	.long 0xCBFB8B30
+	.long 0xEB70FBFB
+	.long 0x9FEE2371
+	.long 0xC1CDEEEE
+	.long 0xED7CC791
+	.long 0xF8BB7C7C
+	.long 0x856617E3
+	.long 0xCC716666 /* 68 */
+	.long 0x53DDA68E
+	.long 0xA77BDDDD
+	.long 0x5C17B84B
+	.long 0x2EAF1717
+	.long 0x01470246
+	.long 0x8E454747
+	.long 0x429E84DC
+	.long 0x211A9E9E /* 72 */
+	.long 0x0FCA1EC5
+	.long 0x89D4CACA
+	.long 0xB42D7599
+	.long 0x5A582D2D
+	.long 0xC6BF9179
+	.long 0x632EBFBF
+	.long 0x1C07381B
+	.long 0x0E3F0707 /* 76 */
+	.long 0x8EAD0123
+	.long 0x47ACADAD
+	.long 0x755AEA2F
+	.long 0xB4B05A5A
+	.long 0x36836CB5
+	.long 0x1BEF8383
+	.long 0xCC3385FF
+	.long 0x66B63333 /* 80 */
+	.long 0x91633FF2
+	.long 0xC65C6363
+	.long 0x0802100A
+	.long 0x04120202
+	.long 0x92AA3938
+	.long 0x4993AAAA
+	.long 0xD971AFA8
+	.long 0xE2DE7171 /* 84 */
+	.long 0x07C80ECF
+	.long 0x8DC6C8C8
+	.long 0x6419C87D
+	.long 0x32D11919
+	.long 0x39497270
+	.long 0x923B4949
+	.long 0x43D9869A
+	.long 0xAF5FD9D9 /* 88 */
+	.long 0xEFF2C31D
+	.long 0xF931F2F2
+	.long 0xABE34B48
+	.long 0xDBA8E3E3
+	.long 0x715BE22A
+	.long 0xB6B95B5B
+	.long 0x1A883492
+	.long 0x0DBC8888 /* 92 */
+	.long 0x529AA4C8
+	.long 0x293E9A9A
+	.long 0x98262DBE
+	.long 0x4C0B2626
+	.long 0xC8328DFA
+	.long 0x64BF3232
+	.long 0xFAB0E94A
+	.long 0x7D59B0B0 /* 96 */
+	.long 0x83E91B6A
+	.long 0xCFF2E9E9
+	.long 0x3C0F7833
+	.long 0x1E770F0F
+	.long 0x73D5E6A6
+	.long 0xB733D5D5
+	.long 0x3A8074BA
+	.long 0x1DF48080 /* 100 */
+	.long 0xC2BE997C
+	.long 0x6127BEBE
+	.long 0x13CD26DE
+	.long 0x87EBCDCD
+	.long 0xD034BDE4
+	.long 0x68893434
+	.long 0x3D487A75
+	.long 0x90324848 /* 104 */
+	.long 0xDBFFAB24
+	.long 0xE354FFFF
+	.long 0xF57AF78F
+	.long 0xF48D7A7A
+	.long 0x7A90F4EA
+	.long 0x3D649090
+	.long 0x615FC23E
+	.long 0xBE9D5F5F /* 108 */
+	.long 0x80201DA0
+	.long 0x403D2020
+	.long 0xBD6867D5
+	.long 0xD00F6868
+	.long 0x681AD072
+	.long 0x34CA1A1A
+	.long 0x82AE192C
+	.long 0x41B7AEAE /* 112 */
+	.long 0xEAB4C95E
+	.long 0x757DB4B4
+	.long 0x4D549A19
+	.long 0xA8CE5454
+	.long 0x7693ECE5
+	.long 0x3B7F9393
+	.long 0x88220DAA
+	.long 0x442F2222 /* 116 */
+	.long 0x8D6407E9
+	.long 0xC8636464
+	.long 0xE3F1DB12
+	.long 0xFF2AF1F1
+	.long 0xD173BFA2
+	.long 0xE6CC7373
+	.long 0x4812905A
+	.long 0x24821212 /* 120 */
+	.long 0x1D403A5D
+	.long 0x807A4040
+	.long 0x20084028
+	.long 0x10480808
+	.long 0x2BC356E8
+	.long 0x9B95C3C3
+	.long 0x97EC337B
+	.long 0xC5DFECEC /* 124 */
+	.long 0x4BDB9690
+	.long 0xAB4DDBDB
+	.long 0xBEA1611F
+	.long 0x5FC0A1A1
+	.long 0x0E8D1C83
+	.long 0x07918D8D
+	.long 0xF43DF5C9
+	.long 0x7AC83D3D /* 128 */
+	.long 0x6697CCF1
+	.long 0x335B9797
+	.long 0x00000000
+	.long 0x00000000
+	.long 0x1BCF36D4
+	.long 0x83F9CFCF
+	.long 0xAC2B4587
+	.long 0x566E2B2B /* 132 */
+	.long 0xC57697B3
+	.long 0xECE17676
+	.long 0x328264B0
+	.long 0x19E68282
+	.long 0x7FD6FEA9
+	.long 0xB128D6D6
+	.long 0x6C1BD877
+	.long 0x36C31B1B /* 136 */
+	.long 0xEEB5C15B
+	.long 0x7774B5B5
+	.long 0x86AF1129
+	.long 0x43BEAFAF
+	.long 0xB56A77DF
+	.long 0xD41D6A6A
+	.long 0x5D50BA0D
+	.long 0xA0EA5050 /* 140 */
+	.long 0x0945124C
+	.long 0x8A574545
+	.long 0xEBF3CB18
+	.long 0xFB38F3F3
+	.long 0xC0309DF0
+	.long 0x60AD3030
+	.long 0x9BEF2B74
+	.long 0xC3C4EFEF /* 144 */
+	.long 0xFC3FE5C3
+	.long 0x7EDA3F3F
+	.long 0x4955921C
+	.long 0xAAC75555
+	.long 0xB2A27910
+	.long 0x59DBA2A2
+	.long 0x8FEA0365
+	.long 0xC9E9EAEA /* 148 */
+	.long 0x89650FEC
+	.long 0xCA6A6565
+	.long 0xD2BAB968
+	.long 0x6903BABA
+	.long 0xBC2F6593
+	.long 0x5E4A2F2F
+	.long 0x27C04EE7
+	.long 0x9D8EC0C0 /* 152 */
+	.long 0x5FDEBE81
+	.long 0xA160DEDE
+	.long 0x701CE06C
+	.long 0x38FC1C1C
+	.long 0xD3FDBB2E
+	.long 0xE746FDFD
+	.long 0x294D5264
+	.long 0x9A1F4D4D /* 156 */
+	.long 0x7292E4E0
+	.long 0x39769292
+	.long 0xC9758FBC
+	.long 0xEAFA7575
+	.long 0x1806301E
+	.long 0x0C360606
+	.long 0x128A2498
+	.long 0x09AE8A8A /* 160 */
+	.long 0xF2B2F940
+	.long 0x794BB2B2
+	.long 0xBFE66359
+	.long 0xD185E6E6
+	.long 0x380E7036
+	.long 0x1C7E0E0E
+	.long 0x7C1FF863
+	.long 0x3EE71F1F /* 164 */
+	.long 0x956237F7
+	.long 0xC4556262
+	.long 0x77D4EEA3
+	.long 0xB53AD4D4
+	.long 0x9AA82932
+	.long 0x4D81A8A8
+	.long 0x6296C4F4
+	.long 0x31529696 /* 168 */
+	.long 0xC3F99B3A
+	.long 0xEF62F9F9
+	.long 0x33C566F6
+	.long 0x97A3C5C5
+	.long 0x942535B1
+	.long 0x4A102525
+	.long 0x7959F220
+	.long 0xB2AB5959 /* 172 */
+	.long 0x2A8454AE
+	.long 0x15D08484
+	.long 0xD572B7A7
+	.long 0xE4C57272
+	.long 0xE439D5DD
+	.long 0x72EC3939
+	.long 0x2D4C5A61
+	.long 0x98164C4C /* 176 */
+	.long 0x655ECA3B
+	.long 0xBC945E5E
+	.long 0xFD78E785
+	.long 0xF09F7878
+	.long 0xE038DDD8
+	.long 0x70E53838
+	.long 0x0A8C1486
+	.long 0x05988C8C /* 180 */
+	.long 0x63D1C6B2
+	.long 0xBF17D1D1
+	.long 0xAEA5410B
+	.long 0x57E4A5A5
+	.long 0xAFE2434D
+	.long 0xD9A1E2E2
+	.long 0x99612FF8
+	.long 0xC24E6161 /* 184 */
+	.long 0xF6B3F145
+	.long 0x7B42B3B3
+	.long 0x842115A5
+	.long 0x42342121
+	.long 0x4A9C94D6
+	.long 0x25089C9C
+	.long 0x781EF066
+	.long 0x3CEE1E1E /* 188 */
+	.long 0x11432252
+	.long 0x86614343
+	.long 0x3BC776FC
+	.long 0x93B1C7C7
+	.long 0xD7FCB32B
+	.long 0xE54FFCFC
+	.long 0x10042014
+	.long 0x08240404 /* 192 */
+	.long 0x5951B208
+	.long 0xA2E35151
+	.long 0x5E99BCC7
+	.long 0x2F259999
+	.long 0xA96D4FC4
+	.long 0xDA226D6D
+	.long 0x340D6839
+	.long 0x1A650D0D /* 196 */
+	.long 0xCFFA8335
+	.long 0xE979FAFA
+	.long 0x5BDFB684
+	.long 0xA369DFDF
+	.long 0xE57ED79B
+	.long 0xFCA97E7E
+	.long 0x90243DB4
+	.long 0x48192424 /* 200 */
+	.long 0xEC3BC5D7
+	.long 0x76FE3B3B
+	.long 0x96AB313D
+	.long 0x4B9AABAB
+	.long 0x1FCE3ED1
+	.long 0x81F0CECE
+	.long 0x44118855
+	.long 0x22991111 /* 204 */
+	.long 0x068F0C89
+	.long 0x03838F8F
+	.long 0x254E4A6B
+	.long 0x9C044E4E
+	.long 0xE6B7D151
+	.long 0x7366B7B7
+	.long 0x8BEB0B60
+	.long 0xCBE0EBEB /* 208 */
+	.long 0xF03CFDCC
+	.long 0x78C13C3C
+	.long 0x3E817CBF
+	.long 0x1FFD8181
+	.long 0x6A94D4FE
+	.long 0x35409494
+	.long 0xFBF7EB0C
+	.long 0xF31CF7F7 /* 212 */
+	.long 0xDEB9A167
+	.long 0x6F18B9B9
+	.long 0x4C13985F
+	.long 0x268B1313
+	.long 0xB02C7D9C
+	.long 0x58512C2C
+	.long 0x6BD3D6B8
+	.long 0xBB05D3D3 /* 216 */
+	.long 0xBBE76B5C
+	.long 0xD38CE7E7
+	.long 0xA56E57CB
+	.long 0xDC396E6E
+	.long 0x37C46EF3
+	.long 0x95AAC4C4
+	.long 0x0C03180F
+	.long 0x061B0303 /* 220 */
+	.long 0x45568A13
+	.long 0xACDC5656
+	.long 0x0D441A49
+	.long 0x885E4444
+	.long 0xE17FDF9E
+	.long 0xFEA07F7F
+	.long 0x9EA92137
+	.long 0x4F88A9A9 /* 224 */
+	.long 0xA82A4D82
+	.long 0x54672A2A
+	.long 0xD6BBB16D
+	.long 0x6B0ABBBB
+	.long 0x23C146E2
+	.long 0x9F87C1C1
+	.long 0x5153A202
+	.long 0xA6F15353 /* 228 */
+	.long 0x57DCAE8B
+	.long 0xA572DCDC
+	.long 0x2C0B5827
+	.long 0x16530B0B
+	.long 0x4E9D9CD3
+	.long 0x27019D9D
+	.long 0xAD6C47C1
+	.long 0xD82B6C6C /* 232 */
+	.long 0xC43195F5
+	.long 0x62A43131
+	.long 0xCD7487B9
+	.long 0xE8F37474
+	.long 0xFFF6E309
+	.long 0xF115F6F6
+	.long 0x05460A43
+	.long 0x8C4C4646 /* 236 */
+	.long 0x8AAC0926
+	.long 0x45A5ACAC
+	.long 0x1E893C97
+	.long 0x0FB58989
+	.long 0x5014A044
+	.long 0x28B41414
+	.long 0xA3E15B42
+	.long 0xDFBAE1E1 /* 240 */
+	.long 0x5816B04E
+	.long 0x2CA61616
+	.long 0xE83ACDD2
+	.long 0x74F73A3A
+	.long 0xB9696FD0
+	.long 0xD2066969
+	.long 0x2409482D
+	.long 0x12410909 /* 244 */
+	.long 0xDD70A7AD
+	.long 0xE0D77070
+	.long 0xE2B6D954
+	.long 0x716FB6B6
+	.long 0x67D0CEB7
+	.long 0xBD1ED0D0
+	.long 0x93ED3B7E
+	.long 0xC7D6EDED /* 248 */
+	.long 0x17CC2EDB
+	.long 0x85E2CCCC
+	.long 0x15422A57
+	.long 0x84684242
+	.long 0x5A98B4C2
+	.long 0x2D2C9898
+	.long 0xAAA4490E
+	.long 0x55EDA4A4 /* 252 */
+	.long 0xA0285D88
+	.long 0x50752828
+	.long 0x6D5CDA31
+	.long 0xB8865C5C
+	.long 0xC7F8933F
+	.long 0xED6BF8F8
+	.long 0x228644A4
+	.long 0x11C28686 /* 256 */
+
+whirlpool_table3:	/* table 4 */
+	.long 0x186018C0
+	.long 0x7830D818
+	.long 0x238C2305
+	.long 0xAF462623
+	.long 0xC63FC67E
+	.long 0xF991B8C6
+	.long 0xE887E813
+	.long 0x6FCDFBE8 /* 4 */
+	.long 0x8726874C
+	.long 0xA113CB87
+	.long 0xB8DAB8A9
+	.long 0x626D11B8
+	.long 0x01040108
+	.long 0x05020901
+	.long 0x4F214F42
+	.long 0x6E9E0D4F /* 8 */
+	.long 0x36D836AD
+	.long 0xEE6C9B36
+	.long 0xA6A2A659
+	.long 0x0451FFA6
+	.long 0xD26FD2DE
+	.long 0xBDB90CD2
+	.long 0xF5F3F5FB
+	.long 0x06F70EF5 /* 12 */
+	.long 0x79F979EF
+	.long 0x80F29679
+	.long 0x6FA16F5F
+	.long 0xCEDE306F
+	.long 0x917E91FC
+	.long 0xEF3F6D91
+	.long 0x525552AA
+	.long 0x07A4F852 /* 16 */
+	.long 0x609D6027
+	.long 0xFDC04760
+	.long 0xBCCABC89
+	.long 0x766535BC
+	.long 0x9B569BAC
+	.long 0xCD2B379B
+	.long 0x8E028E04
+	.long 0x8C018A8E /* 20 */
+	.long 0xA3B6A371
+	.long 0x155BD2A3
+	.long 0x0C300C60
+	.long 0x3C186C0C
+	.long 0x7BF17BFF
+	.long 0x8AF6847B
+	.long 0x35D435B5
+	.long 0xE16A8035 /* 24 */
+	.long 0x1D741DE8
+	.long 0x693AF51D
+	.long 0xE0A7E053
+	.long 0x47DDB3E0
+	.long 0xD77BD7F6
+	.long 0xACB321D7
+	.long 0xC22FC25E
+	.long 0xED999CC2 /* 28 */
+	.long 0x2EB82E6D
+	.long 0x965C432E
+	.long 0x4B314B62
+	.long 0x7A96294B
+	.long 0xFEDFFEA3
+	.long 0x21E15DFE
+	.long 0x57415782
+	.long 0x16AED557 /* 32 */
+	.long 0x155415A8
+	.long 0x412ABD15
+	.long 0x77C1779F
+	.long 0xB6EEE877
+	.long 0x37DC37A5
+	.long 0xEB6E9237
+	.long 0xE5B3E57B
+	.long 0x56D79EE5 /* 36 */
+	.long 0x9F469F8C
+	.long 0xD923139F
+	.long 0xF0E7F0D3
+	.long 0x17FD23F0
+	.long 0x4A354A6A
+	.long 0x7F94204A
+	.long 0xDA4FDA9E
+	.long 0x95A944DA /* 40 */
+	.long 0x587D58FA
+	.long 0x25B0A258
+	.long 0xC903C906
+	.long 0xCA8FCFC9
+	.long 0x29A42955
+	.long 0x8D527C29
+	.long 0x0A280A50
+	.long 0x22145A0A /* 44 */
+	.long 0xB1FEB1E1
+	.long 0x4F7F50B1
+	.long 0xA0BAA069
+	.long 0x1A5DC9A0
+	.long 0x6BB16B7F
+	.long 0xDAD6146B
+	.long 0x852E855C
+	.long 0xAB17D985 /* 48 */
+	.long 0xBDCEBD81
+	.long 0x73673CBD
+	.long 0x5D695DD2
+	.long 0x34BA8F5D
+	.long 0x10401080
+	.long 0x50209010
+	.long 0xF4F7F4F3
+	.long 0x03F507F4 /* 52 */
+	.long 0xCB0BCB16
+	.long 0xC08BDDCB
+	.long 0x3EF83EED
+	.long 0xC67CD33E
+	.long 0x05140528
+	.long 0x110A2D05
+	.long 0x6781671F
+	.long 0xE6CE7867 /* 56 */
+	.long 0xE4B7E473
+	.long 0x53D597E4
+	.long 0x279C2725
+	.long 0xBB4E0227
+	.long 0x41194132
+	.long 0x58827341
+	.long 0x8B168B2C
+	.long 0x9D0BA78B /* 60 */
+	.long 0xA7A6A751
+	.long 0x0153F6A7
+	.long 0x7DE97DCF
+	.long 0x94FAB27D
+	.long 0x956E95DC
+	.long 0xFB374995
+	.long 0xD847D88E
+	.long 0x9FAD56D8 /* 64 */
+	.long 0xFBCBFB8B
+	.long 0x30EB70FB
+	.long 0xEE9FEE23
+	.long 0x71C1CDEE
+	.long 0x7CED7CC7
+	.long 0x91F8BB7C
+	.long 0x66856617
+	.long 0xE3CC7166 /* 68 */
+	.long 0xDD53DDA6
+	.long 0x8EA77BDD
+	.long 0x175C17B8
+	.long 0x4B2EAF17
+	.long 0x47014702
+	.long 0x468E4547
+	.long 0x9E429E84
+	.long 0xDC211A9E /* 72 */
+	.long 0xCA0FCA1E
+	.long 0xC589D4CA
+	.long 0x2DB42D75
+	.long 0x995A582D
+	.long 0xBFC6BF91
+	.long 0x79632EBF
+	.long 0x071C0738
+	.long 0x1B0E3F07 /* 76 */
+	.long 0xAD8EAD01
+	.long 0x2347ACAD
+	.long 0x5A755AEA
+	.long 0x2FB4B05A
+	.long 0x8336836C
+	.long 0xB51BEF83
+	.long 0x33CC3385
+	.long 0xFF66B633 /* 80 */
+	.long 0x6391633F
+	.long 0xF2C65C63
+	.long 0x02080210
+	.long 0x0A041202
+	.long 0xAA92AA39
+	.long 0x384993AA
+	.long 0x71D971AF
+	.long 0xA8E2DE71 /* 84 */
+	.long 0xC807C80E
+	.long 0xCF8DC6C8
+	.long 0x196419C8
+	.long 0x7D32D119
+	.long 0x49394972
+	.long 0x70923B49
+	.long 0xD943D986
+	.long 0x9AAF5FD9 /* 88 */
+	.long 0xF2EFF2C3
+	.long 0x1DF931F2
+	.long 0xE3ABE34B
+	.long 0x48DBA8E3
+	.long 0x5B715BE2
+	.long 0x2AB6B95B
+	.long 0x881A8834
+	.long 0x920DBC88 /* 92 */
+	.long 0x9A529AA4
+	.long 0xC8293E9A
+	.long 0x2698262D
+	.long 0xBE4C0B26
+	.long 0x32C8328D
+	.long 0xFA64BF32
+	.long 0xB0FAB0E9
+	.long 0x4A7D59B0 /* 96 */
+	.long 0xE983E91B
+	.long 0x6ACFF2E9
+	.long 0x0F3C0F78
+	.long 0x331E770F
+	.long 0xD573D5E6
+	.long 0xA6B733D5
+	.long 0x803A8074
+	.long 0xBA1DF480 /* 100 */
+	.long 0xBEC2BE99
+	.long 0x7C6127BE
+	.long 0xCD13CD26
+	.long 0xDE87EBCD
+	.long 0x34D034BD
+	.long 0xE4688934
+	.long 0x483D487A
+	.long 0x75903248 /* 104 */
+	.long 0xFFDBFFAB
+	.long 0x24E354FF
+	.long 0x7AF57AF7
+	.long 0x8FF48D7A
+	.long 0x907A90F4
+	.long 0xEA3D6490
+	.long 0x5F615FC2
+	.long 0x3EBE9D5F /* 108 */
+	.long 0x2080201D
+	.long 0xA0403D20
+	.long 0x68BD6867
+	.long 0xD5D00F68
+	.long 0x1A681AD0
+	.long 0x7234CA1A
+	.long 0xAE82AE19
+	.long 0x2C41B7AE /* 112 */
+	.long 0xB4EAB4C9
+	.long 0x5E757DB4
+	.long 0x544D549A
+	.long 0x19A8CE54
+	.long 0x937693EC
+	.long 0xE53B7F93
+	.long 0x2288220D
+	.long 0xAA442F22 /* 116 */
+	.long 0x648D6407
+	.long 0xE9C86364
+	.long 0xF1E3F1DB
+	.long 0x12FF2AF1
+	.long 0x73D173BF
+	.long 0xA2E6CC73
+	.long 0x12481290
+	.long 0x5A248212 /* 120 */
+	.long 0x401D403A
+	.long 0x5D807A40
+	.long 0x08200840
+	.long 0x28104808
+	.long 0xC32BC356
+	.long 0xE89B95C3
+	.long 0xEC97EC33
+	.long 0x7BC5DFEC /* 124 */
+	.long 0xDB4BDB96
+	.long 0x90AB4DDB
+	.long 0xA1BEA161
+	.long 0x1F5FC0A1
+	.long 0x8D0E8D1C
+	.long 0x8307918D
+	.long 0x3DF43DF5
+	.long 0xC97AC83D /* 128 */
+	.long 0x976697CC
+	.long 0xF1335B97
+	.long 0x00000000
+	.long 0x00000000
+	.long 0xCF1BCF36
+	.long 0xD483F9CF
+	.long 0x2BAC2B45
+	.long 0x87566E2B /* 132 */
+	.long 0x76C57697
+	.long 0xB3ECE176
+	.long 0x82328264
+	.long 0xB019E682
+	.long 0xD67FD6FE
+	.long 0xA9B128D6
+	.long 0x1B6C1BD8
+	.long 0x7736C31B /* 136 */
+	.long 0xB5EEB5C1
+	.long 0x5B7774B5
+	.long 0xAF86AF11
+	.long 0x2943BEAF
+	.long 0x6AB56A77
+	.long 0xDFD41D6A
+	.long 0x505D50BA
+	.long 0x0DA0EA50 /* 140 */
+	.long 0x45094512
+	.long 0x4C8A5745
+	.long 0xF3EBF3CB
+	.long 0x18FB38F3
+	.long 0x30C0309D
+	.long 0xF060AD30
+	.long 0xEF9BEF2B
+	.long 0x74C3C4EF /* 144 */
+	.long 0x3FFC3FE5
+	.long 0xC37EDA3F
+	.long 0x55495592
+	.long 0x1CAAC755
+	.long 0xA2B2A279
+	.long 0x1059DBA2
+	.long 0xEA8FEA03
+	.long 0x65C9E9EA /* 148 */
+	.long 0x6589650F
+	.long 0xECCA6A65
+	.long 0xBAD2BAB9
+	.long 0x686903BA
+	.long 0x2FBC2F65
+	.long 0x935E4A2F
+	.long 0xC027C04E
+	.long 0xE79D8EC0 /* 152 */
+	.long 0xDE5FDEBE
+	.long 0x81A160DE
+	.long 0x1C701CE0
+	.long 0x6C38FC1C
+	.long 0xFDD3FDBB
+	.long 0x2EE746FD
+	.long 0x4D294D52
+	.long 0x649A1F4D /* 156 */
+	.long 0x927292E4
+	.long 0xE0397692
+	.long 0x75C9758F
+	.long 0xBCEAFA75
+	.long 0x06180630
+	.long 0x1E0C3606
+	.long 0x8A128A24
+	.long 0x9809AE8A /* 160 */
+	.long 0xB2F2B2F9
+	.long 0x40794BB2
+	.long 0xE6BFE663
+	.long 0x59D185E6
+	.long 0x0E380E70
+	.long 0x361C7E0E
+	.long 0x1F7C1FF8
+	.long 0x633EE71F /* 164 */
+	.long 0x62956237
+	.long 0xF7C45562
+	.long 0xD477D4EE
+	.long 0xA3B53AD4
+	.long 0xA89AA829
+	.long 0x324D81A8
+	.long 0x966296C4
+	.long 0xF4315296 /* 168 */
+	.long 0xF9C3F99B
+	.long 0x3AEF62F9
+	.long 0xC533C566
+	.long 0xF697A3C5
+	.long 0x25942535
+	.long 0xB14A1025
+	.long 0x597959F2
+	.long 0x20B2AB59 /* 172 */
+	.long 0x842A8454
+	.long 0xAE15D084
+	.long 0x72D572B7
+	.long 0xA7E4C572
+	.long 0x39E439D5
+	.long 0xDD72EC39
+	.long 0x4C2D4C5A
+	.long 0x6198164C /* 176 */
+	.long 0x5E655ECA
+	.long 0x3BBC945E
+	.long 0x78FD78E7
+	.long 0x85F09F78
+	.long 0x38E038DD
+	.long 0xD870E538
+	.long 0x8C0A8C14
+	.long 0x8605988C /* 180 */
+	.long 0xD163D1C6
+	.long 0xB2BF17D1
+	.long 0xA5AEA541
+	.long 0x0B57E4A5
+	.long 0xE2AFE243
+	.long 0x4DD9A1E2
+	.long 0x6199612F
+	.long 0xF8C24E61 /* 184 */
+	.long 0xB3F6B3F1
+	.long 0x457B42B3
+	.long 0x21842115
+	.long 0xA5423421
+	.long 0x9C4A9C94
+	.long 0xD625089C
+	.long 0x1E781EF0
+	.long 0x663CEE1E /* 188 */
+	.long 0x43114322
+	.long 0x52866143
+	.long 0xC73BC776
+	.long 0xFC93B1C7
+	.long 0xFCD7FCB3
+	.long 0x2BE54FFC
+	.long 0x04100420
+	.long 0x14082404 /* 192 */
+	.long 0x515951B2
+	.long 0x08A2E351
+	.long 0x995E99BC
+	.long 0xC72F2599
+	.long 0x6DA96D4F
+	.long 0xC4DA226D
+	.long 0x0D340D68
+	.long 0x391A650D /* 196 */
+	.long 0xFACFFA83
+	.long 0x35E979FA
+	.long 0xDF5BDFB6
+	.long 0x84A369DF
+	.long 0x7EE57ED7
+	.long 0x9BFCA97E
+	.long 0x2490243D
+	.long 0xB4481924 /* 200 */
+	.long 0x3BEC3BC5
+	.long 0xD776FE3B
+	.long 0xAB96AB31
+	.long 0x3D4B9AAB
+	.long 0xCE1FCE3E
+	.long 0xD181F0CE
+	.long 0x11441188
+	.long 0x55229911 /* 204 */
+	.long 0x8F068F0C
+	.long 0x8903838F
+	.long 0x4E254E4A
+	.long 0x6B9C044E
+	.long 0xB7E6B7D1
+	.long 0x517366B7
+	.long 0xEB8BEB0B
+	.long 0x60CBE0EB /* 208 */
+	.long 0x3CF03CFD
+	.long 0xCC78C13C
+	.long 0x813E817C
+	.long 0xBF1FFD81
+	.long 0x946A94D4
+	.long 0xFE354094
+	.long 0xF7FBF7EB
+	.long 0x0CF31CF7 /* 212 */
+	.long 0xB9DEB9A1
+	.long 0x676F18B9
+	.long 0x134C1398
+	.long 0x5F268B13
+	.long 0x2CB02C7D
+	.long 0x9C58512C
+	.long 0xD36BD3D6
+	.long 0xB8BB05D3 /* 216 */
+	.long 0xE7BBE76B
+	.long 0x5CD38CE7
+	.long 0x6EA56E57
+	.long 0xCBDC396E
+	.long 0xC437C46E
+	.long 0xF395AAC4
+	.long 0x030C0318
+	.long 0x0F061B03 /* 220 */
+	.long 0x5645568A
+	.long 0x13ACDC56
+	.long 0x440D441A
+	.long 0x49885E44
+	.long 0x7FE17FDF
+	.long 0x9EFEA07F
+	.long 0xA99EA921
+	.long 0x374F88A9 /* 224 */
+	.long 0x2AA82A4D
+	.long 0x8254672A
+	.long 0xBBD6BBB1
+	.long 0x6D6B0ABB
+	.long 0xC123C146
+	.long 0xE29F87C1
+	.long 0x535153A2
+	.long 0x02A6F153 /* 228 */
+	.long 0xDC57DCAE
+	.long 0x8BA572DC
+	.long 0x0B2C0B58
+	.long 0x2716530B
+	.long 0x9D4E9D9C
+	.long 0xD327019D
+	.long 0x6CAD6C47
+	.long 0xC1D82B6C /* 232 */
+	.long 0x31C43195
+	.long 0xF562A431
+	.long 0x74CD7487
+	.long 0xB9E8F374
+	.long 0xF6FFF6E3
+	.long 0x09F115F6
+	.long 0x4605460A
+	.long 0x438C4C46 /* 236 */
+	.long 0xAC8AAC09
+	.long 0x2645A5AC
+	.long 0x891E893C
+	.long 0x970FB589
+	.long 0x145014A0
+	.long 0x4428B414
+	.long 0xE1A3E15B
+	.long 0x42DFBAE1 /* 240 */
+	.long 0x165816B0
+	.long 0x4E2CA616
+	.long 0x3AE83ACD
+	.long 0xD274F73A
+	.long 0x69B9696F
+	.long 0xD0D20669
+	.long 0x09240948
+	.long 0x2D124109 /* 244 */
+	.long 0x70DD70A7
+	.long 0xADE0D770
+	.long 0xB6E2B6D9
+	.long 0x54716FB6
+	.long 0xD067D0CE
+	.long 0xB7BD1ED0
+	.long 0xED93ED3B
+	.long 0x7EC7D6ED /* 248 */
+	.long 0xCC17CC2E
+	.long 0xDB85E2CC
+	.long 0x4215422A
+	.long 0x57846842
+	.long 0x985A98B4
+	.long 0xC22D2C98
+	.long 0xA4AAA449
+	.long 0x0E55EDA4 /* 252 */
+	.long 0x28A0285D
+	.long 0x88507528
+	.long 0x5C6D5CDA
+	.long 0x31B8865C
+	.long 0xF8C7F893
+	.long 0x3FED6BF8
+	.long 0x86228644
+	.long 0xA411C286 /* 256 */
+
+whirlpool_table4:	/* table 5 */
+	.long 0x18186018
+	.long 0xC07830D8
+	.long 0x23238C23
+	.long 0x05AF4626
+	.long 0xC6C63FC6
+	.long 0x7EF991B8
+	.long 0xE8E887E8
+	.long 0x136FCDFB /* 4 */
+	.long 0x87872687
+	.long 0x4CA113CB
+	.long 0xB8B8DAB8
+	.long 0xA9626D11
+	.long 0x01010401
+	.long 0x08050209
+	.long 0x4F4F214F
+	.long 0x426E9E0D /* 8 */
+	.long 0x3636D836
+	.long 0xADEE6C9B
+	.long 0xA6A6A2A6
+	.long 0x590451FF
+	.long 0xD2D26FD2
+	.long 0xDEBDB90C
+	.long 0xF5F5F3F5
+	.long 0xFB06F70E /* 12 */
+	.long 0x7979F979
+	.long 0xEF80F296
+	.long 0x6F6FA16F
+	.long 0x5FCEDE30
+	.long 0x91917E91
+	.long 0xFCEF3F6D
+	.long 0x52525552
+	.long 0xAA07A4F8 /* 16 */
+	.long 0x60609D60
+	.long 0x27FDC047
+	.long 0xBCBCCABC
+	.long 0x89766535
+	.long 0x9B9B569B
+	.long 0xACCD2B37
+	.long 0x8E8E028E
+	.long 0x048C018A /* 20 */
+	.long 0xA3A3B6A3
+	.long 0x71155BD2
+	.long 0x0C0C300C
+	.long 0x603C186C
+	.long 0x7B7BF17B
+	.long 0xFF8AF684
+	.long 0x3535D435
+	.long 0xB5E16A80 /* 24 */
+	.long 0x1D1D741D
+	.long 0xE8693AF5
+	.long 0xE0E0A7E0
+	.long 0x5347DDB3
+	.long 0xD7D77BD7
+	.long 0xF6ACB321
+	.long 0xC2C22FC2
+	.long 0x5EED999C /* 28 */
+	.long 0x2E2EB82E
+	.long 0x6D965C43
+	.long 0x4B4B314B
+	.long 0x627A9629
+	.long 0xFEFEDFFE
+	.long 0xA321E15D
+	.long 0x57574157
+	.long 0x8216AED5 /* 32 */
+	.long 0x15155415
+	.long 0xA8412ABD
+	.long 0x7777C177
+	.long 0x9FB6EEE8
+	.long 0x3737DC37
+	.long 0xA5EB6E92
+	.long 0xE5E5B3E5
+	.long 0x7B56D79E /* 36 */
+	.long 0x9F9F469F
+	.long 0x8CD92313
+	.long 0xF0F0E7F0
+	.long 0xD317FD23
+	.long 0x4A4A354A
+	.long 0x6A7F9420
+	.long 0xDADA4FDA
+	.long 0x9E95A944 /* 40 */
+	.long 0x58587D58
+	.long 0xFA25B0A2
+	.long 0xC9C903C9
+	.long 0x06CA8FCF
+	.long 0x2929A429
+	.long 0x558D527C
+	.long 0x0A0A280A
+	.long 0x5022145A /* 44 */
+	.long 0xB1B1FEB1
+	.long 0xE14F7F50
+	.long 0xA0A0BAA0
+	.long 0x691A5DC9
+	.long 0x6B6BB16B
+	.long 0x7FDAD614
+	.long 0x85852E85
+	.long 0x5CAB17D9 /* 48 */
+	.long 0xBDBDCEBD
+	.long 0x8173673C
+	.long 0x5D5D695D
+	.long 0xD234BA8F
+	.long 0x10104010
+	.long 0x80502090
+	.long 0xF4F4F7F4
+	.long 0xF303F507 /* 52 */
+	.long 0xCBCB0BCB
+	.long 0x16C08BDD
+	.long 0x3E3EF83E
+	.long 0xEDC67CD3
+	.long 0x05051405
+	.long 0x28110A2D
+	.long 0x67678167
+	.long 0x1FE6CE78 /* 56 */
+	.long 0xE4E4B7E4
+	.long 0x7353D597
+	.long 0x27279C27
+	.long 0x25BB4E02
+	.long 0x41411941
+	.long 0x32588273
+	.long 0x8B8B168B
+	.long 0x2C9D0BA7 /* 60 */
+	.long 0xA7A7A6A7
+	.long 0x510153F6
+	.long 0x7D7DE97D
+	.long 0xCF94FAB2
+	.long 0x95956E95
+	.long 0xDCFB3749
+	.long 0xD8D847D8
+	.long 0x8E9FAD56 /* 64 */
+	.long 0xFBFBCBFB
+	.long 0x8B30EB70
+	.long 0xEEEE9FEE
+	.long 0x2371C1CD
+	.long 0x7C7CED7C
+	.long 0xC791F8BB
+	.long 0x66668566
+	.long 0x17E3CC71 /* 68 */
+	.long 0xDDDD53DD
+	.long 0xA68EA77B
+	.long 0x17175C17
+	.long 0xB84B2EAF
+	.long 0x47470147
+	.long 0x02468E45
+	.long 0x9E9E429E
+	.long 0x84DC211A /* 72 */
+	.long 0xCACA0FCA
+	.long 0x1EC589D4
+	.long 0x2D2DB42D
+	.long 0x75995A58
+	.long 0xBFBFC6BF
+	.long 0x9179632E
+	.long 0x07071C07
+	.long 0x381B0E3F /* 76 */
+	.long 0xADAD8EAD
+	.long 0x012347AC
+	.long 0x5A5A755A
+	.long 0xEA2FB4B0
+	.long 0x83833683
+	.long 0x6CB51BEF
+	.long 0x3333CC33
+	.long 0x85FF66B6 /* 80 */
+	.long 0x63639163
+	.long 0x3FF2C65C
+	.long 0x02020802
+	.long 0x100A0412
+	.long 0xAAAA92AA
+	.long 0x39384993
+	.long 0x7171D971
+	.long 0xAFA8E2DE /* 84 */
+	.long 0xC8C807C8
+	.long 0x0ECF8DC6
+	.long 0x19196419
+	.long 0xC87D32D1
+	.long 0x49493949
+	.long 0x7270923B
+	.long 0xD9D943D9
+	.long 0x869AAF5F /* 88 */
+	.long 0xF2F2EFF2
+	.long 0xC31DF931
+	.long 0xE3E3ABE3
+	.long 0x4B48DBA8
+	.long 0x5B5B715B
+	.long 0xE22AB6B9
+	.long 0x88881A88
+	.long 0x34920DBC /* 92 */
+	.long 0x9A9A529A
+	.long 0xA4C8293E
+	.long 0x26269826
+	.long 0x2DBE4C0B
+	.long 0x3232C832
+	.long 0x8DFA64BF
+	.long 0xB0B0FAB0
+	.long 0xE94A7D59 /* 96 */
+	.long 0xE9E983E9
+	.long 0x1B6ACFF2
+	.long 0x0F0F3C0F
+	.long 0x78331E77
+	.long 0xD5D573D5
+	.long 0xE6A6B733
+	.long 0x80803A80
+	.long 0x74BA1DF4 /* 100 */
+	.long 0xBEBEC2BE
+	.long 0x997C6127
+	.long 0xCDCD13CD
+	.long 0x26DE87EB
+	.long 0x3434D034
+	.long 0xBDE46889
+	.long 0x48483D48
+	.long 0x7A759032 /* 104 */
+	.long 0xFFFFDBFF
+	.long 0xAB24E354
+	.long 0x7A7AF57A
+	.long 0xF78FF48D
+	.long 0x90907A90
+	.long 0xF4EA3D64
+	.long 0x5F5F615F
+	.long 0xC23EBE9D /* 108 */
+	.long 0x20208020
+	.long 0x1DA0403D
+	.long 0x6868BD68
+	.long 0x67D5D00F
+	.long 0x1A1A681A
+	.long 0xD07234CA
+	.long 0xAEAE82AE
+	.long 0x192C41B7 /* 112 */
+	.long 0xB4B4EAB4
+	.long 0xC95E757D
+	.long 0x54544D54
+	.long 0x9A19A8CE
+	.long 0x93937693
+	.long 0xECE53B7F
+	.long 0x22228822
+	.long 0x0DAA442F /* 116 */
+	.long 0x64648D64
+	.long 0x07E9C863
+	.long 0xF1F1E3F1
+	.long 0xDB12FF2A
+	.long 0x7373D173
+	.long 0xBFA2E6CC
+	.long 0x12124812
+	.long 0x905A2482 /* 120 */
+	.long 0x40401D40
+	.long 0x3A5D807A
+	.long 0x08082008
+	.long 0x40281048
+	.long 0xC3C32BC3
+	.long 0x56E89B95
+	.long 0xECEC97EC
+	.long 0x337BC5DF /* 124 */
+	.long 0xDBDB4BDB
+	.long 0x9690AB4D
+	.long 0xA1A1BEA1
+	.long 0x611F5FC0
+	.long 0x8D8D0E8D
+	.long 0x1C830791
+	.long 0x3D3DF43D
+	.long 0xF5C97AC8 /* 128 */
+	.long 0x97976697
+	.long 0xCCF1335B
+	.long 0x00000000
+	.long 0x00000000
+	.long 0xCFCF1BCF
+	.long 0x36D483F9
+	.long 0x2B2BAC2B
+	.long 0x4587566E /* 132 */
+	.long 0x7676C576
+	.long 0x97B3ECE1
+	.long 0x82823282
+	.long 0x64B019E6
+	.long 0xD6D67FD6
+	.long 0xFEA9B128
+	.long 0x1B1B6C1B
+	.long 0xD87736C3 /* 136 */
+	.long 0xB5B5EEB5
+	.long 0xC15B7774
+	.long 0xAFAF86AF
+	.long 0x112943BE
+	.long 0x6A6AB56A
+	.long 0x77DFD41D
+	.long 0x50505D50
+	.long 0xBA0DA0EA /* 140 */
+	.long 0x45450945
+	.long 0x124C8A57
+	.long 0xF3F3EBF3
+	.long 0xCB18FB38
+	.long 0x3030C030
+	.long 0x9DF060AD
+	.long 0xEFEF9BEF
+	.long 0x2B74C3C4 /* 144 */
+	.long 0x3F3FFC3F
+	.long 0xE5C37EDA
+	.long 0x55554955
+	.long 0x921CAAC7
+	.long 0xA2A2B2A2
+	.long 0x791059DB
+	.long 0xEAEA8FEA
+	.long 0x0365C9E9 /* 148 */
+	.long 0x65658965
+	.long 0x0FECCA6A
+	.long 0xBABAD2BA
+	.long 0xB9686903
+	.long 0x2F2FBC2F
+	.long 0x65935E4A
+	.long 0xC0C027C0
+	.long 0x4EE79D8E /* 152 */
+	.long 0xDEDE5FDE
+	.long 0xBE81A160
+	.long 0x1C1C701C
+	.long 0xE06C38FC
+	.long 0xFDFDD3FD
+	.long 0xBB2EE746
+	.long 0x4D4D294D
+	.long 0x52649A1F /* 156 */
+	.long 0x92927292
+	.long 0xE4E03976
+	.long 0x7575C975
+	.long 0x8FBCEAFA
+	.long 0x06061806
+	.long 0x301E0C36
+	.long 0x8A8A128A
+	.long 0x249809AE /* 160 */
+	.long 0xB2B2F2B2
+	.long 0xF940794B
+	.long 0xE6E6BFE6
+	.long 0x6359D185
+	.long 0x0E0E380E
+	.long 0x70361C7E
+	.long 0x1F1F7C1F
+	.long 0xF8633EE7 /* 164 */
+	.long 0x62629562
+	.long 0x37F7C455
+	.long 0xD4D477D4
+	.long 0xEEA3B53A
+	.long 0xA8A89AA8
+	.long 0x29324D81
+	.long 0x96966296
+	.long 0xC4F43152 /* 168 */
+	.long 0xF9F9C3F9
+	.long 0x9B3AEF62
+	.long 0xC5C533C5
+	.long 0x66F697A3
+	.long 0x25259425
+	.long 0x35B14A10
+	.long 0x59597959
+	.long 0xF220B2AB /* 172 */
+	.long 0x84842A84
+	.long 0x54AE15D0
+	.long 0x7272D572
+	.long 0xB7A7E4C5
+	.long 0x3939E439
+	.long 0xD5DD72EC
+	.long 0x4C4C2D4C
+	.long 0x5A619816 /* 176 */
+	.long 0x5E5E655E
+	.long 0xCA3BBC94
+	.long 0x7878FD78
+	.long 0xE785F09F
+	.long 0x3838E038
+	.long 0xDDD870E5
+	.long 0x8C8C0A8C
+	.long 0x14860598 /* 180 */
+	.long 0xD1D163D1
+	.long 0xC6B2BF17
+	.long 0xA5A5AEA5
+	.long 0x410B57E4
+	.long 0xE2E2AFE2
+	.long 0x434DD9A1
+	.long 0x61619961
+	.long 0x2FF8C24E /* 184 */
+	.long 0xB3B3F6B3
+	.long 0xF1457B42
+	.long 0x21218421
+	.long 0x15A54234
+	.long 0x9C9C4A9C
+	.long 0x94D62508
+	.long 0x1E1E781E
+	.long 0xF0663CEE /* 188 */
+	.long 0x43431143
+	.long 0x22528661
+	.long 0xC7C73BC7
+	.long 0x76FC93B1
+	.long 0xFCFCD7FC
+	.long 0xB32BE54F
+	.long 0x04041004
+	.long 0x20140824 /* 192 */
+	.long 0x51515951
+	.long 0xB208A2E3
+	.long 0x99995E99
+	.long 0xBCC72F25
+	.long 0x6D6DA96D
+	.long 0x4FC4DA22
+	.long 0x0D0D340D
+	.long 0x68391A65 /* 196 */
+	.long 0xFAFACFFA
+	.long 0x8335E979
+	.long 0xDFDF5BDF
+	.long 0xB684A369
+	.long 0x7E7EE57E
+	.long 0xD79BFCA9
+	.long 0x24249024
+	.long 0x3DB44819 /* 200 */
+	.long 0x3B3BEC3B
+	.long 0xC5D776FE
+	.long 0xABAB96AB
+	.long 0x313D4B9A
+	.long 0xCECE1FCE
+	.long 0x3ED181F0
+	.long 0x11114411
+	.long 0x88552299 /* 204 */
+	.long 0x8F8F068F
+	.long 0x0C890383
+	.long 0x4E4E254E
+	.long 0x4A6B9C04
+	.long 0xB7B7E6B7
+	.long 0xD1517366
+	.long 0xEBEB8BEB
+	.long 0x0B60CBE0 /* 208 */
+	.long 0x3C3CF03C
+	.long 0xFDCC78C1
+	.long 0x81813E81
+	.long 0x7CBF1FFD
+	.long 0x94946A94
+	.long 0xD4FE3540
+	.long 0xF7F7FBF7
+	.long 0xEB0CF31C /* 212 */
+	.long 0xB9B9DEB9
+	.long 0xA1676F18
+	.long 0x13134C13
+	.long 0x985F268B
+	.long 0x2C2CB02C
+	.long 0x7D9C5851
+	.long 0xD3D36BD3
+	.long 0xD6B8BB05 /* 216 */
+	.long 0xE7E7BBE7
+	.long 0x6B5CD38C
+	.long 0x6E6EA56E
+	.long 0x57CBDC39
+	.long 0xC4C437C4
+	.long 0x6EF395AA
+	.long 0x03030C03
+	.long 0x180F061B /* 220 */
+	.long 0x56564556
+	.long 0x8A13ACDC
+	.long 0x44440D44
+	.long 0x1A49885E
+	.long 0x7F7FE17F
+	.long 0xDF9EFEA0
+	.long 0xA9A99EA9
+	.long 0x21374F88 /* 224 */
+	.long 0x2A2AA82A
+	.long 0x4D825467
+	.long 0xBBBBD6BB
+	.long 0xB16D6B0A
+	.long 0xC1C123C1
+	.long 0x46E29F87
+	.long 0x53535153
+	.long 0xA202A6F1 /* 228 */
+	.long 0xDCDC57DC
+	.long 0xAE8BA572
+	.long 0x0B0B2C0B
+	.long 0x58271653
+	.long 0x9D9D4E9D
+	.long 0x9CD32701
+	.long 0x6C6CAD6C
+	.long 0x47C1D82B /* 232 */
+	.long 0x3131C431
+	.long 0x95F562A4
+	.long 0x7474CD74
+	.long 0x87B9E8F3
+	.long 0xF6F6FFF6
+	.long 0xE309F115
+	.long 0x46460546
+	.long 0x0A438C4C /* 236 */
+	.long 0xACAC8AAC
+	.long 0x092645A5
+	.long 0x89891E89
+	.long 0x3C970FB5
+	.long 0x14145014
+	.long 0xA04428B4
+	.long 0xE1E1A3E1
+	.long 0x5B42DFBA /* 240 */
+	.long 0x16165816
+	.long 0xB04E2CA6
+	.long 0x3A3AE83A
+	.long 0xCDD274F7
+	.long 0x6969B969
+	.long 0x6FD0D206
+	.long 0x09092409
+	.long 0x482D1241 /* 244 */
+	.long 0x7070DD70
+	.long 0xA7ADE0D7
+	.long 0xB6B6E2B6
+	.long 0xD954716F
+	.long 0xD0D067D0
+	.long 0xCEB7BD1E
+	.long 0xEDED93ED
+	.long 0x3B7EC7D6 /* 248 */
+	.long 0xCCCC17CC
+	.long 0x2EDB85E2
+	.long 0x42421542
+	.long 0x2A578468
+	.long 0x98985A98
+	.long 0xB4C22D2C
+	.long 0xA4A4AAA4
+	.long 0x490E55ED /* 252 */
+	.long 0x2828A028
+	.long 0x5D885075
+	.long 0x5C5C6D5C
+	.long 0xDA31B886
+	.long 0xF8F8C7F8
+	.long 0x933FED6B
+	.long 0x86862286
+	.long 0x44A411C2 /* 256 */
+
+whirlpool_table5:	/* table 6 */
+	.long 0xD8181860
+	.long 0x18C07830
+	.long 0x2623238C
+	.long 0x2305AF46
+	.long 0xB8C6C63F
+	.long 0xC67EF991
+	.long 0xFBE8E887
+	.long 0xE8136FCD /* 4 */
+	.long 0xCB878726
+	.long 0x874CA113
+	.long 0x11B8B8DA
+	.long 0xB8A9626D
+	.long 0x09010104
+	.long 0x01080502
+	.long 0x0D4F4F21
+	.long 0x4F426E9E /* 8 */
+	.long 0x9B3636D8
+	.long 0x36ADEE6C
+	.long 0xFFA6A6A2
+	.long 0xA6590451
+	.long 0x0CD2D26F
+	.long 0xD2DEBDB9
+	.long 0x0EF5F5F3
+	.long 0xF5FB06F7 /* 12 */
+	.long 0x967979F9
+	.long 0x79EF80F2
+	.long 0x306F6FA1
+	.long 0x6F5FCEDE
+	.long 0x6D91917E
+	.long 0x91FCEF3F
+	.long 0xF8525255
+	.long 0x52AA07A4 /* 16 */
+	.long 0x4760609D
+	.long 0x6027FDC0
+	.long 0x35BCBCCA
+	.long 0xBC897665
+	.long 0x379B9B56
+	.long 0x9BACCD2B
+	.long 0x8A8E8E02
+	.long 0x8E048C01 /* 20 */
+	.long 0xD2A3A3B6
+	.long 0xA371155B
+	.long 0x6C0C0C30
+	.long 0x0C603C18
+	.long 0x847B7BF1
+	.long 0x7BFF8AF6
+	.long 0x803535D4
+	.long 0x35B5E16A /* 24 */
+	.long 0xF51D1D74
+	.long 0x1DE8693A
+	.long 0xB3E0E0A7
+	.long 0xE05347DD
+	.long 0x21D7D77B
+	.long 0xD7F6ACB3
+	.long 0x9CC2C22F
+	.long 0xC25EED99 /* 28 */
+	.long 0x432E2EB8
+	.long 0x2E6D965C
+	.long 0x294B4B31
+	.long 0x4B627A96
+	.long 0x5DFEFEDF
+	.long 0xFEA321E1
+	.long 0xD5575741
+	.long 0x578216AE /* 32 */
+	.long 0xBD151554
+	.long 0x15A8412A
+	.long 0xE87777C1
+	.long 0x779FB6EE
+	.long 0x923737DC
+	.long 0x37A5EB6E
+	.long 0x9EE5E5B3
+	.long 0xE57B56D7 /* 36 */
+	.long 0x139F9F46
+	.long 0x9F8CD923
+	.long 0x23F0F0E7
+	.long 0xF0D317FD
+	.long 0x204A4A35
+	.long 0x4A6A7F94
+	.long 0x44DADA4F
+	.long 0xDA9E95A9 /* 40 */
+	.long 0xA258587D
+	.long 0x58FA25B0
+	.long 0xCFC9C903
+	.long 0xC906CA8F
+	.long 0x7C2929A4
+	.long 0x29558D52
+	.long 0x5A0A0A28
+	.long 0x0A502214 /* 44 */
+	.long 0x50B1B1FE
+	.long 0xB1E14F7F
+	.long 0xC9A0A0BA
+	.long 0xA0691A5D
+	.long 0x146B6BB1
+	.long 0x6B7FDAD6
+	.long 0xD985852E
+	.long 0x855CAB17 /* 48 */
+	.long 0x3CBDBDCE
+	.long 0xBD817367
+	.long 0x8F5D5D69
+	.long 0x5DD234BA
+	.long 0x90101040
+	.long 0x10805020
+	.long 0x07F4F4F7
+	.long 0xF4F303F5 /* 52 */
+	.long 0xDDCBCB0B
+	.long 0xCB16C08B
+	.long 0xD33E3EF8
+	.long 0x3EEDC67C
+	.long 0x2D050514
+	.long 0x0528110A
+	.long 0x78676781
+	.long 0x671FE6CE /* 56 */
+	.long 0x97E4E4B7
+	.long 0xE47353D5
+	.long 0x0227279C
+	.long 0x2725BB4E
+	.long 0x73414119
+	.long 0x41325882
+	.long 0xA78B8B16
+	.long 0x8B2C9D0B /* 60 */
+	.long 0xF6A7A7A6
+	.long 0xA7510153
+	.long 0xB27D7DE9
+	.long 0x7DCF94FA
+	.long 0x4995956E
+	.long 0x95DCFB37
+	.long 0x56D8D847
+	.long 0xD88E9FAD /* 64 */
+	.long 0x70FBFBCB
+	.long 0xFB8B30EB
+	.long 0xCDEEEE9F
+	.long 0xEE2371C1
+	.long 0xBB7C7CED
+	.long 0x7CC791F8
+	.long 0x71666685
+	.long 0x6617E3CC /* 68 */
+	.long 0x7BDDDD53
+	.long 0xDDA68EA7
+	.long 0xAF17175C
+	.long 0x17B84B2E
+	.long 0x45474701
+	.long 0x4702468E
+	.long 0x1A9E9E42
+	.long 0x9E84DC21 /* 72 */
+	.long 0xD4CACA0F
+	.long 0xCA1EC589
+	.long 0x582D2DB4
+	.long 0x2D75995A
+	.long 0x2EBFBFC6
+	.long 0xBF917963
+	.long 0x3F07071C
+	.long 0x07381B0E /* 76 */
+	.long 0xACADAD8E
+	.long 0xAD012347
+	.long 0xB05A5A75
+	.long 0x5AEA2FB4
+	.long 0xEF838336
+	.long 0x836CB51B
+	.long 0xB63333CC
+	.long 0x3385FF66 /* 80 */
+	.long 0x5C636391
+	.long 0x633FF2C6
+	.long 0x12020208
+	.long 0x02100A04
+	.long 0x93AAAA92
+	.long 0xAA393849
+	.long 0xDE7171D9
+	.long 0x71AFA8E2 /* 84 */
+	.long 0xC6C8C807
+	.long 0xC80ECF8D
+	.long 0xD1191964
+	.long 0x19C87D32
+	.long 0x3B494939
+	.long 0x49727092
+	.long 0x5FD9D943
+	.long 0xD9869AAF /* 88 */
+	.long 0x31F2F2EF
+	.long 0xF2C31DF9
+	.long 0xA8E3E3AB
+	.long 0xE34B48DB
+	.long 0xB95B5B71
+	.long 0x5BE22AB6
+	.long 0xBC88881A
+	.long 0x8834920D /* 92 */
+	.long 0x3E9A9A52
+	.long 0x9AA4C829
+	.long 0x0B262698
+	.long 0x262DBE4C
+	.long 0xBF3232C8
+	.long 0x328DFA64
+	.long 0x59B0B0FA
+	.long 0xB0E94A7D /* 96 */
+	.long 0xF2E9E983
+	.long 0xE91B6ACF
+	.long 0x770F0F3C
+	.long 0x0F78331E
+	.long 0x33D5D573
+	.long 0xD5E6A6B7
+	.long 0xF480803A
+	.long 0x8074BA1D /* 100 */
+	.long 0x27BEBEC2
+	.long 0xBE997C61
+	.long 0xEBCDCD13
+	.long 0xCD26DE87
+	.long 0x893434D0
+	.long 0x34BDE468
+	.long 0x3248483D
+	.long 0x487A7590 /* 104 */
+	.long 0x54FFFFDB
+	.long 0xFFAB24E3
+	.long 0x8D7A7AF5
+	.long 0x7AF78FF4
+	.long 0x6490907A
+	.long 0x90F4EA3D
+	.long 0x9D5F5F61
+	.long 0x5FC23EBE /* 108 */
+	.long 0x3D202080
+	.long 0x201DA040
+	.long 0x0F6868BD
+	.long 0x6867D5D0
+	.long 0xCA1A1A68
+	.long 0x1AD07234
+	.long 0xB7AEAE82
+	.long 0xAE192C41 /* 112 */
+	.long 0x7DB4B4EA
+	.long 0xB4C95E75
+	.long 0xCE54544D
+	.long 0x549A19A8
+	.long 0x7F939376
+	.long 0x93ECE53B
+	.long 0x2F222288
+	.long 0x220DAA44 /* 116 */
+	.long 0x6364648D
+	.long 0x6407E9C8
+	.long 0x2AF1F1E3
+	.long 0xF1DB12FF
+	.long 0xCC7373D1
+	.long 0x73BFA2E6
+	.long 0x82121248
+	.long 0x12905A24 /* 120 */
+	.long 0x7A40401D
+	.long 0x403A5D80
+	.long 0x48080820
+	.long 0x08402810
+	.long 0x95C3C32B
+	.long 0xC356E89B
+	.long 0xDFECEC97
+	.long 0xEC337BC5 /* 124 */
+	.long 0x4DDBDB4B
+	.long 0xDB9690AB
+	.long 0xC0A1A1BE
+	.long 0xA1611F5F
+	.long 0x918D8D0E
+	.long 0x8D1C8307
+	.long 0xC83D3DF4
+	.long 0x3DF5C97A /* 128 */
+	.long 0x5B979766
+	.long 0x97CCF133
+	.long 0x00000000
+	.long 0x00000000
+	.long 0xF9CFCF1B
+	.long 0xCF36D483
+	.long 0x6E2B2BAC
+	.long 0x2B458756 /* 132 */
+	.long 0xE17676C5
+	.long 0x7697B3EC
+	.long 0xE6828232
+	.long 0x8264B019
+	.long 0x28D6D67F
+	.long 0xD6FEA9B1
+	.long 0xC31B1B6C
+	.long 0x1BD87736 /* 136 */
+	.long 0x74B5B5EE
+	.long 0xB5C15B77
+	.long 0xBEAFAF86
+	.long 0xAF112943
+	.long 0x1D6A6AB5
+	.long 0x6A77DFD4
+	.long 0xEA50505D
+	.long 0x50BA0DA0 /* 140 */
+	.long 0x57454509
+	.long 0x45124C8A
+	.long 0x38F3F3EB
+	.long 0xF3CB18FB
+	.long 0xAD3030C0
+	.long 0x309DF060
+	.long 0xC4EFEF9B
+	.long 0xEF2B74C3 /* 144 */
+	.long 0xDA3F3FFC
+	.long 0x3FE5C37E
+	.long 0xC7555549
+	.long 0x55921CAA
+	.long 0xDBA2A2B2
+	.long 0xA2791059
+	.long 0xE9EAEA8F
+	.long 0xEA0365C9 /* 148 */
+	.long 0x6A656589
+	.long 0x650FECCA
+	.long 0x03BABAD2
+	.long 0xBAB96869
+	.long 0x4A2F2FBC
+	.long 0x2F65935E
+	.long 0x8EC0C027
+	.long 0xC04EE79D /* 152 */
+	.long 0x60DEDE5F
+	.long 0xDEBE81A1
+	.long 0xFC1C1C70
+	.long 0x1CE06C38
+	.long 0x46FDFDD3
+	.long 0xFDBB2EE7
+	.long 0x1F4D4D29
+	.long 0x4D52649A /* 156 */
+	.long 0x76929272
+	.long 0x92E4E039
+	.long 0xFA7575C9
+	.long 0x758FBCEA
+	.long 0x36060618
+	.long 0x06301E0C
+	.long 0xAE8A8A12
+	.long 0x8A249809 /* 160 */
+	.long 0x4BB2B2F2
+	.long 0xB2F94079
+	.long 0x85E6E6BF
+	.long 0xE66359D1
+	.long 0x7E0E0E38
+	.long 0x0E70361C
+	.long 0xE71F1F7C
+	.long 0x1FF8633E /* 164 */
+	.long 0x55626295
+	.long 0x6237F7C4
+	.long 0x3AD4D477
+	.long 0xD4EEA3B5
+	.long 0x81A8A89A
+	.long 0xA829324D
+	.long 0x52969662
+	.long 0x96C4F431 /* 168 */
+	.long 0x62F9F9C3
+	.long 0xF99B3AEF
+	.long 0xA3C5C533
+	.long 0xC566F697
+	.long 0x10252594
+	.long 0x2535B14A
+	.long 0xAB595979
+	.long 0x59F220B2 /* 172 */
+	.long 0xD084842A
+	.long 0x8454AE15
+	.long 0xC57272D5
+	.long 0x72B7A7E4
+	.long 0xEC3939E4
+	.long 0x39D5DD72
+	.long 0x164C4C2D
+	.long 0x4C5A6198 /* 176 */
+	.long 0x945E5E65
+	.long 0x5ECA3BBC
+	.long 0x9F7878FD
+	.long 0x78E785F0
+	.long 0xE53838E0
+	.long 0x38DDD870
+	.long 0x988C8C0A
+	.long 0x8C148605 /* 180 */
+	.long 0x17D1D163
+	.long 0xD1C6B2BF
+	.long 0xE4A5A5AE
+	.long 0xA5410B57
+	.long 0xA1E2E2AF
+	.long 0xE2434DD9
+	.long 0x4E616199
+	.long 0x612FF8C2 /* 184 */
+	.long 0x42B3B3F6
+	.long 0xB3F1457B
+	.long 0x34212184
+	.long 0x2115A542
+	.long 0x089C9C4A
+	.long 0x9C94D625
+	.long 0xEE1E1E78
+	.long 0x1EF0663C /* 188 */
+	.long 0x61434311
+	.long 0x43225286
+	.long 0xB1C7C73B
+	.long 0xC776FC93
+	.long 0x4FFCFCD7
+	.long 0xFCB32BE5
+	.long 0x24040410
+	.long 0x04201408 /* 192 */
+	.long 0xE3515159
+	.long 0x51B208A2
+	.long 0x2599995E
+	.long 0x99BCC72F
+	.long 0x226D6DA9
+	.long 0x6D4FC4DA
+	.long 0x650D0D34
+	.long 0x0D68391A /* 196 */
+	.long 0x79FAFACF
+	.long 0xFA8335E9
+	.long 0x69DFDF5B
+	.long 0xDFB684A3
+	.long 0xA97E7EE5
+	.long 0x7ED79BFC
+	.long 0x19242490
+	.long 0x243DB448 /* 200 */
+	.long 0xFE3B3BEC
+	.long 0x3BC5D776
+	.long 0x9AABAB96
+	.long 0xAB313D4B
+	.long 0xF0CECE1F
+	.long 0xCE3ED181
+	.long 0x99111144
+	.long 0x11885522 /* 204 */
+	.long 0x838F8F06
+	.long 0x8F0C8903
+	.long 0x044E4E25
+	.long 0x4E4A6B9C
+	.long 0x66B7B7E6
+	.long 0xB7D15173
+	.long 0xE0EBEB8B
+	.long 0xEB0B60CB /* 208 */
+	.long 0xC13C3CF0
+	.long 0x3CFDCC78
+	.long 0xFD81813E
+	.long 0x817CBF1F
+	.long 0x4094946A
+	.long 0x94D4FE35
+	.long 0x1CF7F7FB
+	.long 0xF7EB0CF3 /* 212 */
+	.long 0x18B9B9DE
+	.long 0xB9A1676F
+	.long 0x8B13134C
+	.long 0x13985F26
+	.long 0x512C2CB0
+	.long 0x2C7D9C58
+	.long 0x05D3D36B
+	.long 0xD3D6B8BB /* 216 */
+	.long 0x8CE7E7BB
+	.long 0xE76B5CD3
+	.long 0x396E6EA5
+	.long 0x6E57CBDC
+	.long 0xAAC4C437
+	.long 0xC46EF395
+	.long 0x1B03030C
+	.long 0x03180F06 /* 220 */
+	.long 0xDC565645
+	.long 0x568A13AC
+	.long 0x5E44440D
+	.long 0x441A4988
+	.long 0xA07F7FE1
+	.long 0x7FDF9EFE
+	.long 0x88A9A99E
+	.long 0xA921374F /* 224 */
+	.long 0x672A2AA8
+	.long 0x2A4D8254
+	.long 0x0ABBBBD6
+	.long 0xBBB16D6B
+	.long 0x87C1C123
+	.long 0xC146E29F
+	.long 0xF1535351
+	.long 0x53A202A6 /* 228 */
+	.long 0x72DCDC57
+	.long 0xDCAE8BA5
+	.long 0x530B0B2C
+	.long 0x0B582716
+	.long 0x019D9D4E
+	.long 0x9D9CD327
+	.long 0x2B6C6CAD
+	.long 0x6C47C1D8 /* 232 */
+	.long 0xA43131C4
+	.long 0x3195F562
+	.long 0xF37474CD
+	.long 0x7487B9E8
+	.long 0x15F6F6FF
+	.long 0xF6E309F1
+	.long 0x4C464605
+	.long 0x460A438C /* 236 */
+	.long 0xA5ACAC8A
+	.long 0xAC092645
+	.long 0xB589891E
+	.long 0x893C970F
+	.long 0xB4141450
+	.long 0x14A04428
+	.long 0xBAE1E1A3
+	.long 0xE15B42DF /* 240 */
+	.long 0xA6161658
+	.long 0x16B04E2C
+	.long 0xF73A3AE8
+	.long 0x3ACDD274
+	.long 0x066969B9
+	.long 0x696FD0D2
+	.long 0x41090924
+	.long 0x09482D12 /* 244 */
+	.long 0xD77070DD
+	.long 0x70A7ADE0
+	.long 0x6FB6B6E2
+	.long 0xB6D95471
+	.long 0x1ED0D067
+	.long 0xD0CEB7BD
+	.long 0xD6EDED93
+	.long 0xED3B7EC7 /* 248 */
+	.long 0xE2CCCC17
+	.long 0xCC2EDB85
+	.long 0x68424215
+	.long 0x422A5784
+	.long 0x2C98985A
+	.long 0x98B4C22D
+	.long 0xEDA4A4AA
+	.long 0xA4490E55 /* 252 */
+	.long 0x752828A0
+	.long 0x285D8850
+	.long 0x865C5C6D
+	.long 0x5CDA31B8
+	.long 0x6BF8F8C7
+	.long 0xF8933FED
+	.long 0xC2868622
+	.long 0x8644A411 /* 256 */
+
+whirlpool_table6:	/* table 7 */
+	.long 0x30D81818
+	.long 0x6018C078
+	.long 0x46262323
+	.long 0x8C2305AF
+	.long 0x91B8C6C6
+	.long 0x3FC67EF9
+	.long 0xCDFBE8E8
+	.long 0x87E8136F /* 4 */
+	.long 0x13CB8787
+	.long 0x26874CA1
+	.long 0x6D11B8B8
+	.long 0xDAB8A962
+	.long 0x02090101
+	.long 0x04010805
+	.long 0x9E0D4F4F
+	.long 0x214F426E /* 8 */
+	.long 0x6C9B3636
+	.long 0xD836ADEE
+	.long 0x51FFA6A6
+	.long 0xA2A65904
+	.long 0xB90CD2D2
+	.long 0x6FD2DEBD
+	.long 0xF70EF5F5
+	.long 0xF3F5FB06 /* 12 */
+	.long 0xF2967979
+	.long 0xF979EF80
+	.long 0xDE306F6F
+	.long 0xA16F5FCE
+	.long 0x3F6D9191
+	.long 0x7E91FCEF
+	.long 0xA4F85252
+	.long 0x5552AA07 /* 16 */
+	.long 0xC0476060
+	.long 0x9D6027FD
+	.long 0x6535BCBC
+	.long 0xCABC8976
+	.long 0x2B379B9B
+	.long 0x569BACCD
+	.long 0x018A8E8E
+	.long 0x028E048C /* 20 */
+	.long 0x5BD2A3A3
+	.long 0xB6A37115
+	.long 0x186C0C0C
+	.long 0x300C603C
+	.long 0xF6847B7B
+	.long 0xF17BFF8A
+	.long 0x6A803535
+	.long 0xD435B5E1 /* 24 */
+	.long 0x3AF51D1D
+	.long 0x741DE869
+	.long 0xDDB3E0E0
+	.long 0xA7E05347
+	.long 0xB321D7D7
+	.long 0x7BD7F6AC
+	.long 0x999CC2C2
+	.long 0x2FC25EED /* 28 */
+	.long 0x5C432E2E
+	.long 0xB82E6D96
+	.long 0x96294B4B
+	.long 0x314B627A
+	.long 0xE15DFEFE
+	.long 0xDFFEA321
+	.long 0xAED55757
+	.long 0x41578216 /* 32 */
+	.long 0x2ABD1515
+	.long 0x5415A841
+	.long 0xEEE87777
+	.long 0xC1779FB6
+	.long 0x6E923737
+	.long 0xDC37A5EB
+	.long 0xD79EE5E5
+	.long 0xB3E57B56 /* 36 */
+	.long 0x23139F9F
+	.long 0x469F8CD9
+	.long 0xFD23F0F0
+	.long 0xE7F0D317
+	.long 0x94204A4A
+	.long 0x354A6A7F
+	.long 0xA944DADA
+	.long 0x4FDA9E95 /* 40 */
+	.long 0xB0A25858
+	.long 0x7D58FA25
+	.long 0x8FCFC9C9
+	.long 0x03C906CA
+	.long 0x527C2929
+	.long 0xA429558D
+	.long 0x145A0A0A
+	.long 0x280A5022 /* 44 */
+	.long 0x7F50B1B1
+	.long 0xFEB1E14F
+	.long 0x5DC9A0A0
+	.long 0xBAA0691A
+	.long 0xD6146B6B
+	.long 0xB16B7FDA
+	.long 0x17D98585
+	.long 0x2E855CAB /* 48 */
+	.long 0x673CBDBD
+	.long 0xCEBD8173
+	.long 0xBA8F5D5D
+	.long 0x695DD234
+	.long 0x20901010
+	.long 0x40108050
+	.long 0xF507F4F4
+	.long 0xF7F4F303 /* 52 */
+	.long 0x8BDDCBCB
+	.long 0x0BCB16C0
+	.long 0x7CD33E3E
+	.long 0xF83EEDC6
+	.long 0x0A2D0505
+	.long 0x14052811
+	.long 0xCE786767
+	.long 0x81671FE6 /* 56 */
+	.long 0xD597E4E4
+	.long 0xB7E47353
+	.long 0x4E022727
+	.long 0x9C2725BB
+	.long 0x82734141
+	.long 0x19413258
+	.long 0x0BA78B8B
+	.long 0x168B2C9D /* 60 */
+	.long 0x53F6A7A7
+	.long 0xA6A75101
+	.long 0xFAB27D7D
+	.long 0xE97DCF94
+	.long 0x37499595
+	.long 0x6E95DCFB
+	.long 0xAD56D8D8
+	.long 0x47D88E9F /* 64 */
+	.long 0xEB70FBFB
+	.long 0xCBFB8B30
+	.long 0xC1CDEEEE
+	.long 0x9FEE2371
+	.long 0xF8BB7C7C
+	.long 0xED7CC791
+	.long 0xCC716666
+	.long 0x856617E3 /* 68 */
+	.long 0xA77BDDDD
+	.long 0x53DDA68E
+	.long 0x2EAF1717
+	.long 0x5C17B84B
+	.long 0x8E454747
+	.long 0x01470246
+	.long 0x211A9E9E
+	.long 0x429E84DC /* 72 */
+	.long 0x89D4CACA
+	.long 0x0FCA1EC5
+	.long 0x5A582D2D
+	.long 0xB42D7599
+	.long 0x632EBFBF
+	.long 0xC6BF9179
+	.long 0x0E3F0707
+	.long 0x1C07381B /* 76 */
+	.long 0x47ACADAD
+	.long 0x8EAD0123
+	.long 0xB4B05A5A
+	.long 0x755AEA2F
+	.long 0x1BEF8383
+	.long 0x36836CB5
+	.long 0x66B63333
+	.long 0xCC3385FF /* 80 */
+	.long 0xC65C6363
+	.long 0x91633FF2
+	.long 0x04120202
+	.long 0x0802100A
+	.long 0x4993AAAA
+	.long 0x92AA3938
+	.long 0xE2DE7171
+	.long 0xD971AFA8 /* 84 */
+	.long 0x8DC6C8C8
+	.long 0x07C80ECF
+	.long 0x32D11919
+	.long 0x6419C87D
+	.long 0x923B4949
+	.long 0x39497270
+	.long 0xAF5FD9D9
+	.long 0x43D9869A /* 88 */
+	.long 0xF931F2F2
+	.long 0xEFF2C31D
+	.long 0xDBA8E3E3
+	.long 0xABE34B48
+	.long 0xB6B95B5B
+	.long 0x715BE22A
+	.long 0x0DBC8888
+	.long 0x1A883492 /* 92 */
+	.long 0x293E9A9A
+	.long 0x529AA4C8
+	.long 0x4C0B2626
+	.long 0x98262DBE
+	.long 0x64BF3232
+	.long 0xC8328DFA
+	.long 0x7D59B0B0
+	.long 0xFAB0E94A /* 96 */
+	.long 0xCFF2E9E9
+	.long 0x83E91B6A
+	.long 0x1E770F0F
+	.long 0x3C0F7833
+	.long 0xB733D5D5
+	.long 0x73D5E6A6
+	.long 0x1DF48080
+	.long 0x3A8074BA /* 100 */
+	.long 0x6127BEBE
+	.long 0xC2BE997C
+	.long 0x87EBCDCD
+	.long 0x13CD26DE
+	.long 0x68893434
+	.long 0xD034BDE4
+	.long 0x90324848
+	.long 0x3D487A75 /* 104 */
+	.long 0xE354FFFF
+	.long 0xDBFFAB24
+	.long 0xF48D7A7A
+	.long 0xF57AF78F
+	.long 0x3D649090
+	.long 0x7A90F4EA
+	.long 0xBE9D5F5F
+	.long 0x615FC23E /* 108 */
+	.long 0x403D2020
+	.long 0x80201DA0
+	.long 0xD00F6868
+	.long 0xBD6867D5
+	.long 0x34CA1A1A
+	.long 0x681AD072
+	.long 0x41B7AEAE
+	.long 0x82AE192C /* 112 */
+	.long 0x757DB4B4
+	.long 0xEAB4C95E
+	.long 0xA8CE5454
+	.long 0x4D549A19
+	.long 0x3B7F9393
+	.long 0x7693ECE5
+	.long 0x442F2222
+	.long 0x88220DAA /* 116 */
+	.long 0xC8636464
+	.long 0x8D6407E9
+	.long 0xFF2AF1F1
+	.long 0xE3F1DB12
+	.long 0xE6CC7373
+	.long 0xD173BFA2
+	.long 0x24821212
+	.long 0x4812905A /* 120 */
+	.long 0x807A4040
+	.long 0x1D403A5D
+	.long 0x10480808
+	.long 0x20084028
+	.long 0x9B95C3C3
+	.long 0x2BC356E8
+	.long 0xC5DFECEC
+	.long 0x97EC337B /* 124 */
+	.long 0xAB4DDBDB
+	.long 0x4BDB9690
+	.long 0x5FC0A1A1
+	.long 0xBEA1611F
+	.long 0x07918D8D
+	.long 0x0E8D1C83
+	.long 0x7AC83D3D
+	.long 0xF43DF5C9 /* 128 */
+	.long 0x335B9797
+	.long 0x6697CCF1
+	.long 0x00000000
+	.long 0x00000000
+	.long 0x83F9CFCF
+	.long 0x1BCF36D4
+	.long 0x566E2B2B
+	.long 0xAC2B4587 /* 132 */
+	.long 0xECE17676
+	.long 0xC57697B3
+	.long 0x19E68282
+	.long 0x328264B0
+	.long 0xB128D6D6
+	.long 0x7FD6FEA9
+	.long 0x36C31B1B
+	.long 0x6C1BD877 /* 136 */
+	.long 0x7774B5B5
+	.long 0xEEB5C15B
+	.long 0x43BEAFAF
+	.long 0x86AF1129
+	.long 0xD41D6A6A
+	.long 0xB56A77DF
+	.long 0xA0EA5050
+	.long 0x5D50BA0D /* 140 */
+	.long 0x8A574545
+	.long 0x0945124C
+	.long 0xFB38F3F3
+	.long 0xEBF3CB18
+	.long 0x60AD3030
+	.long 0xC0309DF0
+	.long 0xC3C4EFEF
+	.long 0x9BEF2B74 /* 144 */
+	.long 0x7EDA3F3F
+	.long 0xFC3FE5C3
+	.long 0xAAC75555
+	.long 0x4955921C
+	.long 0x59DBA2A2
+	.long 0xB2A27910
+	.long 0xC9E9EAEA
+	.long 0x8FEA0365 /* 148 */
+	.long 0xCA6A6565
+	.long 0x89650FEC
+	.long 0x6903BABA
+	.long 0xD2BAB968
+	.long 0x5E4A2F2F
+	.long 0xBC2F6593
+	.long 0x9D8EC0C0
+	.long 0x27C04EE7 /* 152 */
+	.long 0xA160DEDE
+	.long 0x5FDEBE81
+	.long 0x38FC1C1C
+	.long 0x701CE06C
+	.long 0xE746FDFD
+	.long 0xD3FDBB2E
+	.long 0x9A1F4D4D
+	.long 0x294D5264 /* 156 */
+	.long 0x39769292
+	.long 0x7292E4E0
+	.long 0xEAFA7575
+	.long 0xC9758FBC
+	.long 0x0C360606
+	.long 0x1806301E
+	.long 0x09AE8A8A
+	.long 0x128A2498 /* 160 */
+	.long 0x794BB2B2
+	.long 0xF2B2F940
+	.long 0xD185E6E6
+	.long 0xBFE66359
+	.long 0x1C7E0E0E
+	.long 0x380E7036
+	.long 0x3EE71F1F
+	.long 0x7C1FF863 /* 164 */
+	.long 0xC4556262
+	.long 0x956237F7
+	.long 0xB53AD4D4
+	.long 0x77D4EEA3
+	.long 0x4D81A8A8
+	.long 0x9AA82932
+	.long 0x31529696
+	.long 0x6296C4F4 /* 168 */
+	.long 0xEF62F9F9
+	.long 0xC3F99B3A
+	.long 0x97A3C5C5
+	.long 0x33C566F6
+	.long 0x4A102525
+	.long 0x942535B1
+	.long 0xB2AB5959
+	.long 0x7959F220 /* 172 */
+	.long 0x15D08484
+	.long 0x2A8454AE
+	.long 0xE4C57272
+	.long 0xD572B7A7
+	.long 0x72EC3939
+	.long 0xE439D5DD
+	.long 0x98164C4C
+	.long 0x2D4C5A61 /* 176 */
+	.long 0xBC945E5E
+	.long 0x655ECA3B
+	.long 0xF09F7878
+	.long 0xFD78E785
+	.long 0x70E53838
+	.long 0xE038DDD8
+	.long 0x05988C8C
+	.long 0x0A8C1486 /* 180 */
+	.long 0xBF17D1D1
+	.long 0x63D1C6B2
+	.long 0x57E4A5A5
+	.long 0xAEA5410B
+	.long 0xD9A1E2E2
+	.long 0xAFE2434D
+	.long 0xC24E6161
+	.long 0x99612FF8 /* 184 */
+	.long 0x7B42B3B3
+	.long 0xF6B3F145
+	.long 0x42342121
+	.long 0x842115A5
+	.long 0x25089C9C
+	.long 0x4A9C94D6
+	.long 0x3CEE1E1E
+	.long 0x781EF066 /* 188 */
+	.long 0x86614343
+	.long 0x11432252
+	.long 0x93B1C7C7
+	.long 0x3BC776FC
+	.long 0xE54FFCFC
+	.long 0xD7FCB32B
+	.long 0x08240404
+	.long 0x10042014 /* 192 */
+	.long 0xA2E35151
+	.long 0x5951B208
+	.long 0x2F259999
+	.long 0x5E99BCC7
+	.long 0xDA226D6D
+	.long 0xA96D4FC4
+	.long 0x1A650D0D
+	.long 0x340D6839 /* 196 */
+	.long 0xE979FAFA
+	.long 0xCFFA8335
+	.long 0xA369DFDF
+	.long 0x5BDFB684
+	.long 0xFCA97E7E
+	.long 0xE57ED79B
+	.long 0x48192424
+	.long 0x90243DB4 /* 200 */
+	.long 0x76FE3B3B
+	.long 0xEC3BC5D7
+	.long 0x4B9AABAB
+	.long 0x96AB313D
+	.long 0x81F0CECE
+	.long 0x1FCE3ED1
+	.long 0x22991111
+	.long 0x44118855 /* 204 */
+	.long 0x03838F8F
+	.long 0x068F0C89
+	.long 0x9C044E4E
+	.long 0x254E4A6B
+	.long 0x7366B7B7
+	.long 0xE6B7D151
+	.long 0xCBE0EBEB
+	.long 0x8BEB0B60 /* 208 */
+	.long 0x78C13C3C
+	.long 0xF03CFDCC
+	.long 0x1FFD8181
+	.long 0x3E817CBF
+	.long 0x35409494
+	.long 0x6A94D4FE
+	.long 0xF31CF7F7
+	.long 0xFBF7EB0C /* 212 */
+	.long 0x6F18B9B9
+	.long 0xDEB9A167
+	.long 0x268B1313
+	.long 0x4C13985F
+	.long 0x58512C2C
+	.long 0xB02C7D9C
+	.long 0xBB05D3D3
+	.long 0x6BD3D6B8 /* 216 */
+	.long 0xD38CE7E7
+	.long 0xBBE76B5C
+	.long 0xDC396E6E
+	.long 0xA56E57CB
+	.long 0x95AAC4C4
+	.long 0x37C46EF3
+	.long 0x061B0303
+	.long 0x0C03180F /* 220 */
+	.long 0xACDC5656
+	.long 0x45568A13
+	.long 0x885E4444
+	.long 0x0D441A49
+	.long 0xFEA07F7F
+	.long 0xE17FDF9E
+	.long 0x4F88A9A9
+	.long 0x9EA92137 /* 224 */
+	.long 0x54672A2A
+	.long 0xA82A4D82
+	.long 0x6B0ABBBB
+	.long 0xD6BBB16D
+	.long 0x9F87C1C1
+	.long 0x23C146E2
+	.long 0xA6F15353
+	.long 0x5153A202 /* 228 */
+	.long 0xA572DCDC
+	.long 0x57DCAE8B
+	.long 0x16530B0B
+	.long 0x2C0B5827
+	.long 0x27019D9D
+	.long 0x4E9D9CD3
+	.long 0xD82B6C6C
+	.long 0xAD6C47C1 /* 232 */
+	.long 0x62A43131
+	.long 0xC43195F5
+	.long 0xE8F37474
+	.long 0xCD7487B9
+	.long 0xF115F6F6
+	.long 0xFFF6E309
+	.long 0x8C4C4646
+	.long 0x05460A43 /* 236 */
+	.long 0x45A5ACAC
+	.long 0x8AAC0926
+	.long 0x0FB58989
+	.long 0x1E893C97
+	.long 0x28B41414
+	.long 0x5014A044
+	.long 0xDFBAE1E1
+	.long 0xA3E15B42 /* 240 */
+	.long 0x2CA61616
+	.long 0x5816B04E
+	.long 0x74F73A3A
+	.long 0xE83ACDD2
+	.long 0xD2066969
+	.long 0xB9696FD0
+	.long 0x12410909
+	.long 0x2409482D /* 244 */
+	.long 0xE0D77070
+	.long 0xDD70A7AD
+	.long 0x716FB6B6
+	.long 0xE2B6D954
+	.long 0xBD1ED0D0
+	.long 0x67D0CEB7
+	.long 0xC7D6EDED
+	.long 0x93ED3B7E /* 248 */
+	.long 0x85E2CCCC
+	.long 0x17CC2EDB
+	.long 0x84684242
+	.long 0x15422A57
+	.long 0x2D2C9898
+	.long 0x5A98B4C2
+	.long 0x55EDA4A4
+	.long 0xAAA4490E /* 252 */
+	.long 0x50752828
+	.long 0xA0285D88
+	.long 0xB8865C5C
+	.long 0x6D5CDA31
+	.long 0xED6BF8F8
+	.long 0xC7F8933F
+	.long 0x11C28686
+	.long 0x228644A4 /* 256 */
+
+whirlpool_table7:	/* table 8 */
+	.long 0x7830D818
+	.long 0x186018C0
+	.long 0xAF462623
+	.long 0x238C2305
+	.long 0xF991B8C6
+	.long 0xC63FC67E
+	.long 0x6FCDFBE8
+	.long 0xE887E813 /* 4 */
+	.long 0xA113CB87
+	.long 0x8726874C
+	.long 0x626D11B8
+	.long 0xB8DAB8A9
+	.long 0x05020901
+	.long 0x01040108
+	.long 0x6E9E0D4F
+	.long 0x4F214F42 /* 8 */
+	.long 0xEE6C9B36
+	.long 0x36D836AD
+	.long 0x0451FFA6
+	.long 0xA6A2A659
+	.long 0xBDB90CD2
+	.long 0xD26FD2DE
+	.long 0x06F70EF5
+	.long 0xF5F3F5FB /* 12 */
+	.long 0x80F29679
+	.long 0x79F979EF
+	.long 0xCEDE306F
+	.long 0x6FA16F5F
+	.long 0xEF3F6D91
+	.long 0x917E91FC
+	.long 0x07A4F852
+	.long 0x525552AA /* 16 */
+	.long 0xFDC04760
+	.long 0x609D6027
+	.long 0x766535BC
+	.long 0xBCCABC89
+	.long 0xCD2B379B
+	.long 0x9B569BAC
+	.long 0x8C018A8E
+	.long 0x8E028E04 /* 20 */
+	.long 0x155BD2A3
+	.long 0xA3B6A371
+	.long 0x3C186C0C
+	.long 0x0C300C60
+	.long 0x8AF6847B
+	.long 0x7BF17BFF
+	.long 0xE16A8035
+	.long 0x35D435B5 /* 24 */
+	.long 0x693AF51D
+	.long 0x1D741DE8
+	.long 0x47DDB3E0
+	.long 0xE0A7E053
+	.long 0xACB321D7
+	.long 0xD77BD7F6
+	.long 0xED999CC2
+	.long 0xC22FC25E /* 28 */
+	.long 0x965C432E
+	.long 0x2EB82E6D
+	.long 0x7A96294B
+	.long 0x4B314B62
+	.long 0x21E15DFE
+	.long 0xFEDFFEA3
+	.long 0x16AED557
+	.long 0x57415782 /* 32 */
+	.long 0x412ABD15
+	.long 0x155415A8
+	.long 0xB6EEE877
+	.long 0x77C1779F
+	.long 0xEB6E9237
+	.long 0x37DC37A5
+	.long 0x56D79EE5
+	.long 0xE5B3E57B /* 36 */
+	.long 0xD923139F
+	.long 0x9F469F8C
+	.long 0x17FD23F0
+	.long 0xF0E7F0D3
+	.long 0x7F94204A
+	.long 0x4A354A6A
+	.long 0x95A944DA
+	.long 0xDA4FDA9E /* 40 */
+	.long 0x25B0A258
+	.long 0x587D58FA
+	.long 0xCA8FCFC9
+	.long 0xC903C906
+	.long 0x8D527C29
+	.long 0x29A42955
+	.long 0x22145A0A
+	.long 0x0A280A50 /* 44 */
+	.long 0x4F7F50B1
+	.long 0xB1FEB1E1
+	.long 0x1A5DC9A0
+	.long 0xA0BAA069
+	.long 0xDAD6146B
+	.long 0x6BB16B7F
+	.long 0xAB17D985
+	.long 0x852E855C /* 48 */
+	.long 0x73673CBD
+	.long 0xBDCEBD81
+	.long 0x34BA8F5D
+	.long 0x5D695DD2
+	.long 0x50209010
+	.long 0x10401080
+	.long 0x03F507F4
+	.long 0xF4F7F4F3 /* 52 */
+	.long 0xC08BDDCB
+	.long 0xCB0BCB16
+	.long 0xC67CD33E
+	.long 0x3EF83EED
+	.long 0x110A2D05
+	.long 0x05140528
+	.long 0xE6CE7867
+	.long 0x6781671F /* 56 */
+	.long 0x53D597E4
+	.long 0xE4B7E473
+	.long 0xBB4E0227
+	.long 0x279C2725
+	.long 0x58827341
+	.long 0x41194132
+	.long 0x9D0BA78B
+	.long 0x8B168B2C /* 60 */
+	.long 0x0153F6A7
+	.long 0xA7A6A751
+	.long 0x94FAB27D
+	.long 0x7DE97DCF
+	.long 0xFB374995
+	.long 0x956E95DC
+	.long 0x9FAD56D8
+	.long 0xD847D88E /* 64 */
+	.long 0x30EB70FB
+	.long 0xFBCBFB8B
+	.long 0x71C1CDEE
+	.long 0xEE9FEE23
+	.long 0x91F8BB7C
+	.long 0x7CED7CC7
+	.long 0xE3CC7166
+	.long 0x66856617 /* 68 */
+	.long 0x8EA77BDD
+	.long 0xDD53DDA6
+	.long 0x4B2EAF17
+	.long 0x175C17B8
+	.long 0x468E4547
+	.long 0x47014702
+	.long 0xDC211A9E
+	.long 0x9E429E84 /* 72 */
+	.long 0xC589D4CA
+	.long 0xCA0FCA1E
+	.long 0x995A582D
+	.long 0x2DB42D75
+	.long 0x79632EBF
+	.long 0xBFC6BF91
+	.long 0x1B0E3F07
+	.long 0x071C0738 /* 76 */
+	.long 0x2347ACAD
+	.long 0xAD8EAD01
+	.long 0x2FB4B05A
+	.long 0x5A755AEA
+	.long 0xB51BEF83
+	.long 0x8336836C
+	.long 0xFF66B633
+	.long 0x33CC3385 /* 80 */
+	.long 0xF2C65C63
+	.long 0x6391633F
+	.long 0x0A041202
+	.long 0x02080210
+	.long 0x384993AA
+	.long 0xAA92AA39
+	.long 0xA8E2DE71
+	.long 0x71D971AF /* 84 */
+	.long 0xCF8DC6C8
+	.long 0xC807C80E
+	.long 0x7D32D119
+	.long 0x196419C8
+	.long 0x70923B49
+	.long 0x49394972
+	.long 0x9AAF5FD9
+	.long 0xD943D986 /* 88 */
+	.long 0x1DF931F2
+	.long 0xF2EFF2C3
+	.long 0x48DBA8E3
+	.long 0xE3ABE34B
+	.long 0x2AB6B95B
+	.long 0x5B715BE2
+	.long 0x920DBC88
+	.long 0x881A8834 /* 92 */
+	.long 0xC8293E9A
+	.long 0x9A529AA4
+	.long 0xBE4C0B26
+	.long 0x2698262D
+	.long 0xFA64BF32
+	.long 0x32C8328D
+	.long 0x4A7D59B0
+	.long 0xB0FAB0E9 /* 96 */
+	.long 0x6ACFF2E9
+	.long 0xE983E91B
+	.long 0x331E770F
+	.long 0x0F3C0F78
+	.long 0xA6B733D5
+	.long 0xD573D5E6
+	.long 0xBA1DF480
+	.long 0x803A8074 /* 100 */
+	.long 0x7C6127BE
+	.long 0xBEC2BE99
+	.long 0xDE87EBCD
+	.long 0xCD13CD26
+	.long 0xE4688934
+	.long 0x34D034BD
+	.long 0x75903248
+	.long 0x483D487A /* 104 */
+	.long 0x24E354FF
+	.long 0xFFDBFFAB
+	.long 0x8FF48D7A
+	.long 0x7AF57AF7
+	.long 0xEA3D6490
+	.long 0x907A90F4
+	.long 0x3EBE9D5F
+	.long 0x5F615FC2 /* 108 */
+	.long 0xA0403D20
+	.long 0x2080201D
+	.long 0xD5D00F68
+	.long 0x68BD6867
+	.long 0x7234CA1A
+	.long 0x1A681AD0
+	.long 0x2C41B7AE
+	.long 0xAE82AE19 /* 112 */
+	.long 0x5E757DB4
+	.long 0xB4EAB4C9
+	.long 0x19A8CE54
+	.long 0x544D549A
+	.long 0xE53B7F93
+	.long 0x937693EC
+	.long 0xAA442F22
+	.long 0x2288220D /* 116 */
+	.long 0xE9C86364
+	.long 0x648D6407
+	.long 0x12FF2AF1
+	.long 0xF1E3F1DB
+	.long 0xA2E6CC73
+	.long 0x73D173BF
+	.long 0x5A248212
+	.long 0x12481290 /* 120 */
+	.long 0x5D807A40
+	.long 0x401D403A
+	.long 0x28104808
+	.long 0x08200840
+	.long 0xE89B95C3
+	.long 0xC32BC356
+	.long 0x7BC5DFEC
+	.long 0xEC97EC33 /* 124 */
+	.long 0x90AB4DDB
+	.long 0xDB4BDB96
+	.long 0x1F5FC0A1
+	.long 0xA1BEA161
+	.long 0x8307918D
+	.long 0x8D0E8D1C
+	.long 0xC97AC83D
+	.long 0x3DF43DF5 /* 128 */
+	.long 0xF1335B97
+	.long 0x976697CC
+	.long 0x00000000
+	.long 0x00000000
+	.long 0xD483F9CF
+	.long 0xCF1BCF36
+	.long 0x87566E2B
+	.long 0x2BAC2B45 /* 132 */
+	.long 0xB3ECE176
+	.long 0x76C57697
+	.long 0xB019E682
+	.long 0x82328264
+	.long 0xA9B128D6
+	.long 0xD67FD6FE
+	.long 0x7736C31B
+	.long 0x1B6C1BD8 /* 136 */
+	.long 0x5B7774B5
+	.long 0xB5EEB5C1
+	.long 0x2943BEAF
+	.long 0xAF86AF11
+	.long 0xDFD41D6A
+	.long 0x6AB56A77
+	.long 0x0DA0EA50
+	.long 0x505D50BA /* 140 */
+	.long 0x4C8A5745
+	.long 0x45094512
+	.long 0x18FB38F3
+	.long 0xF3EBF3CB
+	.long 0xF060AD30
+	.long 0x30C0309D
+	.long 0x74C3C4EF
+	.long 0xEF9BEF2B /* 144 */
+	.long 0xC37EDA3F
+	.long 0x3FFC3FE5
+	.long 0x1CAAC755
+	.long 0x55495592
+	.long 0x1059DBA2
+	.long 0xA2B2A279
+	.long 0x65C9E9EA
+	.long 0xEA8FEA03 /* 148 */
+	.long 0xECCA6A65
+	.long 0x6589650F
+	.long 0x686903BA
+	.long 0xBAD2BAB9
+	.long 0x935E4A2F
+	.long 0x2FBC2F65
+	.long 0xE79D8EC0
+	.long 0xC027C04E /* 152 */
+	.long 0x81A160DE
+	.long 0xDE5FDEBE
+	.long 0x6C38FC1C
+	.long 0x1C701CE0
+	.long 0x2EE746FD
+	.long 0xFDD3FDBB
+	.long 0x649A1F4D
+	.long 0x4D294D52 /* 156 */
+	.long 0xE0397692
+	.long 0x927292E4
+	.long 0xBCEAFA75
+	.long 0x75C9758F
+	.long 0x1E0C3606
+	.long 0x06180630
+	.long 0x9809AE8A
+	.long 0x8A128A24 /* 160 */
+	.long 0x40794BB2
+	.long 0xB2F2B2F9
+	.long 0x59D185E6
+	.long 0xE6BFE663
+	.long 0x361C7E0E
+	.long 0x0E380E70
+	.long 0x633EE71F
+	.long 0x1F7C1FF8 /* 164 */
+	.long 0xF7C45562
+	.long 0x62956237
+	.long 0xA3B53AD4
+	.long 0xD477D4EE
+	.long 0x324D81A8
+	.long 0xA89AA829
+	.long 0xF4315296
+	.long 0x966296C4 /* 168 */
+	.long 0x3AEF62F9
+	.long 0xF9C3F99B
+	.long 0xF697A3C5
+	.long 0xC533C566
+	.long 0xB14A1025
+	.long 0x25942535
+	.long 0x20B2AB59
+	.long 0x597959F2 /* 172 */
+	.long 0xAE15D084
+	.long 0x842A8454
+	.long 0xA7E4C572
+	.long 0x72D572B7
+	.long 0xDD72EC39
+	.long 0x39E439D5
+	.long 0x6198164C
+	.long 0x4C2D4C5A /* 176 */
+	.long 0x3BBC945E
+	.long 0x5E655ECA
+	.long 0x85F09F78
+	.long 0x78FD78E7
+	.long 0xD870E538
+	.long 0x38E038DD
+	.long 0x8605988C
+	.long 0x8C0A8C14 /* 180 */
+	.long 0xB2BF17D1
+	.long 0xD163D1C6
+	.long 0x0B57E4A5
+	.long 0xA5AEA541
+	.long 0x4DD9A1E2
+	.long 0xE2AFE243
+	.long 0xF8C24E61
+	.long 0x6199612F /* 184 */
+	.long 0x457B42B3
+	.long 0xB3F6B3F1
+	.long 0xA5423421
+	.long 0x21842115
+	.long 0xD625089C
+	.long 0x9C4A9C94
+	.long 0x663CEE1E
+	.long 0x1E781EF0 /* 188 */
+	.long 0x52866143
+	.long 0x43114322
+	.long 0xFC93B1C7
+	.long 0xC73BC776
+	.long 0x2BE54FFC
+	.long 0xFCD7FCB3
+	.long 0x14082404
+	.long 0x04100420 /* 192 */
+	.long 0x08A2E351
+	.long 0x515951B2
+	.long 0xC72F2599
+	.long 0x995E99BC
+	.long 0xC4DA226D
+	.long 0x6DA96D4F
+	.long 0x391A650D
+	.long 0x0D340D68 /* 196 */
+	.long 0x35E979FA
+	.long 0xFACFFA83
+	.long 0x84A369DF
+	.long 0xDF5BDFB6
+	.long 0x9BFCA97E
+	.long 0x7EE57ED7
+	.long 0xB4481924
+	.long 0x2490243D /* 200 */
+	.long 0xD776FE3B
+	.long 0x3BEC3BC5
+	.long 0x3D4B9AAB
+	.long 0xAB96AB31
+	.long 0xD181F0CE
+	.long 0xCE1FCE3E
+	.long 0x55229911
+	.long 0x11441188 /* 204 */
+	.long 0x8903838F
+	.long 0x8F068F0C
+	.long 0x6B9C044E
+	.long 0x4E254E4A
+	.long 0x517366B7
+	.long 0xB7E6B7D1
+	.long 0x60CBE0EB
+	.long 0xEB8BEB0B /* 208 */
+	.long 0xCC78C13C
+	.long 0x3CF03CFD
+	.long 0xBF1FFD81
+	.long 0x813E817C
+	.long 0xFE354094
+	.long 0x946A94D4
+	.long 0x0CF31CF7
+	.long 0xF7FBF7EB /* 212 */
+	.long 0x676F18B9
+	.long 0xB9DEB9A1
+	.long 0x5F268B13
+	.long 0x134C1398
+	.long 0x9C58512C
+	.long 0x2CB02C7D
+	.long 0xB8BB05D3
+	.long 0xD36BD3D6 /* 216 */
+	.long 0x5CD38CE7
+	.long 0xE7BBE76B
+	.long 0xCBDC396E
+	.long 0x6EA56E57
+	.long 0xF395AAC4
+	.long 0xC437C46E
+	.long 0x0F061B03
+	.long 0x030C0318 /* 220 */
+	.long 0x13ACDC56
+	.long 0x5645568A
+	.long 0x49885E44
+	.long 0x440D441A
+	.long 0x9EFEA07F
+	.long 0x7FE17FDF
+	.long 0x374F88A9
+	.long 0xA99EA921 /* 224 */
+	.long 0x8254672A
+	.long 0x2AA82A4D
+	.long 0x6D6B0ABB
+	.long 0xBBD6BBB1
+	.long 0xE29F87C1
+	.long 0xC123C146
+	.long 0x02A6F153
+	.long 0x535153A2 /* 228 */
+	.long 0x8BA572DC
+	.long 0xDC57DCAE
+	.long 0x2716530B
+	.long 0x0B2C0B58
+	.long 0xD327019D
+	.long 0x9D4E9D9C
+	.long 0xC1D82B6C
+	.long 0x6CAD6C47 /* 232 */
+	.long 0xF562A431
+	.long 0x31C43195
+	.long 0xB9E8F374
+	.long 0x74CD7487
+	.long 0x09F115F6
+	.long 0xF6FFF6E3
+	.long 0x438C4C46
+	.long 0x4605460A /* 236 */
+	.long 0x2645A5AC
+	.long 0xAC8AAC09
+	.long 0x970FB589
+	.long 0x891E893C
+	.long 0x4428B414
+	.long 0x145014A0
+	.long 0x42DFBAE1
+	.long 0xE1A3E15B /* 240 */
+	.long 0x4E2CA616
+	.long 0x165816B0
+	.long 0xD274F73A
+	.long 0x3AE83ACD
+	.long 0xD0D20669
+	.long 0x69B9696F
+	.long 0x2D124109
+	.long 0x09240948 /* 244 */
+	.long 0xADE0D770
+	.long 0x70DD70A7
+	.long 0x54716FB6
+	.long 0xB6E2B6D9
+	.long 0xB7BD1ED0
+	.long 0xD067D0CE
+	.long 0x7EC7D6ED
+	.long 0xED93ED3B /* 248 */
+	.long 0xDB85E2CC
+	.long 0xCC17CC2E
+	.long 0x57846842
+	.long 0x4215422A
+	.long 0xC22D2C98
+	.long 0x985A98B4
+	.long 0x0E55EDA4
+	.long 0xA4AAA449 /* 252 */
+	.long 0x88507528
+	.long 0x28A0285D
+	.long 0x31B8865C
+	.long 0x5C6D5CDA
+	.long 0x3FED6BF8
+	.long 0xF8C7F893
+	.long 0xA411C286
+	.long 0x86228644 /* 256 */
