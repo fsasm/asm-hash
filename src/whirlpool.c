@@ -11,9 +11,11 @@
 #ifndef WHIRLPOOL_PRINT_TABLES
 void process_blocks (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
 	(void)data_bits;
-	for (unsigned int i = 0; i < n; i++) {
-		whirlpool_process_blocks (&block[i * 64], (uint64_t(*))(b->func_data), 0);
-	}
+#ifdef WHIRLPOOL_USE_ASM
+	whirlpool_process_blocks_asm (block, (uint64_t(*))(b->func_data), n);
+#else
+	whirlpool_process_blocks (block, (uint64_t(*))(b->func_data), n);
+#endif
 }
 
 void whirlpool_init (whirlpool_context* ctxt) {

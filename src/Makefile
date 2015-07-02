@@ -7,8 +7,8 @@ INCLUDE_PATH=-I.
 all: all_c all_armv6
 
 clean:
-	rm -rf md5sum sha1sum sha224sum sha256sum sha384sum sha512sum sha512_224sum sha512_256sum blake224sum blake256sum blake384sum blake512sum groestl224sum groestl256sum groestl384sum groestl512sum whirlpoolsum
-	rm -rf md5sum.exe sha1sum.exe sha224sum.exe sha256sum.exe sha384sum.exe sha512sum.exe sha512_224sum.exe sha512_256sum.exe blake224sum.exe blake256sum.exe blake384sum.exe blake512sum.exe groestl224sum.exe groestl256sum.exe groestl384sum.exe groestl512sum.exe whirlpoolsum.exe
+	rm -rf md5sum sha1sum sha224sum sha256sum sha384sum sha512sum sha512_224sum sha512_256sum blake224sum blake256sum blake384sum blake512sum groestl224sum groestl256sum groestl384sum groestl512sum whirlpoolsum whirlpoolsum_x64
+	rm -rf md5sum.exe sha1sum.exe sha224sum.exe sha256sum.exe sha384sum.exe sha512sum.exe sha512_224sum.exe sha512_256sum.exe blake224sum.exe blake256sum.exe blake384sum.exe blake512sum.exe groestl224sum.exe groestl256sum.exe groestl384sum.exe groestl512sum.exe whirlpoolsum.exe whirlpoolsum_x64.exe
 
 # C versions
 all_c: md5sum sha1sum sha2 whirlpoolsum blake groestl
@@ -80,6 +80,9 @@ sha512_256sum_armv6:
 # Whirlpool
 whirlpoolsum:
 	$(CC) -std=c99 -o whirlpoolsum whirlpool.c block.c int_util.c hashsum.c -DHASH_WHIRLPOOL $(INCLUDE_PATH) $(CFLAGS)
+
+whirlpoolsum_x64:
+	$(CC) -std=c99 -o whirlpoolsum_x64 whirlpool.c -DWHIRLPOOL_USE_ASM whirlpool_x64.s block.c int_util.c hashsum.c -DHASH_WHIRLPOOL $(INCLUDE_PATH) $(CFLAGS)
 
 # BLAKE
 blake224sum:
