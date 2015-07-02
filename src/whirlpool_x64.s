@@ -8,44 +8,11 @@
 
 .include "whirlpool_tables64.s"
 
-.section .rodata
-msg1:	.string "%16.16lX "
-msg2:	.string "%16.16lX\n"
-
 .text
-.extern printf
 
 .global whirlpool_process_blocks_asm
 .type whirlpool_process_blocks_asm, %function
 whirlpool_process_blocks_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8], rdx: unsigned int n) */
-
-.macro print msg val
-	push rax
-	push rcx
-	push rdx
-	push rsi
-	push rdi
-	push r8
-	push r9
-	push r10
-	push r11
-
-	mov rdi, OFFSET FLAT: \msg
-	mov rsi, \val
-	mov al, 0
-	call printf
-
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rdi
-	pop rsi
-	pop rdx
-	pop rcx
-	pop rax
-.endm
-
 	cmp rdx, 0
 	je .Lend
 
@@ -324,17 +291,6 @@ whirlpool_process_blocks_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8],
 	mov [rsp + 104], r13
 	mov [rsp + 112], r14
 	mov [rsp + 120], r15
-
-.macro print_tmp
-	print msg1, r8
-	print msg1, r9
-	print msg1, r10
-	print msg1, r11
-	print msg1, r12
-	print msg1, r13
-	print msg1, r14
-	print msg2, r15
-.endm
 
 	dec rcx
 	jnz .Lloop
