@@ -83,8 +83,8 @@
 #define HASH_TYPE uint64_t
 #define HASH_SIZE 8
 #define HASH_INIT whirlpool_init_hash
-#define PROCESS_BLOCKS_ASM(hash) whirlpool_process_block_asm (test_block_128, hash,1)
-#define PROCESS_BLOCKS(hash) whirlpool_process_blocks (test_block_128, hash, 1)
+#define PROCESS_BLOCKS_ASM(hash) whirlpool_process_blocks_asm (test_block_128, hash, 2)
+#define PROCESS_BLOCKS(hash) whirlpool_process_blocks (test_block_128, hash, 2)
 #define PRINTF_HASH "%16.16" PRIX64 " "
 
 

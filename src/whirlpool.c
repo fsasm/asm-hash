@@ -12,7 +12,7 @@
 void process_blocks (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
 	(void)data_bits;
 	for (unsigned int i = 0; i < n; i++) {
-		whirlpool_process_blocks (&block[i * 64], (uint8_t(*)[8])(b->func_data), 0);
+		whirlpool_process_blocks (&block[i * 64], (uint64_t(*))(b->func_data), 0);
 	}
 }
 
@@ -24,7 +24,7 @@ void whirlpool_init (whirlpool_context* ctxt) {
 	whirlpool_init_hash(ctxt->hash);
 }
 
-void whirlpool_init_hash (uint8_t hash[8][8]) {
+void whirlpool_init_hash (uint64_t hash[8]) {
 	memset (hash, 0, WHIRLPOOL_HASH_SIZE);
 }
 
@@ -40,9 +40,10 @@ void whirlpool_get_digest (whirlpool_context* ctxt, uint8_t digest[WHIRLPOOL_DIG
 #ifdef WHIRLPOOL_NAIVE
 	memcpy (digest, ctxt->hash, WHIRLPOOL_DIGEST_SIZE);
 #else
+	uint8_t (*h)[8] = (uint8_t (*)[8])ctxt->hash;
 	for (uint_fast8_t x = 0; x < 8; x++) {
 		for (uint_fast8_t y = 0; y < 8; y++) {
-			digest[x * 8 + y] = ctxt->hash[x][7 - y];
+			digest[x * 8 + y] = h[x][7 - y];
 		}
 	}
 #endif
@@ -232,63 +233,65 @@ int main (void) {
 
 #else
 
-void whirlpool_process_blocks (const uint8_t block[], uint8_t hash[8][8], unsigned int n) {
-	(void)n;
+void whirlpool_process_blocks (const uint8_t block_[], uint64_t hash_[8], unsigned int n) {
+	uint8_t (*hash)[8] = (uint8_t (*)[8])hash_;
+	for (unsigned int i = 0; i < n; i++) {
+		const uint8_t *block = &block_[i * 64];
 #ifdef WHIRLPOOL_NAIVE
-	uint8_t state[8][8];
-	uint8_t key[8][8];
+		uint8_t state[8][8];
+		uint8_t key[8][8];
 
-	memcpy (key, hash, 64);
-	
-	for (uint_fast8_t x = 0; x < 8; x++) {
-		for (uint_fast8_t y = 0; y < 8; y++) {
-			state[x][y] = block[x * 8 + y] ^ hash[x][y];
-		}
-	}
-	
-	for (uint_fast8_t r = 0; r < 10; r++) {
-		/* substitution */
-		for (uint_fast8_t x = 0; x < 8; x++) {
-			for (uint_fast8_t y = 0; y < 8; y++) {
-				state[x][y] = s_box[state[x][y]];
-				key[x][y] = s_box[key[x][y]];
-			}
-		};
-		
-		permute (state);
-		permute (key);
-		
-		diffuse (state);
-		diffuse (key);
-		
-		/* add round key */
-		for (uint_fast8_t y = 0; y < 8; y++) {
-			key[0][y] ^= s_box[8 * r + y];
-		}
+		memcpy (key, hash, 64);
 		
 		for (uint_fast8_t x = 0; x < 8; x++) {
 			for (uint_fast8_t y = 0; y < 8; y++) {
-				state[x][y] ^= key[x][y];
+				state[x][y] = block[x * 8 + y] ^ hash[x][y];
 			}
 		}
-	}
-	
-	for (uint_fast8_t x = 0; x < 8; x++) {
-		for (uint_fast8_t y = 0; y < 8; y++) {
-			hash[x][y] ^= state[x][y] ^ block[x * 8 + y];
+		
+		for (uint_fast8_t r = 0; r < 10; r++) {
+			/* substitution */
+			for (uint_fast8_t x = 0; x < 8; x++) {
+				for (uint_fast8_t y = 0; y < 8; y++) {
+					state[x][y] = s_box[state[x][y]];
+					key[x][y] = s_box[key[x][y]];
+				}
+			};
+			
+			permute (state);
+			permute (key);
+			
+			diffuse (state);
+			diffuse (key);
+			
+			/* add round key */
+			for (uint_fast8_t y = 0; y < 8; y++) {
+				key[0][y] ^= s_box[8 * r + y];
+			}
+			
+			for (uint_fast8_t x = 0; x < 8; x++) {
+				for (uint_fast8_t y = 0; y < 8; y++) {
+					state[x][y] ^= key[x][y];
+				}
+			}
 		}
-	}
+		
+		for (uint_fast8_t x = 0; x < 8; x++) {
+			for (uint_fast8_t y = 0; y < 8; y++) {
+				hash[x][y] ^= state[x][y] ^ block[x * 8 + y];
+			}
+		}
 #else
-	uint64_t state[8];
-	uint64_t key[8];
-	uint64_t tmp [8];
+		uint64_t state[8];
+		uint64_t key[8];
+		uint64_t tmp [8];
 
-	memcpy (key, hash, 64);
-	memset (tmp, 0, sizeof (tmp));
+		memcpy (key, hash, 64);
+		memset (tmp, 0, sizeof (tmp));
 
-	for (uint_fast8_t x = 0; x < 8; x++) {
-		state[x] = u8_to_u64_be (&block[x * 8]) ^ key[x];
-	}
+		for (uint_fast8_t x = 0; x < 8; x++) {
+			state[x] = u8_to_u64_be (&block[x * 8]) ^ key[x];
+		}
 
 #ifdef WHIRLPOOL_SINGLE_TABLE
 
@@ -313,85 +316,86 @@ void whirlpool_process_blocks (const uint8_t block[], uint8_t hash[8][8], unsign
 #define TABLE7(index) (tables[7][(index) & 0xFF])
 
 #endif
-	for (uint_fast8_t r = 0; r < 10; r++) {
-		/* key */
-		tmp[0] = 
-			TABLE0(key[0]) ^ TABLE1(key[7]) ^ TABLE2(key[6]) ^ TABLE3(key[5]) ^
-			TABLE4(key[4]) ^ TABLE5(key[3]) ^ TABLE6(key[2]) ^ TABLE7(key[1]) ^
-			round_constants[r];
+		for (uint_fast8_t r = 0; r < 10; r++) {
+			/* key */
+			tmp[0] = 
+				TABLE0(key[0]) ^ TABLE1(key[7]) ^ TABLE2(key[6]) ^ TABLE3(key[5]) ^
+				TABLE4(key[4]) ^ TABLE5(key[3]) ^ TABLE6(key[2]) ^ TABLE7(key[1]) ^
+				round_constants[r];
+				
+			tmp[1] = 
+				TABLE0(key[1]) ^ TABLE1(key[0]) ^ TABLE2(key[7]) ^ TABLE3(key[6]) ^
+				TABLE4(key[5]) ^ TABLE5(key[4]) ^ TABLE6(key[3]) ^ TABLE7(key[2]);
+				
+			tmp[2] = 
+				TABLE0(key[2]) ^ TABLE1(key[1]) ^ TABLE2(key[0]) ^ TABLE3(key[7]) ^
+				TABLE4(key[6]) ^ TABLE5(key[5]) ^ TABLE6(key[4]) ^ TABLE7(key[3]);
+				
+			tmp[3] = 
+				TABLE0(key[3]) ^ TABLE1(key[2]) ^ TABLE2(key[1]) ^ TABLE3(key[0]) ^
+				TABLE4(key[7]) ^ TABLE5(key[6]) ^ TABLE6(key[5]) ^ TABLE7(key[4]);
+				
+			tmp[4] = 
+				TABLE0(key[4]) ^ TABLE1(key[3]) ^ TABLE2(key[2]) ^ TABLE3(key[1]) ^
+				TABLE4(key[0]) ^ TABLE5(key[7]) ^ TABLE6(key[6]) ^ TABLE7(key[5]);
+				
+			tmp[5] = 
+				TABLE0(key[5]) ^ TABLE1(key[4]) ^ TABLE2(key[3]) ^ TABLE3(key[2]) ^
+				TABLE4(key[1]) ^ TABLE5(key[0]) ^ TABLE6(key[7]) ^ TABLE7(key[6]);
+				
+			tmp[6] = 
+				TABLE0(key[6]) ^ TABLE1(key[5]) ^ TABLE2(key[4]) ^ TABLE3(key[3]) ^
+				TABLE4(key[2]) ^ TABLE5(key[1]) ^ TABLE6(key[0]) ^ TABLE7(key[7]);
+				
+			tmp[7] = 		
+				TABLE0(key[7]) ^ TABLE1(key[6]) ^ TABLE2(key[5]) ^ TABLE3(key[4]) ^
+				TABLE4(key[3]) ^ TABLE5(key[2]) ^ TABLE6(key[1]) ^ TABLE7(key[0]);
+				
+			memcpy (key, tmp, sizeof (tmp));
 			
-		tmp[1] = 
-			TABLE0(key[1]) ^ TABLE1(key[0]) ^ TABLE2(key[7]) ^ TABLE3(key[6]) ^
-			TABLE4(key[5]) ^ TABLE5(key[4]) ^ TABLE6(key[3]) ^ TABLE7(key[2]);
-			
-		tmp[2] = 
-			TABLE0(key[2]) ^ TABLE1(key[1]) ^ TABLE2(key[0]) ^ TABLE3(key[7]) ^
-			TABLE4(key[6]) ^ TABLE5(key[5]) ^ TABLE6(key[4]) ^ TABLE7(key[3]);
-			
-		tmp[3] = 
-			TABLE0(key[3]) ^ TABLE1(key[2]) ^ TABLE2(key[1]) ^ TABLE3(key[0]) ^
-			TABLE4(key[7]) ^ TABLE5(key[6]) ^ TABLE6(key[5]) ^ TABLE7(key[4]);
-			
-		tmp[4] = 
-			TABLE0(key[4]) ^ TABLE1(key[3]) ^ TABLE2(key[2]) ^ TABLE3(key[1]) ^
-			TABLE4(key[0]) ^ TABLE5(key[7]) ^ TABLE6(key[6]) ^ TABLE7(key[5]);
-			
-		tmp[5] = 
-			TABLE0(key[5]) ^ TABLE1(key[4]) ^ TABLE2(key[3]) ^ TABLE3(key[2]) ^
-			TABLE4(key[1]) ^ TABLE5(key[0]) ^ TABLE6(key[7]) ^ TABLE7(key[6]);
-			
-		tmp[6] = 
-			TABLE0(key[6]) ^ TABLE1(key[5]) ^ TABLE2(key[4]) ^ TABLE3(key[3]) ^
-			TABLE4(key[2]) ^ TABLE5(key[1]) ^ TABLE6(key[0]) ^ TABLE7(key[7]);
-			
-		tmp[7] = 		
-			TABLE0(key[7]) ^ TABLE1(key[6]) ^ TABLE2(key[5]) ^ TABLE3(key[4]) ^
-			TABLE4(key[3]) ^ TABLE5(key[2]) ^ TABLE6(key[1]) ^ TABLE7(key[0]);
-			
-		memcpy (key, tmp, sizeof (tmp));
+			/* state */
+			tmp[0] ^= 
+				TABLE0(state[0]) ^ TABLE1(state[7]) ^ TABLE2(state[6]) ^ TABLE3(state[5]) ^
+				TABLE4(state[4]) ^ TABLE5(state[3]) ^ TABLE6(state[2]) ^ TABLE7(state[1]);
+				
+			tmp[1] ^= 
+				TABLE0(state[1]) ^ TABLE1(state[0]) ^ TABLE2(state[7]) ^ TABLE3(state[6]) ^
+				TABLE4(state[5]) ^ TABLE5(state[4]) ^ TABLE6(state[3]) ^ TABLE7(state[2]);
+				
+			tmp[2] ^= 
+				TABLE0(state[2]) ^ TABLE1(state[1]) ^ TABLE2(state[0]) ^ TABLE3(state[7]) ^
+				TABLE4(state[6]) ^ TABLE5(state[5]) ^ TABLE6(state[4]) ^ TABLE7(state[3]);
+				
+			tmp[3] ^= 
+				TABLE0(state[3]) ^ TABLE1(state[2]) ^ TABLE2(state[1]) ^ TABLE3(state[0]) ^
+				TABLE4(state[7]) ^ TABLE5(state[6]) ^ TABLE6(state[5]) ^ TABLE7(state[4]);
+				
+			tmp[4] ^= 
+				TABLE0(state[4]) ^ TABLE1(state[3]) ^ TABLE2(state[2]) ^ TABLE3(state[1]) ^
+				TABLE4(state[0]) ^ TABLE5(state[7]) ^ TABLE6(state[6]) ^ TABLE7(state[5]);
+				
+			tmp[5] ^= 
+				TABLE0(state[5]) ^ TABLE1(state[4]) ^ TABLE2(state[3]) ^ TABLE3(state[2]) ^
+				TABLE4(state[1]) ^ TABLE5(state[0]) ^ TABLE6(state[7]) ^ TABLE7(state[6]);
+				
+			tmp[6] ^= 
+				TABLE0(state[6]) ^ TABLE1(state[5]) ^ TABLE2(state[4]) ^ TABLE3(state[3]) ^
+				TABLE4(state[2]) ^ TABLE5(state[1]) ^ TABLE6(state[0]) ^ TABLE7(state[7]);
+				
+			tmp[7] ^= 		
+				TABLE0(state[7]) ^ TABLE1(state[6]) ^ TABLE2(state[5]) ^ TABLE3(state[4]) ^
+				TABLE4(state[3]) ^ TABLE5(state[2]) ^ TABLE6(state[1]) ^ TABLE7(state[0]);
+				
+			memcpy (state, tmp, sizeof (tmp));
+		}
 		
-		/* state */
-		tmp[0] ^= 
-			TABLE0(state[0]) ^ TABLE1(state[7]) ^ TABLE2(state[6]) ^ TABLE3(state[5]) ^
-			TABLE4(state[4]) ^ TABLE5(state[3]) ^ TABLE6(state[2]) ^ TABLE7(state[1]);
-			
-		tmp[1] ^= 
-			TABLE0(state[1]) ^ TABLE1(state[0]) ^ TABLE2(state[7]) ^ TABLE3(state[6]) ^
-			TABLE4(state[5]) ^ TABLE5(state[4]) ^ TABLE6(state[3]) ^ TABLE7(state[2]);
-			
-		tmp[2] ^= 
-			TABLE0(state[2]) ^ TABLE1(state[1]) ^ TABLE2(state[0]) ^ TABLE3(state[7]) ^
-			TABLE4(state[6]) ^ TABLE5(state[5]) ^ TABLE6(state[4]) ^ TABLE7(state[3]);
-			
-		tmp[3] ^= 
-			TABLE0(state[3]) ^ TABLE1(state[2]) ^ TABLE2(state[1]) ^ TABLE3(state[0]) ^
-			TABLE4(state[7]) ^ TABLE5(state[6]) ^ TABLE6(state[5]) ^ TABLE7(state[4]);
-			
-		tmp[4] ^= 
-			TABLE0(state[4]) ^ TABLE1(state[3]) ^ TABLE2(state[2]) ^ TABLE3(state[1]) ^
-			TABLE4(state[0]) ^ TABLE5(state[7]) ^ TABLE6(state[6]) ^ TABLE7(state[5]);
-			
-		tmp[5] ^= 
-			TABLE0(state[5]) ^ TABLE1(state[4]) ^ TABLE2(state[3]) ^ TABLE3(state[2]) ^
-			TABLE4(state[1]) ^ TABLE5(state[0]) ^ TABLE6(state[7]) ^ TABLE7(state[6]);
-			
-		tmp[6] ^= 
-			TABLE0(state[6]) ^ TABLE1(state[5]) ^ TABLE2(state[4]) ^ TABLE3(state[3]) ^
-			TABLE4(state[2]) ^ TABLE5(state[1]) ^ TABLE6(state[0]) ^ TABLE7(state[7]);
-			
-		tmp[7] ^= 		
-			TABLE0(state[7]) ^ TABLE1(state[6]) ^ TABLE2(state[5]) ^ TABLE3(state[4]) ^
-			TABLE4(state[3]) ^ TABLE5(state[2]) ^ TABLE6(state[1]) ^ TABLE7(state[0]);
-			
-		memcpy (state, tmp, sizeof (tmp));
-	}
-	
-	memcpy (tmp, hash, sizeof (tmp));
-	for (uint_fast8_t x = 0; x < 8; x++) {
-		tmp[x] ^= state[x] ^ u8_to_u64_be (&block[x * 8]);
-	}
-	memcpy (hash, tmp, sizeof (tmp));
+		memcpy (tmp, hash, sizeof (tmp));
+		for (uint_fast8_t x = 0; x < 8; x++) {
+			tmp[x] ^= state[x] ^ u8_to_u64_be (&block[x * 8]);
+		}
+		memcpy (hash, tmp, sizeof (tmp));
 #endif
+	}
 }
 
 #endif

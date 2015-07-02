@@ -15,9 +15,9 @@ msg2:	.string "%16.16lX\n"
 .text
 .extern printf
 
-.global whirlpool_process_block_asm
-.type whirlpool_process_block_asm, %function
-whirlpool_process_block_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8], rdx: unsigned int n) */
+.global whirlpool_process_blocks_asm
+.type whirlpool_process_blocks_asm, %function
+whirlpool_process_blocks_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8], rdx: unsigned int n) */
 
 .macro print msg val
 	push rax
