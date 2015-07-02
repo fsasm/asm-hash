@@ -28,4 +28,11 @@ void whirlpool_get_digest (whirlpool_context* ctxt, uint8_t digest[WHIRLPOOL_DIG
 
 void whirlpool_process_blocks (const uint8_t block[], uint8_t hash[8][8], unsigned int n);
 
+#if defined (WHIRLPOOL_USE_ASM) || defined (WHIRLPOOL_ENABLE_ASM)
+#if __x86_64__
+__attribute__((sysv_abi))
+#endif
+extern void md5_process_blocks_asm (const uint8_t block[], uint64_t hash[8], unsigned int n);
+#endif
+
 #endif
