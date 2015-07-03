@@ -107,6 +107,21 @@
 #define PROCESS_BLOCKS(hash) blake512_process_block_asm (test_block_128, hash, UINT64_C (0x6A09E667BB67AE85))
 #endif
 
+#elif defined(HASH_WHIRLPOOL) || defined(HASH_WHIRLPOOL_ASM)
+
+#define WHIRLPOOL_ENABLE_ASM
+#include "whirlpool.h"
+
+#define HASH_TYPE uint64_t
+#define HASH_SIZE 8
+#define DEFAULT_RUNS 1000
+#define NUM_BYTES (128)
+
+#ifdef HASH_WHIRLPOOL
+#define PROCESS_BLOCKS(hash) whirlpool_process_blocks(test_block_128, hash, 2)
+#else
+#define PROCESS_BLOCKS(hash) whirlpool_process_blocks_asm (test_block_128, hash, 2)
+#endif
 #endif
 
 /* for quicksort */
@@ -149,10 +164,10 @@ int main (int argc, char* argv[]) {
 			for (uint_fast32_t k = 0; k < num_runs; k++) {
 				PROCESS_BLOCKS (hash);
 			}
-			
+	
 			struct timespec stop_time;
 			clock_gettime (CLOCK_REALTIME, &stop_time);
-			
+
 			uint64_t start_ns = start_time.tv_sec * UINT64_C (1000000000) + start_time.tv_nsec;
 			uint64_t stop_ns = stop_time.tv_sec * UINT64_C (1000000000) + stop_time.tv_nsec;
 			
@@ -170,3 +185,4 @@ int main (int argc, char* argv[]) {
 
 	return 0;
 }
+
