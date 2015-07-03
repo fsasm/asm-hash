@@ -7,32 +7,19 @@
 #ifndef MD5_H
 #define MD5_H
 
-#include <stdint.h>
 #include "block.h"
-
-#define MD5_BLOCK_SIZE 64
-#define MD5_HASH_SIZE 16
-#define MD5_DIGEST_SIZE 16
+#include "md5_core.h"
 
 typedef struct {
-	uint8_t buffer[64];
+	uint8_t buffer[MD5_BLOCK_SIZE];
 	uint32_t hash[4];
 	block b;
 } md5_context;
 
 void md5_init (md5_context* ctxt);
-void md5_init_hash (uint32_t hash[4]);
 void md5_add (md5_context* ctxt, const uint8_t data[], size_t length);
 void md5_finalize (md5_context* ctxt);
 void md5_get_digest (md5_context* ctxt, uint8_t digest[MD5_DIGEST_SIZE]);
 
-void md5_process_blocks (const uint8_t block[], uint32_t hash[4], unsigned int n);
-
-#if defined (MD5_USE_ASM) || defined (MD5_ENABLE_ASM)
-#if __x86_64__
-__attribute__((sysv_abi))
-#endif
-extern void md5_process_blocks_asm (const uint8_t block[], uint32_t hash[4], unsigned int n);
 #endif
 
-#endif

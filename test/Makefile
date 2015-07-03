@@ -2,14 +2,14 @@ CC=gcc
 CFLAGS=
 INCLUDE_PATH=-I../src/
 
-md5_test_armv6: hash_test.c
-	$(CC) -std=c99 -o md5_test_armv6 hash_test.c -DHASH_MD5 ../src/md5.c ../src/md5_armv6.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
+md5_test_armv6:
+	$(CC) -std=c99 -DHASH_MD5 -o $@ hash_test.c ../src/md5_core.c ../src/md5_armv6.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 	
-md5_test_armv7: hash_test.c
-	$(CC) -std=c99 -march=armv7-a -o md5_test_armv7 hash_test.c -DHASH_MD5 ../src/md5.c ../src/md5_armv7.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
+md5_test_armv7:
+	$(CC) -std=c99 -DHASH_MD5 -o $@ hash_test.c ../src/md5_core.c ../src/md5_armv7.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
 md5_test_x64: hash_test.c
-	$(CC) -std=c99 -o md5_test_x64 hash_test.c -DHASH_MD5 ../src/md5.c ../src/md5_x64.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_MD5 -o $@ hash_test.c ../src/md5_core.c ../src/md5_x64.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 	
 sha1_test_armv6: hash_test.c
 	$(CC) -std=c99 -o sha1_test_armv6 hash_test.c -DHASH_SHA1 ../src/sha1.c ../src/sha1_armv6.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
@@ -32,17 +32,17 @@ blake512_test: hash_test.c
 int_util_test: int_util_test.c
 	$(CC) -std=c99 -o int_util_test int_util_test.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
-md5_bench: hash_benchmark.c
-	$(CC) -std=gnu99 -lrt -o md5_bench hash_benchmark.c -DHASH_MD5 ../src/md5.c ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
+md5_bench:
+	$(CC) -std=gnu99 -DHASH_MD5 -lrt -o $@ hash_benchmark.c ../src/md5_core.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
 
-md5_bench_armv6: hash_benchmark.c
-	$(CC) -std=gnu99 -lrt -o md5_bench_armv6 hash_benchmark.c -DHASH_MD5_ASM ../src/md5.c ../src/md5_armv6.s ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
+md5_bench_armv6:
+	$(CC) -std=gnu99 -DHASH_MD5_ASM -lrt -o $@ hash_benchmark.c ../src/md5_core.c ../src/md5_armv6.s ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
 
-md5_bench_armv7: hash_benchmark.c
-	$(CC) -std=gnu99 -march=armv7-a -lrt -o md5_bench_armv7 hash_benchmark.c -DHASH_MD5_ASM ../src/md5.c ../src/md5_armv7.s ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
+md5_bench_armv7:
+	$(CC) -std=gnu99 -march=armv7-a -DHASH_MD5_ASM -lrt -o $@ hash_benchmark.c ../src/md5_core.c ../src/md5_armv7.s ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
 
-md5_bench_x64: hash_benchmark.c
-	$(CC) -std=gnu99 -lrt -o md5_bench_x64 hash_benchmark.c -DHASH_MD5_ASM ../src/md5.c ../src/md5_x64.s ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
+md5_bench_x64:
+	$(CC) -std=gnu99 -DHASH_MD5_ASM -lrt -o $@ hash_benchmark.c ../src/md5_core.c ../src/md5_x64.s ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
 
 sha1_bench: hash_benchmark.c
 	$(CC) -std=gnu99 -lrt -o sha1_bench hash_benchmark.c -DHASH_SHA1 ../src/sha1.c ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)

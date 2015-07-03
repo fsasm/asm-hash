@@ -2,9 +2,9 @@ CC=gcc
 CFLAGS=
 INCLUDE_PATH=-I.
 
-.PHONY: all clean
+.PHONY: all clean all_c all_armv6 all_armv7 all_x64
 
-all: all_c all_armv6
+all: all_c all_armv6 all_armv7 all_x64
 
 clean:
 	rm -rf md5sum sha1sum sha224sum sha256sum sha384sum sha512sum sha512_224sum sha512_256sum blake224sum blake256sum blake384sum blake512sum groestl224sum groestl256sum groestl384sum groestl512sum whirlpoolsum whirlpoolsum_x64
@@ -20,18 +20,28 @@ blake: blake224sum blake256sum blake384sum blake512sum
 groestl: groestl224sum groestl256sum groestl384sum groestl512sum
 
 # Assembly versions
+all_x64: md5sum_x64
+
 all_armv6: md5sum_armv6 sha1sum_armv6 sha2_armv6 blake_armv6
+
+all_armv7: md5sum_armv7
 
 sha2_armv6: sha224sum_armv6 sha256sum_armv6 sha384sum_armv6 sha512sum_armv6 sha512_224sum_armv6 sha512_256sum_armv6
 
 blake_armv6: blake224sum_armv6 blake256sum_armv6 blake384sum_armv6 blake512sum_armv6
 
 # MD5
-md5sum:
-	$(CC) -std=c99 -o md5sum md5.c block.c int_util.c hashsum.c -DHASH_MD5 $(INCLUDE_PATH) $(CFLAGS)
+md5sum: md5.c md5_core.c block.c int_util.c hashsum.c 
+	$(CC) -std=c99 -DHASH_MD5 -o $@  md5.c md5_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
-md5sum_armv6:
-	$(CC) -std=c99 -o md5sum md5.c md5_armv6.s -DMD5_USE_ASM block.c int_util.c hashsum.c -DHASH_MD5 $(INCLUDE_PATH) $(CFLAGS)
+md5sum_x64: md5.c md5_core.c md5_x64.s block.c int_util.c hashsum.c 
+	$(CC) -std=c99 -DHASH_MD5 -DMD5_USE_ASM -o $@  md5.c md5_core.c md5_x64.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
+
+md5sum_armv6: md5.c md5_core.c md5_armv6.s block.c int_util.c hashsum.c 
+	$(CC) -std=c99 -DHASH_MD5 -DMD5_USE_ASM -o $@  md5.c md5_core.c md5_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
+
+md5sum_armv7: md5.c md5_core.c md5_armv7.s block.c int_util.c hashsum.c 
+	$(CC) -std=c99 -DHASH_MD5 -DMD5_USE_ASM -o $@  md5.c md5_core.c md5_armv7.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 # SHA-1
 sha1sum:
