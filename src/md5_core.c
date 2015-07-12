@@ -33,14 +33,14 @@ static const uint_fast8_t md5_shift[16] = {
 	6, 10, 15, 21
 };
 
-void md5_init_hash (uint32_t hash[4]) {
+void md5_init_hash(uint32_t hash[4]) {
 	hash[0] = UINT32_C(0x67452301);
 	hash[1] = UINT32_C(0xEFCDAB89);
 	hash[2] = UINT32_C(0x98BADCFE);
 	hash[3] = UINT32_C(0x10325476);
 }
 
-void md5_process_blocks (const uint8_t block[], uint32_t hash[4], unsigned int n) {
+void md5_process_blocks(const uint8_t block[], uint32_t hash[4], unsigned int n) {
 	for (unsigned int j = 0; j < n; j++) {
 		const uint8_t* block1 = &block[j * 64];
 		
