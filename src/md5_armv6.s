@@ -78,6 +78,7 @@ md5_table:
 .text
 .arm
 .global md5_process_blocks_asm
+.type md5_process_blocks_asm, %function
 md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
 	push {r4 - r11}
 	cmp r2, #0

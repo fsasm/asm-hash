@@ -76,6 +76,7 @@ md5_table:
 
 .section .text
 .global md5_process_blocks_asm
+.type md5_process_blocks_asm, %function
 md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
 	/* block: rdi; hash: rsi; n: rdx*/
 	push rbp
