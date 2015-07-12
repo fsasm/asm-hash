@@ -46,7 +46,7 @@
 #elif defined(HASH_SHA256) || defined(HASH_SHA256_ASM)
 
 #define SHA256_ENABLE_ASM
-#include "sha256.h"
+#include "sha256_core.h"
 
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 8

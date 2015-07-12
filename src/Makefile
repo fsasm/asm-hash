@@ -55,16 +55,16 @@ sha1sum_armv7:
 	
 # SHA-2
 sha224sum:
-	$(CC) -std=c99 -o sha224sum sha256.c block.c int_util.c hashsum.c -DHASH_SHA224 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA224 -o $@ sha256.c sha256_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 	
 sha224sum_armv6:
-	$(CC) -std=c99 -o sha224sum sha256.c sha256_armv6.s -DSHA256_USE_ASM block.c int_util.c hashsum.c -DHASH_SHA224 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA224 -DSHA256_USE_ASM -o $@ sha256.c sha256_core.c sha256_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha256sum:
-	$(CC) -std=c99 -o sha256sum sha256.c block.c int_util.c hashsum.c -DHASH_SHA256 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA256 -o $@ sha256.c sha256_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha256sum_armv6:
-	$(CC) -std=c99 -o sha256sum sha256.c sha256_armv6.s -DSHA256_USE_ASM block.c int_util.c hashsum.c -DHASH_SHA256 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA256 -DSHA256_USE_ASM -o $@ sha256.c sha256_core.c sha256_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha384sum:
 	$(CC) -std=c99 -o sha384sum sha512.c block.c int_util.c hashsum.c -DHASH_SHA384 $(INCLUDE_PATH) $(CFLAGS)

@@ -8,25 +8,25 @@ md5_test_armv6:
 md5_test_armv7:
 	$(CC) -std=c99 -DHASH_MD5 -o $@ hash_test.c ../src/md5_core.c ../src/md5_armv7.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
-md5_test_x64: hash_test.c
+md5_test_x64:
 	$(CC) -std=c99 -DHASH_MD5 -o $@ hash_test.c ../src/md5_core.c ../src/md5_x64.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 	
-sha1_test_armv6: hash_test.c
+sha1_test_armv6:
 	$(CC) -std=c99 -DHASH_SHA1 -o $@ hash_test.c ../src/sha1_core.c ../src/sha1_armv6.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
-sha1_test_armv7: hash_test.c
+sha1_test_armv7:
 	$(CC) -std=c99 -DHASH_SHA1 -o $@ hash_test.c ../src/sha1_core.c ../src/sha1_armv7.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
-sha256_test: hash_test.c
-	$(CC) -std=c99 -o sha256_test hash_test.c -DHASH_SHA256 ../src/sha256.c ../src/sha256_armv6.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
+sha256_test_armv6:
+	$(CC) -std=c99 -DHASH_SHA256 -o $@ hash_test.c ../src/sha256_core.c ../src/sha256_armv6.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
-sha512_test: hash_test.c
+sha512_test:
 	$(CC) -std=c99 -o sha512_test hash_test.c -DHASH_SHA512 ../src/sha512.c ../src/sha512_armv6.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
-blake256_test: hash_test.c
+blake256_test:
 	$(CC) -std=c99 -o blake256_test hash_test.c -DHASH_BLAKE256 ../src/blake256.c ../src/blake256_armv6.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
-blake512_test: hash_test.c
+blake512_test:
 	$(CC) -std=c99 -o blake512_test hash_test.c -DHASH_BLAKE512 ../src/blake512.c ../src/blake512_armv6.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
 int_util_test: int_util_test.c
@@ -53,35 +53,35 @@ sha1_bench_armv6:
 sha1_bench_armv7:
 	$(CC) -std=gnu99 -DHASH_SHA1_ASM -lrt -o $@ hash_benchmark.c ../src/sha1_core.c ../src/sha1_armv7.s ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
 
-sha256_bench: hash_benchmark.c
-	$(CC) -std=gnu99 -lrt -o sha256_bench hash_benchmark.c -DHASH_SHA256 ../src/sha256.c ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
+sha256_bench:
+	$(CC) -std=gnu99 -DHASH_SHA256 -lrt -o $@ hash_benchmark.c ../src/sha256_core.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
 
-sha256_bench_armv6: hash_benchmark.c
-	$(CC) -std=gnu99 -lrt -o sha256_bench_armv6 hash_benchmark.c -DHASH_SHA256_ASM ../src/sha256.c ../src/sha256_armv6.s ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
+sha256_bench_armv6:
+	$(CC) -std=gnu99 -DHASH_SHA256_ASM -lrt -o $@ hash_benchmark.c ../src/sha256_core.c ../src/sha256_armv6.s ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
 
-sha512_bench: hash_benchmark.c
+sha512_bench:
 	$(CC) -std=gnu99 -lrt -o sha512_bench hash_benchmark.c -DHASH_SHA512 ../src/sha512.c ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
 
-sha512_bench_armv6: hash_benchmark.c
+sha512_bench_armv6:
 	$(CC) -std=gnu99 -lrt -o sha512_bench_armv6 hash_benchmark.c -DHASH_SHA512_ASM ../src/sha512.c ../src/sha512_armv6.s ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
 
-blake256_bench: hash_benchmark.c
+blake256_bench:
 	$(CC) -std=gnu99 -lrt -o blake256_bench hash_benchmark.c -DHASH_BLAKE256 ../src/blake256.c ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
 
-blake256_bench_armv6: hash_benchmark.c
+blake256_bench_armv6:
 	$(CC) -std=gnu99 -lrt -o blake256_bench_armv6 hash_benchmark.c -DHASH_BLAKE256_ASM ../src/blake256.c ../src/blake256_armv6.s ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
 
-blake512_bench: hash_benchmark.c
+blake512_bench:
 	$(CC) -std=gnu99 -lrt -o blake512_bench hash_benchmark.c -DHASH_BLAKE512 ../src/blake512.c ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
 
-blake512_bench_armv6: hash_benchmark.c
+blake512_bench_armv6:
 	$(CC) -std=gnu99 -lrt -o blake512_bench_armv6 hash_benchmark.c -DHASH_BLAKE512_ASM ../src/blake512.c ../src/blake512_armv6.s ../src/block.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
 
-whirlpool_test_x64: hash_test.c
+whirlpool_test_x64:
 	$(CC) -std=c99 -o whirlpool_test_x64 hash_test.c -DHASH_WHIRLPOOL ../src/whirlpool.c ../src/whirlpool_x64.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
-whirlpool_bench: hash_benchmark.c
+whirlpool_bench:
 	$(CC) -std=gnu99 -lrt -o whirlpool_bench hash_benchmark.c -DHASH_WHIRLPOOL ../src/whirlpool.c ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
-whirlpool_bench_x64: hash_benchmark.c
+whirlpool_bench_x64:
 	$(CC) -std=gnu99 -lrt -o whirlpool_bench_x64 hash_benchmark.c -DHASH_WHIRLPOOL_ASM ../src/whirlpool.c ../src/whirlpool_x64.s ../src/block.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
