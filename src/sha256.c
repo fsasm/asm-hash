@@ -7,8 +7,6 @@
 
 #include "sha256.h"
 #include "int_util.h"
-#include <stdlib.h>
-#include <string.h>
 
 void process_block(block* b, const uint8_t block[], unsigned int n, bool data_bits) {
 	(void)data_bits;
