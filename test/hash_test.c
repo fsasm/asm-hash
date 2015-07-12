@@ -13,7 +13,7 @@
 #ifdef HASH_MD5
 
 #define MD5_ENABLE_ASM
-#include "md5.h"
+#include "md5_core.h"
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 4
 #define HASH_INIT md5_init_hash
@@ -24,7 +24,7 @@
 #elif HASH_SHA1
 
 #define SHA1_ENABLE_ASM
-#include "sha1.h"
+#include "sha1_core.h"
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 5
 #define HASH_INIT sha1_init_hash

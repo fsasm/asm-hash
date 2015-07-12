@@ -24,7 +24,7 @@ all_x64: md5sum_x64
 
 all_armv6: md5sum_armv6 sha1sum_armv6 sha2_armv6 blake_armv6
 
-all_armv7: md5sum_armv7
+all_armv7: md5sum_armv7 sha1sum_armv7
 
 sha2_armv6: sha224sum_armv6 sha256sum_armv6 sha384sum_armv6 sha512sum_armv6 sha512_224sum_armv6 sha512_256sum_armv6
 
@@ -45,10 +45,13 @@ md5sum_armv7: md5.c md5_core.c md5_armv7.s block.c int_util.c hashsum.c
 
 # SHA-1
 sha1sum:
-	$(CC) -std=c99 -o sha1sum sha1.c block.c int_util.c hashsum.c -DHASH_SHA1 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA1 -o $@ sha1.c sha1_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 	
 sha1sum_armv6: 
-	$(CC) -std=c99 -o sha1sum sha1.c sha1_armv6.s -DSHA1_USE_ASM block.c int_util.c hashsum.c -DHASH_SHA1 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA1 -DSHA1_USE_ASM -o $@ sha1.c sha1_core.c sha1_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
+	
+sha1sum_armv7: 
+	$(CC) -std=c99 -DHASH_SHA1 -DSHA1_USE_ASM -o $@ sha1.c sha1_core.c sha1_armv7.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 	
 # SHA-2
 sha224sum:

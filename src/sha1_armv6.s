@@ -1,5 +1,5 @@
 /*
- * sha1_block.s
+ * sha1_armv6.s
  * Author: Fabjan Sukalia (fsukalia@gmail.com)
  * Date: 2014-05-01
  */
@@ -7,6 +7,7 @@
 .arch armv6
 
 .text
+.arm
 /* FIXME: without this hack the assembler throws errors because the pool is too far away */
 k1:
 	.word 0x5A827999
@@ -14,6 +15,7 @@ k2:
 	.word 0x6ED9EBA1
 
 .global sha1_process_blocks_asm
+.type sha1_process_blocks_asm, %function
 sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 	push {r4 - r12}
 	cmp r2, #0
@@ -247,3 +249,4 @@ sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 .Lend:	
 	pop {r4 - r12}
 	bx lr
+
