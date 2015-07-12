@@ -78,7 +78,7 @@
 #elif defined(HASH_BLAKE256) || defined(HASH_BLAKE256_ASM)
 
 #define BLAKE256_ENABLE_ASM
-#include "blake256.h"
+#include "blake256_core.h"
 
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 8

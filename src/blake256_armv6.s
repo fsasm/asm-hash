@@ -59,6 +59,7 @@ blake256_permutations: /* 8 digits packed in 32 bit */
 
 .text
 .global blake256_process_block_asm
+.type blake256_process_block_asm, %function
 blake256_process_block_asm: /* (uint8_t block[64], uint32_t hash[8], uint64_t counter) */
 	push {r4 - r12}
 	sub sp, sp, #64

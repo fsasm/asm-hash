@@ -57,7 +57,7 @@
 #elif HASH_BLAKE256
 
 #define BLAKE256_ENABLE_ASM
-#include "blake256.h"
+#include "blake256_core.h"
 #define HASH_TYPE uint32_t
 #define HASH_SIZE 8
 #define HASH_INIT blake256_init_hash

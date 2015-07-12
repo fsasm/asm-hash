@@ -99,16 +99,16 @@ whirlpoolsum_x64:
 
 # BLAKE
 blake224sum:
-	$(CC) -std=c99 -o blake224sum blake256.c block.c int_util.c hashsum.c -DHASH_BLAKE224 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_BLAKE224 -o $@ blake256.c blake256_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 blake224sum_armv6:
-	$(CC) -std=c99 -o blake224sum blake256.c blake256_armv6.s -DBLAKE256_USE_ASM block.c int_util.c hashsum.c -DHASH_BLAKE224 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_BLAKE224 -DBLAKE256_USE_ASM -o $@ blake256.c blake256_core.c blake256_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 blake256sum:
-	$(CC) -std=c99 -o blake256sum blake256.c block.c int_util.c hashsum.c -DHASH_BLAKE256 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_BLAKE256 -o $@ blake256.c blake256_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 blake256sum_armv6:
-	$(CC) -std=c99 -o blake256sum blake256.c blake256_armv6.s -DBLAKE256_USE_ASM block.c int_util.c hashsum.c -DHASH_BLAKE256 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_BLAKE256 -DBLAKE256_USE_ASM -o $@ blake256.c blake256_core.c blake256_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 blake512sum:
 	$(CC) -std=c99 -o blake512sum blake512.c block.c int_util.c hashsum.c -DHASH_BLAKE512 $(INCLUDE_PATH) $(CFLAGS)
