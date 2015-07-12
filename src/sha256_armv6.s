@@ -77,6 +77,7 @@ sha256_table:
 
 .text
 .global sha256_process_blocks_asm
+.type sha256_process_blocks_asm, %function
 sha256_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[8], uint n) */
 	push {r4 - r12}
 	cmp r2, #0

@@ -9,6 +9,7 @@
 
 .text
 .global sha1_process_blocks_asm
+.type sha1_process_blocks_asm, %function
 sha1_process_blocks_asm: /* (uint8_t block[], uint32_t hash[5], uint n) */
 	push {r4 - r12}
 	cmp r2, #0
