@@ -67,28 +67,28 @@ sha256sum_armv6:
 	$(CC) -std=c99 -DHASH_SHA256 -DSHA256_USE_ASM -o $@ sha256.c sha256_core.c sha256_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha384sum:
-	$(CC) -std=c99 -o sha384sum sha512.c block.c int_util.c hashsum.c -DHASH_SHA384 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA384 -o $@ sha512.c sha512_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha384sum_armv6:
-	$(CC) -std=c99 -o sha384sum sha512.c sha512_armv6.s -DSHA512_USE_ASM block.c int_util.c hashsum.c -DHASH_SHA384 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA384 -DSHA512_USE_ASM -o $@ sha512.c sha512_core.c sha512_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha512sum:
-	$(CC) -std=c99 -o sha512sum sha512.c block.c int_util.c hashsum.c -DHASH_SHA512 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA512 -o $@ sha512.c sha512_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha512sum_armv6:
-	$(CC) -std=c99 -o sha512sum sha512.c sha512_armv6.s -DSHA512_USE_ASM block.c int_util.c hashsum.c -DHASH_SHA512 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA512 -DSHA512_USE_ASM -o $@ sha512.c sha512_core.c sha512_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha512_224sum:
-	$(CC) -std=c99 -o sha512_224sum sha512.c block.c int_util.c hashsum.c -DHASH_SHA512_224 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA512_224 -o $@ sha512.c sha512_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha512_224sum_armv6:
-	$(CC) -std=c99 -o sha512_224sum sha512.c sha512_armv6.s -DSHA512_USE_ASM block.c int_util.c hashsum.c -DHASH_SHA512_224 $(INCLUDE_PATH) $(CFLAGS)	
+	$(CC) -std=c99 -DHASH_SHA512_224 -DSHA512_USE_ASM -o $@ sha512.c sha512_core.c sha512_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha512_256sum:
-	$(CC) -std=c99 -o sha512_256sum sha512.c block.c int_util.c hashsum.c -DHASH_SHA512_256 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA512_256 -o $@ sha512.c sha512_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 sha512_256sum_armv6:
-	$(CC) -std=c99 -o sha512_256sum sha512.c sha512_armv6.s -DSHA512_USE_ASM block.c int_util.c hashsum.c -DHASH_SHA512_256 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_SHA512_256 -DSHA512_USE_ASM -o $@ sha512.c sha512_core.c sha512_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 # Whirlpool
 whirlpoolsum:

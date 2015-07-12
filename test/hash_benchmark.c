@@ -62,7 +62,7 @@
 #elif defined(HASH_SHA512) || defined(HASH_SHA512_ASM)
 
 #define SHA512_ENABLE_ASM
-#include "sha512.h"
+#include "sha512_core.h"
 
 #define HASH_TYPE uint64_t
 #define HASH_SIZE 8

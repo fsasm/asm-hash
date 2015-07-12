@@ -172,6 +172,7 @@ sha512_table: /* uint64_t[80] (little endian) */
 	
 .text
 .global sha512_process_blocks_asm
+.type sha512_process_blocks_asm, %function
 sha512_process_blocks_asm: /* (uint8_t block[128], uint64_t hash[8], uint n) */
 	push {r4 - r12, lr}
 	cmp r2, #0
