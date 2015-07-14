@@ -105,6 +105,7 @@ blake512_permutations: /* 8 digits packed in 32 bit */
 .text
 
 .global blake512_process_block_asm
+.type blake512_process_block_asm, %function
 blake512_process_block_asm: /* (uint8_t block[128], uint64_t hash[8], uint64_t counter) */
 	push {r4 - r12, lr}
 	sub sp, sp, #128

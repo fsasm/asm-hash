@@ -68,7 +68,7 @@
 #elif HASH_BLAKE512
 
 #define BLAKE512_ENABLE_ASM
-#include "blake512.h"
+#include "blake512_core.h"
 #define HASH_TYPE uint64_t
 #define HASH_SIZE 8
 #define HASH_INIT blake512_init_hash

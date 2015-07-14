@@ -111,16 +111,16 @@ blake256sum_armv6:
 	$(CC) -std=c99 -DHASH_BLAKE256 -DBLAKE256_USE_ASM -o $@ blake256.c blake256_core.c blake256_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 blake512sum:
-	$(CC) -std=c99 -o blake512sum blake512.c block.c int_util.c hashsum.c -DHASH_BLAKE512 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_BLAKE512 -o $@ blake512.c blake512_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 blake512sum_armv6:
-	$(CC) -std=c99 -o blake512sum blake512.c blake512_armv6.s -DBLAKE512_USE_ASM block.c int_util.c hashsum.c -DHASH_BLAKE512 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_BLAKE512 -DBLAKE512_USE_ASM -o $@ blake512.c blake512_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 blake384sum:
-	$(CC) -std=c99 -o blake384sum blake512.c block.c int_util.c hashsum.c -DHASH_BLAKE384 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_BLAKE384 -o $@ blake512.c blake512_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 blake384sum_armv6:
-	$(CC) -std=c99 -o blake384sum blake512.c blake512_armv6.s -DBLAKE512_USE_ASM block.c int_util.c hashsum.c -DHASH_BLAKE384 $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_BLAKE384 -DBLAKE512_USE_ASM -o $@ blake512.c blake512_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 # Groestl
 groestl256sum: groestl256.c block.c hashsum.c int_util.c
