@@ -110,7 +110,7 @@
 #elif defined(HASH_WHIRLPOOL) || defined(HASH_WHIRLPOOL_ASM)
 
 #define WHIRLPOOL_ENABLE_ASM
-#include "whirlpool.h"
+#include "whirlpool_core.h"
 
 #define HASH_TYPE uint64_t
 #define HASH_SIZE 8
