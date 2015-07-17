@@ -31,16 +31,16 @@ sha2_armv6: sha224sum_armv6 sha256sum_armv6 sha384sum_armv6 sha512sum_armv6 sha5
 blake_armv6: blake224sum_armv6 blake256sum_armv6 blake384sum_armv6 blake512sum_armv6
 
 # MD5
-md5sum: md5.c md5_core.c block.c int_util.c hashsum.c 
+md5sum:
 	$(CC) -std=c99 -DHASH_MD5 -o $@  md5.c md5_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
-md5sum_x64: md5.c md5_core.c md5_x64.s block.c int_util.c hashsum.c 
+md5sum_x64:
 	$(CC) -std=c99 -DHASH_MD5 -DMD5_USE_ASM -o $@  md5.c md5_core.c md5_x64.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
-md5sum_armv6: md5.c md5_core.c md5_armv6.s block.c int_util.c hashsum.c 
+md5sum_armv6:
 	$(CC) -std=c99 -DHASH_MD5 -DMD5_USE_ASM -o $@  md5.c md5_core.c md5_armv6.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
-md5sum_armv7: md5.c md5_core.c md5_armv7.s block.c int_util.c hashsum.c 
+md5sum_armv7:
 	$(CC) -std=c99 -DHASH_MD5 -DMD5_USE_ASM -o $@  md5.c md5_core.c md5_armv7.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 # SHA-1
@@ -92,10 +92,25 @@ sha512_256sum_armv6:
 
 # Whirlpool
 whirlpoolsum:
-	$(CC) -std=c99 -o whirlpoolsum whirlpool.c block.c int_util.c hashsum.c -DHASH_WHIRLPOOL $(INCLUDE_PATH) $(CFLAGS)
+	$(CC) -std=c99 -DHASH_WHIRLPOOL -o $@ whirlpool.c whirlpool_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
-whirlpoolsum_x64:
-	$(CC) -std=c99 -o whirlpoolsum_x64 whirlpool.c -DWHIRLPOOL_USE_ASM whirlpool_x64.s block.c int_util.c hashsum.c -DHASH_WHIRLPOOL $(INCLUDE_PATH) $(CFLAGS)
+whirlpoolsum_single:
+	$(CC) -std=c99 -DHASH_WHIRLPOOL -DWHIRLPOOL_SINGLE_TABLE -o $@ whirlpool.c whirlpool_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
+
+whirlpoolsum_naive:
+	$(CC) -std=c99 -DHASH_WHIRLPOOL -DWHIRLPOOL_NAIVE -o $@ whirlpool.c whirlpool_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
+
+whirlpoolsum_single_x64:
+	$(CC) -std=c99 -DHASH_WHIRLPOOL -DWHIRLPOOL_USE_ASM -o $@ whirlpool.c whirlpool_core.c whirlpool_single_x64.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
+
+whirlpool_ctable_gen:
+	$(CC) -std=c99 -o $@ whirlpool_table_gen.c int_util.c $(INCLUDE_PATH) $(CLFAGS) 
+
+whirlpool_asm32_table_gen:
+	$(CC) -std=c99 -DWHIRLPOOL_ASM_TABLES_32 -o $@ whirlpool_table_gen.c int_util.c $(INCLUDE_PATH) $(CLFAGS) 
+
+whirlpool_asm64_table_gen:
+	$(CC) -std=c99 -DWHIRLPOOL_ASM_TABLES_64 -o $@ whirlpool_table_gen.c int_util.c $(INCLUDE_PATH) $(CLFAGS) 
 
 # BLAKE
 blake224sum:

@@ -6,7 +6,8 @@
 
 .intel_syntax noprefix
 
-.include "whirlpool_tables64.s"
+/* single table method */
+.include "whirlpool_table64.s"
 
 .text
 
@@ -64,11 +65,11 @@ whirlpool_process_blocks_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8],
 	mov rbx, rax
 .if \shift == 0
 	and rbx, 0xFF
-	mov \reg, whirlpool_tables[8 * rbx]
+	mov \reg, whirlpool_table0[8 * rbx]
 .else
 	shr rbx, (\shift - 3)
 	and rbx, 0x07F8
-	mov \reg, whirlpool_tables[rbx]
+	mov \reg, whirlpool_table0[rbx]
 .endif
 .if \rot > 0
 	ror \reg, \rot
@@ -79,11 +80,11 @@ whirlpool_process_blocks_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8],
 	mov rbx, rax
 .if \shift == 0
 	and rbx, 0xFF
-	mov rbx, whirlpool_tables[8 * rbx]
+	mov rbx, whirlpool_table0[8 * rbx]
 .else
 	shr rbx, (\shift - 3)
 	and rbx, 0x07F8
-	mov rbx, whirlpool_tables[rbx]
+	mov rbx, whirlpool_table0[rbx]
 .endif
 .if \rot > 0
 	ror rbx, \rot
@@ -191,11 +192,11 @@ whirlpool_process_blocks_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8],
 	mov rbx, rax
 .if \shift == 0
 	and rbx, 0xFF
-	mov rbx, whirlpool_tables[8 * rbx]
+	mov rbx, whirlpool_table0[8 * rbx]
 .else
 	shr rbx, (\shift - 3)
 	and rbx, 0x07F8
-	mov rbx, whirlpool_tables[rbx]
+	mov rbx, whirlpool_table0[rbx]
 .endif
 .if \rot > 0
 	ror rbx, \rot

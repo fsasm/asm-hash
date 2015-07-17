@@ -557,3 +557,4 @@ static const uint64_t round_constants[10] = {
 	0xFBEE7C66DD17479E,
 	0xCA2DBF07AD5A8333,
 };
+
