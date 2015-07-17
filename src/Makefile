@@ -136,14 +136,15 @@ groestl384sum:
 	$(CC) -std=c99 -DHASH_GROESTL384 -o $@ groestl512.c groestl512_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
 # JH	
-jh256sum: jh.c block.c hashsum.c int_util.c
-	$(CC) -std=c99 -o jh256sum jh.c block.c int_util.c hashsum.c -DHASH_JH256 $(INCLUDE_PATH) $(CFLAGS)
+jh256sum: 
+	$(CC) -std=c99 -DHASH_JH256 -o $@ jh.c jh_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
-jh224sum: jh.c block.c hashsum.c int_util.c
-	$(CC) -std=c99 -o jh224sum jh.c block.c int_util.c hashsum.c -DHASH_JH224 $(INCLUDE_PATH) $(CFLAGS)
+jh224sum:
+	$(CC) -std=c99 -DHASH_JH224 -o $@ jh.c jh_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
-jh512sum: jh.c block.c hashsum.c int_util.c
-	$(CC) -std=c99 -o jh512sum jh.c block.c int_util.c hashsum.c -DHASH_JH512 $(INCLUDE_PATH) $(CFLAGS)
+jh512sum:
+	$(CC) -std=c99 -DHASH_JH512 -o $@ jh.c jh_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
-jh384sum: jh.c block.c hashsum.c int_util.c
-	$(CC) -std=c99 -o jh384sum jh.c block.c int_util.c hashsum.c -DHASH_JH384 $(INCLUDE_PATH) $(CFLAGS)
+jh384sum:
+	$(CC) -std=c99 -DHASH_JH384 -o $@ jh.c jh_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
+
