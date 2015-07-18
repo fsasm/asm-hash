@@ -100,6 +100,9 @@ whirlpoolsum_single:
 whirlpoolsum_naive:
 	$(CC) -std=c99 -DHASH_WHIRLPOOL -DWHIRLPOOL_NAIVE -o $@ whirlpool.c whirlpool_core.c block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 
+whirlpoolsum_x64:
+	$(CC) -std=c99 -DHASH_WHIRLPOOL -DWHIRLPOOL_USE_ASM -o $@ whirlpool.c whirlpool_core.c whirlpool_x64.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
+
 whirlpoolsum_single_x64:
 	$(CC) -std=c99 -DHASH_WHIRLPOOL -DWHIRLPOOL_USE_ASM -o $@ whirlpool.c whirlpool_core.c whirlpool_single_x64.s block.c int_util.c hashsum.c $(INCLUDE_PATH) $(CFLAGS)
 

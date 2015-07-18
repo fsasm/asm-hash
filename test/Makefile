@@ -77,6 +77,9 @@ blake512_bench:
 blake512_bench_armv6:
 	$(CC) -std=gnu99 -DHASH_BLAKE512_ASM -lrt -o $@ hash_benchmark.c ../src/blake512_core.c ../src/blake512_armv6.s ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH) 
 
+whirlpool_test_x64:
+	$(CC) -std=c99 -DHASH_WHIRLPOOL -o $@ hash_test.c ../src/whirlpool_core.c ../src/whirlpool_x64.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
+
 whirlpool_test_single_x64:
 	$(CC) -std=c99 -DHASH_WHIRLPOOL -o $@ hash_test.c ../src/whirlpool_core.c ../src/whirlpool_single_x64.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
@@ -88,6 +91,9 @@ whirlpool_bench_single:
 
 whirlpool_bench_naive:
 	$(CC) -std=gnu99 -DHASH_WHIRLPOOL -DWHIRLPOOL_NAIVE -lrt -o $@ hash_benchmark.c ../src/whirlpool_core.c ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
+
+whirlpool_bench_x64:
+	$(CC) -std=gnu99 -DHASH_WHIRLPOOL_ASM -lrt -o $@ hash_benchmark.c ../src/whirlpool_core.c ../src/whirlpool_x64.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
 whirlpool_bench_single_x64:
 	$(CC) -std=gnu99 -DHASH_WHIRLPOOL_ASM -lrt -o $@ hash_benchmark.c ../src/whirlpool_core.c ../src/whirlpool_single_x64.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
