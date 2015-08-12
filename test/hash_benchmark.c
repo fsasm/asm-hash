@@ -114,7 +114,7 @@
 
 #define HASH_TYPE uint64_t
 #define HASH_SIZE 8
-#define DEFAULT_RUNS 1000
+#define DEFAULT_RUNS 10000
 #define NUM_BYTES (128)
 
 #ifdef HASH_WHIRLPOOL
