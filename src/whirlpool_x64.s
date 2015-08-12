@@ -137,14 +137,14 @@ whirlpool_process_blocks_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8],
 	mov rbx, whirlpool_round_const[rbx * 8]
 	xor r8, rbx
 
-	mov [rsp + 0], r8
-	mov [rsp + 8], r9
-	mov [rsp + 16], r10
-	mov [rsp + 24], r11
-	mov [rsp + 32], r12
-	mov [rsp + 40], r13
 	mov [rsp + 48], r14
 	mov [rsp + 56], r15
+	mov [rsp + 32], r12
+	mov [rsp + 40], r13
+	mov [rsp + 16], r10
+	mov [rsp + 24], r11
+	mov [rsp + 0], r8
+	mov [rsp + 8], r9
 
 	mov rax, [rsp + 64] /* state[0] */
 	tableX2 6, r14, 7, r15
