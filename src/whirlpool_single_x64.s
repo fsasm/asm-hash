@@ -61,116 +61,83 @@ whirlpool_process_blocks_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8],
 	 * r15: tmp[7]
 	 */
 
-.macro key0 reg, shift, rot
-	mov rbx, rax
-.if \shift == 0
-	and rbx, 0xFF
-	mov \reg, whirlpool_table0[8 * rbx]
-.else
-	shr rbx, (\shift - 3)
-	and rbx, 0x07F8
-	mov \reg, whirlpool_table0[rbx]
+.macro table rot1, reg1, rot2, reg2
+	movzx ebx, ah
+	movzx ebp, al
+	mov \reg1, whirlpool_table0[8 * ebx]
+	mov \reg2, whirlpool_table0[8 * ebp]
+.if \rot1 > 0
+	shr rax, 16
+	ror \reg1, (\rot1 * 8)
 .endif
-.if \rot > 0
-	ror \reg, \rot
+.if \rot2 > 0
+	ror \reg2, (\rot2 * 8)
 .endif
 .endm
 
-.macro keyX reg, shift, rot
-	mov rbx, rax
-.if \shift == 0
-	and rbx, 0xFF
-	mov rbx, whirlpool_table0[8 * rbx]
-.else
-	shr rbx, (\shift - 3)
-	and rbx, 0x07F8
-	mov rbx, whirlpool_table0[rbx]
+.macro tableX rot1, reg1, rot2, reg2
+	movzx ebx, ah
+	movzx ebp, al
+	mov rbx, whirlpool_table0[8 * ebx]
+	mov rbp, whirlpool_table0[8 * ebp]
+.if \rot1 > 0
+	shr rax, 16
+	ror rbx, (\rot1 * 8)
 .endif
-.if \rot > 0
-	ror rbx, \rot
+.if \rot2 > 0
+	ror rbp, (\rot2 * 8)
 .endif
-	xor \reg, rbx
+	xor \reg1, rbx
+	xor \reg2, rbp
 .endm
 
 	mov rax, [rsp + 0] /* key[0] */
-	key0 r8,  56,  0
-	key0 r9,  48,  8
-	key0 r10, 40, 16
-	key0 r11, 32, 24
-	key0 r12, 24, 32
-	key0 r13, 16, 40
-	key0 r14,  8, 48
-	key0 r15,  0, 56
+	table 6, r14, 7, r15
+	table 4, r12, 5, r13
+	table 2, r10, 3, r11
+	table 0, r8,  1, r9
 
 	mov rax, [rsp + 8] /* key[1] */
-	keyX r8,   0, 56
-	keyX r9,  56,  0
-	keyX r10, 48,  8
-	keyX r11, 40, 16
-	keyX r12, 32, 24
-	keyX r13, 24, 32
-	keyX r14, 16, 40
-	keyX r15,  8, 48
-	
+	tableX 6, r15, 7, r8
+	tableX 4, r13, 5, r14
+	tableX 2, r11, 3, r12
+	tableX 0, r9,  1, r10
+
 	mov rax, [rsp + 16] /* key[2] */
-	keyX r8,   8, 48
-	keyX r9,   0, 56
-	keyX r10, 56,  0
-	keyX r11, 48,  8
-	keyX r12, 40, 16
-	keyX r13, 32, 24
-	keyX r14, 24, 32
-	keyX r15, 16, 40
+	tableX 6, r8,  7, r9
+	tableX 4, r14, 5, r15
+	tableX 2, r12, 3, r13
+	tableX 0, r10, 1, r11
 
 	mov rax, [rsp + 24] /* key[3] */
-	keyX r8,  16, 40
-	keyX r9,   8, 48
-	keyX r10,  0, 56
-	keyX r11, 56,  0
-	keyX r12, 48,  8
-	keyX r13, 40, 16
-	keyX r14, 32, 24
-	keyX r15, 24, 32
-	
+	tableX 6, r9,  7, r10
+	tableX 4, r15, 5, r8
+	tableX 2, r13, 3, r14
+	tableX 0, r11, 1, r12
+
 	mov rax, [rsp + 32] /* key[4] */
-	keyX r8,  24, 32
-	keyX r9,  16, 40
-	keyX r10,  8, 48
-	keyX r11,  0, 56
-	keyX r12, 56,  0
-	keyX r13, 48,  8
-	keyX r14, 40, 16
-	keyX r15, 32, 24
-	
+	tableX 6, r10, 7, r11
+	tableX 4, r8,  5, r9
+	tableX 2, r14, 3, r15
+	tableX 0, r12, 1, r13
+
 	mov rax, [rsp + 40] /* key[5] */
-	keyX r8,  32, 24
-	keyX r9,  24, 32
-	keyX r10, 16, 40
-	keyX r11,  8, 48
-	keyX r12,  0, 56
-	keyX r13, 56,  0
-	keyX r14, 48,  8
-	keyX r15, 40, 16
+	tableX 6, r11, 7, r12
+	tableX 4, r9,  5, r10
+	tableX 2, r15, 3, r8
+	tableX 0, r13, 1, r14
 
 	mov rax, [rsp + 48] /* key[6] */
-	keyX r8,  40, 16
-	keyX r9,  32, 24
-	keyX r10, 24, 32
-	keyX r11, 16, 40
-	keyX r12,  8, 48
-	keyX r13,  0, 56
-	keyX r14, 56,  0
-	keyX r15, 48,  8
+	tableX 6, r12, 7, r13
+	tableX 4, r10, 5, r11
+	tableX 2, r8,  3, r9
+	tableX 0, r14, 1, r15
 	
 	mov rax, [rsp + 56] /* key[7] */
-	keyX r8,  48,  8
-	keyX r9,  40, 16
-	keyX r10, 32, 24
-	keyX r11, 24, 32
-	keyX r12, 16, 40
-	keyX r13,  8, 48
-	keyX r14,  0, 56
-	keyX r15, 56,  0
+	tableX 6, r13, 7, r14
+	tableX 4, r11, 5, r12
+	tableX 2, r9,  3, r10
+	tableX 0, r15, 1, r8
 
 	/* round constant */
 	mov rbx, 10
@@ -178,119 +145,73 @@ whirlpool_process_blocks_asm: /* (rdi: uint8_t block[], rsi: uint8_t hash[8][8],
 	mov rbx, whirlpool_round_const[rbx * 8]
 	xor r8, rbx
 
-	mov [rsp + 0], r8
-	mov [rsp + 8], r9
-	mov [rsp + 16], r10
-	mov [rsp + 24], r11
-	mov [rsp + 32], r12
-	mov [rsp + 40], r13
 	mov [rsp + 48], r14
 	mov [rsp + 56], r15
+	mov [rsp + 32], r12
+	mov [rsp + 40], r13
+	mov [rsp + 16], r10
+	mov [rsp + 24], r11
+	mov [rsp + 0], r8
+	mov [rsp + 8], r9
 
 	/* state */
-.macro stateX reg, shift, rot
-	mov rbx, rax
-.if \shift == 0
-	and rbx, 0xFF
-	mov rbx, whirlpool_table0[8 * rbx]
-.else
-	shr rbx, (\shift - 3)
-	and rbx, 0x07F8
-	mov rbx, whirlpool_table0[rbx]
-.endif
-.if \rot > 0
-	ror rbx, \rot
-.endif
-	xor \reg, rbx
-.endm
-
 	mov rax, [rsp + 64] /* state[0] */
-	stateX r8,  56,  0
-	stateX r9,  48,  8
-	stateX r10, 40, 16
-	stateX r11, 32, 24
-	stateX r12, 24, 32
-	stateX r13, 16, 40
-	stateX r14,  8, 48
-	stateX r15,  0, 56
+	tableX 6, r14, 7, r15
+	tableX 4, r12, 5, r13
+	tableX 2, r10, 3, r11
+	tableX 0, r8,  1, r9
 
 	mov rax, [rsp + 72] /* state[1] */
-	stateX r8,   0, 56
-	stateX r9,  56,  0
-	stateX r10, 48,  8
-	stateX r11, 40, 16
-	stateX r12, 32, 24
-	stateX r13, 24, 32
-	stateX r14, 16, 40
-	stateX r15,  8, 48
-	
+	tableX 6, r15, 7, r8
+	tableX 4, r13, 5, r14
+	tableX 2, r11, 3, r12
+	tableX 0, r9,  1, r10
+
 	mov rax, [rsp + 80] /* state[2] */
-	stateX r8,   8, 48
-	stateX r9,   0, 56
-	stateX r10, 56,  0
-	stateX r11, 48,  8
-	stateX r12, 40, 16
-	stateX r13, 32, 24
-	stateX r14, 24, 32
-	stateX r15, 16, 40
+	tableX 6, r8,  7, r9
+	tableX 4, r14, 5, r15
+	tableX 2, r12, 3, r13
+	tableX 0, r10, 1, r11
 
 	mov rax, [rsp + 88] /* state[3] */
-	stateX r8,  16, 40
-	stateX r9,   8, 48
-	stateX r10,  0, 56
-	stateX r11, 56,  0
-	stateX r12, 48,  8
-	stateX r13, 40, 16
-	stateX r14, 32, 24
-	stateX r15, 24, 32
-	
+	tableX 6, r9,  7, r10
+	tableX 4, r15, 5, r8
+	tableX 2, r13, 3, r14
+	tableX 0, r11, 1, r12
+
 	mov rax, [rsp + 96] /* state[4] */
-	stateX r8,  24, 32
-	stateX r9,  16, 40
-	stateX r10,  8, 48
-	stateX r11,  0, 56
-	stateX r12, 56,  0
-	stateX r13, 48,  8
-	stateX r14, 40, 16
-	stateX r15, 32, 24
+	tableX 6, r10, 7, r11
+	tableX 4, r8,  5, r9
+	tableX 2, r14, 3, r15
+	tableX 0, r12, 1, r13
 	
 	mov rax, [rsp + 104] /* state[5] */
-	stateX r8,  32, 24
-	stateX r9,  24, 32
-	stateX r10, 16, 40
-	stateX r11,  8, 48
-	stateX r12,  0, 56
-	stateX r13, 56,  0
-	stateX r14, 48,  8
-	stateX r15, 40, 16
+	tableX 6, r11, 7, r12
+	tableX 4, r9,  5, r10
+	tableX 2, r15, 3, r8
+	tableX 0, r13, 1, r14
 
 	mov rax, [rsp + 112] /* state[6] */
-	stateX r8,  40, 16
-	stateX r9,  32, 24
-	stateX r10, 24, 32
-	stateX r11, 16, 40
-	stateX r12,  8, 48
-	stateX r13,  0, 56
-	stateX r14, 56,  0
-	stateX r15, 48,  8
+	tableX 6, r12, 7, r13
+	tableX 4, r10, 5, r11
+	tableX 2, r8,  3, r9
+	tableX 0, r14, 1, r15
 	
 	mov rax, [rsp + 120] /* state[7] */
-	stateX r8,  48,  8
-	stateX r9,  40, 16
-	stateX r10, 32, 24
-	stateX r11, 24, 32
-	stateX r12, 16, 40
-	stateX r13,  8, 48
-	stateX r14,  0, 56
-	stateX r15, 56,  0
-
-	mov [rsp +  64], r8
-	mov [rsp +  72], r9
-	mov [rsp +  80], r10
-	mov [rsp +  88], r11
-	mov [rsp +  96], r12
+	tableX 6, r13, 7, r14
 	mov [rsp + 104], r13
 	mov [rsp + 112], r14
+
+	tableX 4, r11, 5, r12
+	mov [rsp +  88], r11
+	mov [rsp +  96], r12
+
+	tableX 2, r9,  3, r10
+	mov [rsp +  72], r9
+	mov [rsp +  80], r10
+
+	tableX 0, r15, 1, r8
+	mov [rsp +  64], r8
 	mov [rsp + 120], r15
 
 	dec rcx
