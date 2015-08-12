@@ -5,7 +5,6 @@
  */
 
 #include "md5.h"
-#include "int_util.h"
 
 void process_block(block* b, const uint8_t block[], unsigned int n, bool data_bits) {
 	(void)data_bits;
@@ -33,8 +32,6 @@ void md5_finalize(md5_context* ctxt) {
 }
 
 void md5_get_digest(md5_context* ctxt, uint8_t digest[MD5_DIGEST_SIZE]) {
-	for (int i = 0; i < 4; i++) {
-		u32_to_u8_le(ctxt->hash[i], &digest[i * 4]);
-	}
+	md5_hash_to_digest(ctxt->hash, digest);
 }
 

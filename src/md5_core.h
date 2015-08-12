@@ -14,6 +14,7 @@
 #define MD5_DIGEST_SIZE	(16)
 
 void md5_init_hash(uint32_t hash[4]);
+void md5_hash_to_digest(uint32_t hash[4], uint8_t digest[MD5_DIGEST_SIZE]);
 void md5_process_blocks(const uint8_t block[], uint32_t hash[4], unsigned int n);
 
 #if defined(MD5_USE_ASM) || defined(MD5_ENABLE_ASM)

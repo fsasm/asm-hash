@@ -40,6 +40,12 @@ void md5_init_hash(uint32_t hash[4]) {
 	hash[3] = UINT32_C(0x10325476);
 }
 
+void md5_hash_to_digest(uint32_t hash[4], uint8_t digest[MD5_DIGEST_SIZE]) {
+	for (int i = 0; i < 4; i++) {
+		u32_to_u8_le(hash[i], &digest[i * 4]);
+	}
+}
+
 void md5_process_blocks(const uint8_t block[], uint32_t hash[4], unsigned int n) {
 	for (unsigned int j = 0; j < n; j++) {
 		const uint8_t* block1 = &block[j * 64];
