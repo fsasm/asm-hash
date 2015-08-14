@@ -61,6 +61,14 @@ void groestl512_init_hash(uint8_t hash[8][16]) {
 	hash[6][15] = 0x02;
 }
 
+void groestl512_hash_to_digest(uint8_t hash[8][16], uint8_t digest[GROESTL512_DIGEST_SIZE]) {
+	for (uint_fast8_t row = 0; row < 8; row++) {
+		for (uint_fast8_t column = 0; column < 8; column++) {
+			digest[column * 8 + row] = hash[row][column + 8];
+		}
+	}
+}
+
 static void add_round_constants_p(uint8_t state[8][16], unsigned int round) {
 	for (uint_fast8_t i = 0; i < 16; i++) {
 		state[0][i] ^= round ^ (i << 4);
@@ -235,4 +243,11 @@ void groestl384_init_hash(uint8_t hash[8][16]) {
 	hash[7][15] = 0x80;
 }
 
+void groestl384_hash_to_digest(uint8_t hash[8][16], uint8_t digest[GROESTL384_DIGEST_SIZE]) {
+	for (uint_fast8_t column = 2; column < 8; column++) {
+		for (uint_fast8_t row = 0; row < 8; row++) {
+			digest[column * 8 + row - 16] = hash[row][column + 8];
+		}
+	}
+}
 

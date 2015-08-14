@@ -5,7 +5,6 @@
  */
  
 #include "groestl512.h"
-#include "int_util.h"
 #include <string.h>
 
 void process_blocks(block* b, const uint8_t block[], unsigned int n, bool data_bits) {
@@ -47,11 +46,7 @@ void groestl512_finalize(groestl512_context* ctxt) {
 }
 
 void groestl512_get_digest(groestl512_context* ctxt, uint8_t digest[GROESTL512_DIGEST_SIZE]) {
-	for (uint_fast8_t row = 0; row < 8; row++) {
-		for (uint_fast8_t column = 0; column < 8; column++) {
-			digest[column * 8 + row] = ctxt->hash[row][column + 8];
-		}
-	}
+	groestl512_hash_to_digest(ctxt->hash, digest);
 }
 
 /* GROESTL-224 */
@@ -79,10 +74,6 @@ void groestl384_finalize(groestl384_context* ctxt) {
 }
 
 void groestl384_get_digest(groestl384_context* ctxt, uint8_t digest[GROESTL384_DIGEST_SIZE]) {	
-	for (uint_fast8_t column = 2; column < 8; column++) {
-		for (uint_fast8_t row = 0; row < 8; row++) {
-			digest[column * 8 + row - 16] = ctxt->hash[row][column + 8];
-		}
-	}
+	groestl384_hash_to_digest(ctxt->hash, digest);
 }
 

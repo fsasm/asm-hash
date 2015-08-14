@@ -15,6 +15,7 @@
 #define GROESTL512_HASH_SIZE	(128)
 
 void groestl512_init_hash(uint8_t hash[8][16]);
+void groestl512_hash_to_digest(uint8_t hash[8][16], uint8_t digest[GROESTL512_DIGEST_SIZE]);
 void groestl512_process_block(const uint8_t block[128], uint8_t hash[8][16], unsigned int n);
 void groestl512_finalize_hash(uint8_t hash[8][16]);
 
@@ -24,6 +25,7 @@ void groestl512_finalize_hash(uint8_t hash[8][16]);
 #define GROESTL384_HASH_SIZE	(128)
 
 void groestl384_init_hash(uint8_t hash[8][16]);
+void groestl384_hash_to_digest(uint8_t hash[8][16], uint8_t digest[GROESTL384_DIGEST_SIZE]);
 
 #endif
 
