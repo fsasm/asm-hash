@@ -5,7 +5,6 @@
  */
 
 #include "jh.h"
-#include "int_util.h"
 #include <string.h>
 
 void process_blocks(block* b, const uint8_t block[], unsigned int n, bool data_bits) {
@@ -37,10 +36,7 @@ void jh256_finalize(jh256_context* ctxt) {
 }
 
 void jh256_get_digest(jh256_context* ctxt, uint8_t digest[JH256_DIGEST_SIZE]) {
-	u64_to_u8_le(ctxt->hash[6][0], &digest[0]);
-	u64_to_u8_le(ctxt->hash[6][1], &digest[8]);
-	u64_to_u8_le(ctxt->hash[7][0], &digest[16]);
-	u64_to_u8_le(ctxt->hash[7][1], &digest[24]);
+	jh256_hash_to_digest(ctxt->hash, digest);
 }
 
 /* JH-224 */
@@ -61,10 +57,7 @@ void jh224_finalize(jh256_context* ctxt) {
 }
 
 void jh224_get_digest(jh224_context* ctxt, uint8_t digest[JH224_DIGEST_SIZE]) {
-	u32_to_u8_le((uint32_t)(ctxt->hash[6][0] >> 32), &digest[0]);
-	u64_to_u8_le(ctxt->hash[6][1], &digest[4]);
-	u64_to_u8_le(ctxt->hash[7][0], &digest[12]);
-	u64_to_u8_le(ctxt->hash[7][1], &digest[20]);
+	jh224_hash_to_digest(ctxt->hash, digest);
 }
 
 /* JH-384 */
@@ -85,12 +78,7 @@ void jh384_finalize(jh384_context* ctxt) {
 }
 
 void jh384_get_digest(jh384_context* ctxt, uint8_t digest[JH384_DIGEST_SIZE]) {
-	u64_to_u8_le(ctxt->hash[5][0], &digest[0]);
-	u64_to_u8_le(ctxt->hash[5][1], &digest[8]);
-	u64_to_u8_le(ctxt->hash[6][0], &digest[16]);
-	u64_to_u8_le(ctxt->hash[6][1], &digest[24]);
-	u64_to_u8_le(ctxt->hash[7][0], &digest[32]);
-	u64_to_u8_le(ctxt->hash[7][1], &digest[40]);
+	jh384_hash_to_digest(ctxt->hash, digest);
 }
 
 /* JH-512 */
@@ -111,13 +99,6 @@ void jh512_finalize(jh512_context* ctxt) {
 }
 
 void jh512_get_digest(jh512_context* ctxt, uint8_t digest[JH512_DIGEST_SIZE]) {
-	u64_to_u8_le(ctxt->hash[4][0], &digest[0]);
-	u64_to_u8_le(ctxt->hash[4][1], &digest[8]);
-	u64_to_u8_le(ctxt->hash[5][0], &digest[16]);
-	u64_to_u8_le(ctxt->hash[5][1], &digest[24]);
-	u64_to_u8_le(ctxt->hash[6][0], &digest[32]);
-	u64_to_u8_le(ctxt->hash[6][1], &digest[40]);
-	u64_to_u8_le(ctxt->hash[7][0], &digest[48]);
-	u64_to_u8_le(ctxt->hash[7][1], &digest[56]);
+	jh512_hash_to_digest(ctxt->hash, digest);
 }
 

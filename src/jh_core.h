@@ -15,6 +15,7 @@
 #define JH256_HASH_SIZE		(128)
 
 void jh256_init_hash(uint64_t hash[8][2]);
+void jh256_hash_to_digest(uint64_t hash[8][2], uint8_t digest[JH256_DIGEST_SIZE]);
 void jh_process_block(const uint8_t block[64], uint64_t hash[8][2]);
 
 /* JH-224 */
@@ -23,6 +24,7 @@ void jh_process_block(const uint8_t block[64], uint64_t hash[8][2]);
 #define JH224_HASH_SIZE		(128)
 
 void jh224_init_hash(uint64_t hash[8][2]);
+void jh224_hash_to_digest(uint64_t hash[8][2], uint8_t digest[JH224_DIGEST_SIZE]);
 
 /* JH-384 */
 #define JH384_BLOCK_SIZE	(64)
@@ -30,6 +32,7 @@ void jh224_init_hash(uint64_t hash[8][2]);
 #define JH384_HASH_SIZE		(128)
 
 void jh384_init_hash(uint64_t hash[8][2]);
+void jh384_hash_to_digest(uint64_t hash[8][2], uint8_t digest[JH384_DIGEST_SIZE]);
 
 /* JH-512 */
 #define JH512_BLOCK_SIZE	(64)
@@ -37,6 +40,7 @@ void jh384_init_hash(uint64_t hash[8][2]);
 #define JH512_HASH_SIZE		(128)
 
 void jh512_init_hash(uint64_t hash[8][2]);
+void jh512_hash_to_digest(uint64_t hash[8][2], uint8_t digest[JH512_DIGEST_SIZE]);
 
 #endif
 

@@ -27,6 +27,13 @@ void jh256_init_hash(uint64_t hash[8][2]) {
 	hash[7][1] = UINT64_C(0x69D71CD313ABE389);
 }
 
+void jh256_hash_to_digest(uint64_t hash[8][2], uint8_t digest[JH256_DIGEST_SIZE]) {
+	u64_to_u8_le(hash[6][0], &digest[0]);
+	u64_to_u8_le(hash[6][1], &digest[8]);
+	u64_to_u8_le(hash[7][0], &digest[16]);
+	u64_to_u8_le(hash[7][1], &digest[24]);
+}
+
 /* JH-224 */
 void jh224_init_hash(uint64_t hash[8][2]) {
 	hash[0][0] = UINT64_C(0xAC989AF962DDFE2D);
@@ -45,6 +52,13 @@ void jh224_init_hash(uint64_t hash[8][2]) {
 	hash[6][1] = UINT64_C(0xF06CE59C95AC74D5);
 	hash[7][0] = UINT64_C(0xBF2BABB5EA0D9615);
 	hash[7][1] = UINT64_C(0x6EEA64DDF0DC1196);
+}
+
+void jh224_hash_to_digest(uint64_t hash[8][2], uint8_t digest[JH224_DIGEST_SIZE]) {
+	u32_to_u8_le((uint32_t)(hash[6][0] >> 32), &digest[0]);
+	u64_to_u8_le(hash[6][1], &digest[4]);
+	u64_to_u8_le(hash[7][0], &digest[12]);
+	u64_to_u8_le(hash[7][1], &digest[20]);
 }
 
 /* JH-384 */
@@ -67,6 +81,15 @@ void jh384_init_hash(uint64_t hash[8][2]) {
 	hash[7][1] = UINT64_C(0x7F734298BA3F6C97);
 }
 
+void jh384_hash_to_digest(uint64_t hash[8][2], uint8_t digest[JH384_DIGEST_SIZE]) {
+	u64_to_u8_le(hash[5][0], &digest[0]);
+	u64_to_u8_le(hash[5][1], &digest[8]);
+	u64_to_u8_le(hash[6][0], &digest[16]);
+	u64_to_u8_le(hash[6][1], &digest[24]);
+	u64_to_u8_le(hash[7][0], &digest[32]);
+	u64_to_u8_le(hash[7][1], &digest[40]);
+}
+
 /* JH-512 */
 void jh512_init_hash(uint64_t hash[8][2]) {
 	hash[0][0] = UINT64_C(0x17AA003E964BD16F);
@@ -85,6 +108,17 @@ void jh512_init_hash(uint64_t hash[8][2]) {
 	hash[6][1] = UINT64_C(0x56B116577C8806A7);
 	hash[7][0] = UINT64_C(0xFB1785E6DFFCC2E3);
 	hash[7][1] = UINT64_C(0x4BDD8CCC78465A54);
+}
+
+void jh512_hash_to_digest(uint64_t hash[8][2], uint8_t digest[JH512_DIGEST_SIZE]) {
+	u64_to_u8_le(hash[4][0], &digest[0]);
+	u64_to_u8_le(hash[4][1], &digest[8]);
+	u64_to_u8_le(hash[5][0], &digest[16]);
+	u64_to_u8_le(hash[5][1], &digest[24]);
+	u64_to_u8_le(hash[6][0], &digest[32]);
+	u64_to_u8_le(hash[6][1], &digest[40]);
+	u64_to_u8_le(hash[7][0], &digest[48]);
+	u64_to_u8_le(hash[7][1], &digest[56]);
 }
 
 static void sbox_64(uint64_t* x0, uint64_t* x1, uint64_t* x2, uint64_t* x3, uint64_t c) {
