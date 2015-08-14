@@ -38,6 +38,12 @@ void blake512_init_hash(uint64_t hash[8]) {
 	hash[7] = UINT64_C(0x5BE0CD19137E2179);
 }
 
+void blake512_hash_to_digest(uint64_t hash[8], uint8_t digest[BLAKE512_DIGEST_SIZE]) {
+	for (int i = 0; i < 8; i++) {
+		u64_to_u8_be(hash[i], &digest[i * 8]);
+	}
+}
+
 static void compress(uint64_t* v1, uint64_t* v2, uint64_t* v3, uint64_t* v4, uint64_t mc1, uint64_t mc2) {
 	uint64_t a = *v1;
 	uint64_t b = *v2;
@@ -133,5 +139,11 @@ void blake384_init_hash(uint64_t hash[8]) {
 	hash[5] = UINT64_C(0x8EB44A8768581511);
 	hash[6] = UINT64_C(0xDB0C2E0D64F98FA7);
 	hash[7] = UINT64_C(0x47B5481DBEFA4FA4);
+}
+
+void blake384_hash_to_digest(uint64_t hash[8], uint8_t digest[BLAKE384_DIGEST_SIZE]) {
+	for (int i = 0; i < 6; i++) {
+		u64_to_u8_be(hash[i], &digest[i * 8]);
+	}
 }
 

@@ -5,7 +5,6 @@
  */
  
 #include "blake512.h"
-#include "int_util.h"
 #include <string.h>
 
 void process_block(block* b, const uint8_t block[], unsigned int n, bool data_bits) {
@@ -60,9 +59,7 @@ void blake512_add(blake512_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void blake512_get_digest(blake512_context* ctxt, uint8_t digest[BLAKE512_DIGEST_SIZE]) {
-	for (int i = 0; i < 8; i++) {
-		u64_to_u8_be(ctxt->hash[i], &digest[i * 8]);
-	}
+	blake512_hash_to_digest(ctxt->hash, digest);
 }
 
 void blake512_finalize(blake512_context* ctxt) {
@@ -93,9 +90,7 @@ void blake384_add(blake384_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void blake384_get_digest(blake384_context* ctxt, uint8_t digest[BLAKE384_DIGEST_SIZE]) {
-	for (int i = 0; i < 6; i++) {
-		u64_to_u8_be(ctxt->hash[i], &digest[i * 8]);
-	}
+	blake384_hash_to_digest(ctxt->hash, digest);
 }
 
 void blake384_finalize(blake384_context* ctxt) {
