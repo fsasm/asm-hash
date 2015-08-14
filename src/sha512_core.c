@@ -64,6 +64,27 @@ void sha512_256_init_hash(uint64_t hash[8]) {
 	hash[7] = UINT64_C(0x0EB72DDC81C52CA2);
 }
 
+void sha512_hash_to_digest(uint64_t hash[8], uint8_t digest[SHA512_DIGEST_SIZE]) {
+	for (int i = 0; i < 8; i++) {
+		u64_to_u8_be(hash[i], &digest[i * 8]);
+	}
+}
+
+void sha512_224_hash_to_digest(uint64_t hash[8], uint8_t digest[SHA512_224_DIGEST_SIZE]) {
+	for (int i = 0; i < 3; i++) {
+		u64_to_u8_be(hash[i], &digest[i * 8]);
+	}
+	
+	uint32_t h4 = (uint32_t)(hash[3] >> 32);
+	u32_to_u8_be(h4, &digest[24]);
+}
+
+void sha512_256_hash_to_digest(uint64_t hash[8], uint8_t digest[SHA512_256_DIGEST_SIZE]) {
+	for (int i = 0; i < 4; i++) {
+		u64_to_u8_be(hash[i], &digest[i * 8]);
+	}
+}
+
 /* ch */
 static uint64_t f1(uint64_t x, uint64_t y, uint64_t z) {
 	return (x & y) ^ (~x & z);
@@ -151,5 +172,10 @@ void sha384_init_hash(uint64_t hash[8]) {
 	hash[5] = UINT64_C(0x8EB44A8768581511);
 	hash[6] = UINT64_C(0xDB0C2E0D64F98FA7);
 	hash[7] = UINT64_C(0x47B5481DBEFA4FA4);
+}
+
+void sha384_hash_to_digest(uint64_t hash[8], uint8_t digest[SHA384_DIGEST_SIZE]) {
+	for (int i = 0; i < 6; i++)
+		u64_to_u8_be(hash[i], &digest[i * 8]);
 }
 

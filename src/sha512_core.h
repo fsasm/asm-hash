@@ -19,6 +19,10 @@ void sha512_init_hash(uint64_t hash[8]);
 void sha512_224_init_hash(uint64_t hash[8]);
 void sha512_256_init_hash(uint64_t hash[8]);
 
+void sha512_hash_to_digest(uint64_t hash[8], uint8_t digest[SHA512_DIGEST_SIZE]);
+void sha512_224_hash_to_digest(uint64_t hash[8], uint8_t digest[SHA512_224_DIGEST_SIZE]);
+void sha512_256_hash_to_digest(uint64_t hash[8], uint8_t digest[SHA512_256_DIGEST_SIZE]);
+
 void sha512_process_blocks(const uint8_t block[], uint64_t hash[8], unsigned int n);
 
 #if defined(SHA512_USE_ASM) || defined(SHA512_ENABLE_ASM)
@@ -34,6 +38,7 @@ extern void sha512_process_blocks_asm(const uint8_t block[], uint64_t hash[8], u
 #define SHA384_HASH_SIZE	(64)
 
 void sha384_init_hash(uint64_t hash[8]);
+void sha384_hash_to_digest(uint64_t hash[8], uint8_t digest[SHA384_DIGEST_SIZE]);
 
 #endif
 

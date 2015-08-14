@@ -49,24 +49,15 @@ void sha512_finalize(sha512_context* ctxt) {
 }
 
 void sha512_get_digest(sha512_context* ctxt, uint8_t digest[SHA512_DIGEST_SIZE]) {
-	for (int i = 0; i < 8; i++) {
-		u64_to_u8_be(ctxt->hash[i], &digest[i * 8]);
-	}
+	sha512_hash_to_digest(ctxt->hash, digest);
 }
 
 void sha512_224_get_digest(sha512_context* ctxt, uint8_t digest[SHA512_224_DIGEST_SIZE]) {
-	for (int i = 0; i < 3; i++) {
-		u64_to_u8_be(ctxt->hash[i], &digest[i * 8]);
-	}
-	
-	uint32_t h4 = (uint32_t)(ctxt->hash[3] >> 32);
-	u32_to_u8_be(h4, &digest[24]);
+	sha512_224_hash_to_digest(ctxt->hash, digest);
 }
 
 void sha512_256_get_digest(sha512_context* ctxt, uint8_t digest[SHA512_256_DIGEST_SIZE]) {
-	for (int i = 0; i < 4; i++) {
-		u64_to_u8_be(ctxt->hash[i], &digest[i * 8]);
-	}
+	sha512_256_hash_to_digest(ctxt->hash, digest);
 }
 
 /* SHA-384 */
@@ -87,10 +78,6 @@ void sha384_finalize(sha384_context* ctxt) {
 }
 
 void sha384_get_digest(sha384_context* ctxt, uint8_t digest[SHA384_DIGEST_SIZE]) {
-	if (ctxt == NULL)
-		return;
-		
-	for (int i = 0; i < 6; i++)
-		u64_to_u8_be(ctxt->hash[i], &digest[i * 8]);
+	sha384_hash_to_digest(ctxt->hash, digest);
 }
 
