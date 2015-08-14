@@ -38,6 +38,18 @@ void sha256_init_hash (uint32_t hash[8]) {
 	hash[7] = UINT32_C(0x5BE0CD19);
 }
 
+void sha256_hash_to_digest(uint32_t hash[8], uint8_t digest[SHA256_DIGEST_SIZE]) {
+	for (int i = 0; i < 8; i++) {
+		u32_to_u8_be(hash[i], &digest[i * 4]);
+	}
+}
+
+void sha224_hash_to_digest(uint32_t hash[8], uint8_t digest[SHA224_DIGEST_SIZE]) {
+	for (int i = 0; i < 7; i++) {
+		u32_to_u8_be(hash[i], &digest[i * 4]);
+	}
+}
+
 static uint32_t f1(uint32_t x, uint32_t y, uint32_t z) {
 	return (x & y) ^ (~x & z);
 }

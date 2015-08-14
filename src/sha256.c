@@ -6,7 +6,6 @@
 
 
 #include "sha256.h"
-#include "int_util.h"
 
 void process_block(block* b, const uint8_t block[], unsigned int n, bool data_bits) {
 	(void)data_bits;
@@ -35,9 +34,7 @@ void sha256_add(sha256_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void sha256_get_digest(sha256_context* ctxt, uint8_t digest[SHA256_DIGEST_SIZE]) {
-	for (int i = 0; i < 8; i++) {
-		u32_to_u8_be(ctxt->hash[i], &digest[i * 4]);
-	}
+	sha256_hash_to_digest(ctxt->hash, digest);
 }
 
 /* SHA-224 */
@@ -58,10 +55,6 @@ void sha224_finalize(sha224_context* ctxt) {
 }
 
 void sha224_get_digest(sha256_context* ctxt, uint8_t digest[SHA224_DIGEST_SIZE]) {
-	if (ctxt == NULL)
-		return;
-		
-	for (uint_fast8_t i = 0; i < 7; i++)
-		u32_to_u8_be(ctxt->hash[i], &digest[i * 4]);
+	sha224_hash_to_digest(ctxt->hash, digest);
 }
 

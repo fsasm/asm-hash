@@ -15,6 +15,7 @@
 #define SHA256_HASH_SIZE	(32)
 
 void sha256_init_hash(uint32_t hash[8]);
+void sha256_hash_to_digest(uint32_t hash[8], uint8_t digest[SHA256_DIGEST_SIZE]);
 void sha256_process_blocks(const uint8_t block[], uint32_t hash[8], unsigned int n);
 
 #if defined(SHA256_USE_ASM) || defined(SHA256_ENABLE_ASM)
@@ -30,6 +31,7 @@ extern void sha256_process_blocks_asm(const uint8_t block[], uint32_t hash[8], u
 #define SHA224_DIGEST_SIZE	(28)
 
 void sha224_init_hash(uint32_t hash[8]);
+void sha224_hash_to_digest(uint32_t hash[8], uint8_t digest[SHA224_DIGEST_SIZE]);
 
 #endif
 
