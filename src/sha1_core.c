@@ -15,6 +15,12 @@ void sha1_init_hash(uint32_t hash[5]) {
 	hash[4] = UINT32_C(0xC3D2E1F0);
 }
 
+void sha1_hash_to_digest(uint32_t hash[5], uint8_t digest[SHA1_DIGEST_SIZE]) {
+	for (int i = 0; i < 5; i++) {
+		u32_to_u8_be(hash[i], &digest[i * 4]);
+	}
+}
+
 void sha1_process_blocks(const uint8_t block[], uint32_t hash[5], unsigned int n) {
 	for (unsigned int j = 0; j < n; j++) {
 		const uint8_t* block1 = &block[j * 64];

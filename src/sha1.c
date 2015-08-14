@@ -5,7 +5,6 @@
  */
 
 #include "sha1.h"
-#include "int_util.h"
 
 void process_block(block* b, const uint8_t block[], unsigned int n, bool data_bits) {
 	(void)data_bits;
@@ -33,8 +32,6 @@ void sha1_finalize(sha1_context* ctxt) {
 }
 
 void sha1_get_digest(sha1_context* ctxt, uint8_t digest[SHA1_DIGEST_SIZE]) {
-	for (size_t i = 0; i < 5; i++) {
-		u32_to_u8_be(ctxt->hash[i], &digest[i * 4]);
-	}
+	sha1_hash_to_digest(ctxt->hash, digest);
 }
 
