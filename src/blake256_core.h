@@ -16,6 +16,7 @@
 #define BLAKE256_SALT_SIZE		(16)
 
 void blake256_init_hash(uint32_t hash[8]);
+void blake256_hash_to_digest(uint32_t hash[8], uint8_t digest[BLAKE256_DIGEST_SIZE]);
 void blake256_process_block(const uint8_t block[64], uint32_t hash[8], uint64_t counter);
 void blake256_process_block_with_salt(const uint8_t block[64], uint32_t hash[8], const uint32_t salt[4], uint64_t counter);
 
@@ -30,5 +31,6 @@ extern void blake256_process_block_asm(const uint8_t block[64], uint32_t hash[8]
 #define BLAKE224_SALT_SIZE		(16)
 
 void blake224_init_hash(uint32_t hash[8]);
+void blake224_hash_to_digest(uint32_t hash[8], uint8_t digest[BLAKE224_DIGEST_SIZE]);
 
 #endif

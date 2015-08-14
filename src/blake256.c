@@ -5,7 +5,6 @@
  */
 
 #include "blake256.h"
-#include "int_util.h"
 #include <string.h>
 
 void process_block(block* b, const uint8_t block[], unsigned int n, bool data_bits) {
@@ -61,9 +60,7 @@ void blake256_add(blake256_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void blake256_get_digest(blake256_context* ctxt, uint8_t digest[BLAKE256_DIGEST_SIZE]) {
-	for (int i = 0; i < 8; i++) {
-		u32_to_u8_be(ctxt->hash[i], &digest[i * 4]);
-	}
+	blake256_hash_to_digest(ctxt->hash, digest);
 }
 
 void blake256_finalize(blake256_context* ctxt) {
@@ -94,12 +91,7 @@ void blake224_add(blake224_context* ctxt, const uint8_t data[], size_t length) {
 }
 
 void blake224_get_digest(blake224_context* ctxt, uint8_t digest[BLAKE224_DIGEST_SIZE]) {
-	if (ctxt == NULL)
-		return;
-	
-	for (int i = 0; i < 7; i++) {
-		u32_to_u8_be(ctxt->hash[i], &digest[i * 4]);
-	}
+	blake224_hash_to_digest(ctxt->hash, digest);
 }
 
 void blake224_finalize(blake224_context* ctxt) {

@@ -39,6 +39,12 @@ void blake256_init_hash(uint32_t hash[8]) {
 	hash[7] = UINT32_C(0x5BE0CD19);
 }
 
+void blake256_hash_to_digest(uint32_t hash[8], uint8_t digest[BLAKE256_DIGEST_SIZE]) {
+	for (int i = 0; i < 8; i++) {
+		u32_to_u8_be(hash[i], &digest[i * 4]);
+	}
+}
+
 static void compress(uint32_t* v1, uint32_t* v2, uint32_t* v3, uint32_t* v4, uint32_t mc1, uint32_t mc2) {
 	uint32_t a = *v1;
 	uint32_t b = *v2;
@@ -134,5 +140,11 @@ void blake224_init_hash(uint32_t hash[8]) {
 	hash[5] = UINT32_C(0x68581511);
 	hash[6] = UINT32_C(0x64F98FA7);
 	hash[7] = UINT32_C(0xBEFA4FA4);
+}
+
+void blake224_hash_to_digest(uint32_t hash[8], uint8_t digest[BLAKE224_DIGEST_SIZE]) {
+	for (int i = 0; i < 7; i++) {
+		u32_to_u8_be(hash[i], &digest[i * 4]);
+	}
 }
 
