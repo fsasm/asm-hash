@@ -15,6 +15,7 @@
 #define GROESTL256_HASH_SIZE	(64)
 
 void groestl256_init_hash(uint8_t hash[8][8]);
+void groestl256_hash_to_digest(uint8_t hash[8][8], uint8_t digest[GROESTL256_DIGEST_SIZE]);
 void groestl256_process_block(const uint8_t block[64], uint8_t hash[8][8], unsigned int n);
 void groestl256_finalize_hash(uint8_t hash[8][8]);
 
@@ -24,6 +25,7 @@ void groestl256_finalize_hash(uint8_t hash[8][8]);
 #define GROESTL224_HASH_SIZE	(64)
 
 void groestl224_init_hash(uint8_t hash[8][8]);
+void groestl224_hash_to_digest(uint8_t hash[8][8], uint8_t digest[GROESTL224_DIGEST_SIZE]);
 
 #endif
 
