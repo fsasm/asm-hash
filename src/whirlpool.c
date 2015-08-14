@@ -5,7 +5,6 @@
  */
 
 #include "whirlpool.h"
-#include "int_util.h"
 #include <string.h>
 
 void process_blocks (block* b, const uint8_t block[], unsigned int n, bool data_bits) {
@@ -34,15 +33,6 @@ void whirlpool_add (whirlpool_context* ctxt, const uint8_t data[], size_t length
 }
 
 void whirlpool_get_digest (whirlpool_context* ctxt, uint8_t digest[WHIRLPOOL_DIGEST_SIZE]) {
-#ifdef WHIRLPOOL_NAIVE
-	memcpy (digest, ctxt->hash, WHIRLPOOL_DIGEST_SIZE);
-#else
-	uint8_t (*h)[8] = (uint8_t (*)[8])ctxt->hash;
-	for (uint_fast8_t x = 0; x < 8; x++) {
-		for (uint_fast8_t y = 0; y < 8; y++) {
-			digest[x * 8 + y] = h[x][7 - y];
-		}
-	}
-#endif
+	whirlpool_hash_to_digest(ctxt->hash, digest);
 }
 

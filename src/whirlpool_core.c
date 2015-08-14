@@ -13,6 +13,21 @@ void whirlpool_init_hash(uint64_t hash[8]) {
 	memset(hash, 0, WHIRLPOOL_HASH_SIZE);
 }
 
+void whirlpool_hash_to_digest(uint64_t hash[8], uint8_t digest[WHIRLPOOL_DIGEST_SIZE]) {
+#ifdef WHIRLPOOL_NAIVE
+	for (uint_fast8_t i = 0; i < 8; i++) {
+		u64_to_u8_le(hash[i], &digest[i * 8]);
+	}
+#else
+	uint8_t (*h)[8] = (uint8_t (*)[8])hash;
+	for (uint_fast8_t x = 0; x < 8; x++) {
+		for (uint_fast8_t y = 0; y < 8; y++) {
+			digest[x * 8 + y] = h[x][7 - y];
+		}
+	}
+#endif
+}
+
 #if defined(WHIRLPOOL_NAIVE)
 static const uint8_t s_box[256] = {
 	0x18, 0x23, 0xC6, 0xE8, 0x87, 0xB8, 0x01, 0x4F,

@@ -14,6 +14,7 @@
 #define WHIRLPOOL_HASH_SIZE		(64)
 
 void whirlpool_init_hash(uint64_t hash[8]);
+void whirlpool_hash_to_digest(uint64_t hash[8], uint8_t digest[WHIRLPOOL_DIGEST_SIZE]);
 void whirlpool_process_blocks(const uint8_t block[], uint64_t hash[8], unsigned int n);
 
 #if defined(WHIRLPOOL_USE_ASM) || defined (WHIRLPOOL_ENABLE_ASM)
