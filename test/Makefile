@@ -17,6 +17,9 @@ sha1_test_armv6:
 sha1_test_armv7:
 	$(CC) -std=c99 -DHASH_SHA1 -o $@ hash_test.c ../src/sha1_core.c ../src/sha1_armv7.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
+sha1_test_x64:
+	$(CC) -std=c99 -DHASH_SHA1 -o $@ hash_test.c ../src/sha1_core.c ../src/sha1_x64.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
+
 sha256_test_armv6:
 	$(CC) -std=c99 -DHASH_SHA256 -o $@ hash_test.c ../src/sha256_core.c ../src/sha256_armv6.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 
@@ -52,6 +55,9 @@ sha1_bench_armv6:
 
 sha1_bench_armv7:
 	$(CC) -std=gnu99 -DHASH_SHA1_ASM -lrt -o $@ hash_benchmark.c ../src/sha1_core.c ../src/sha1_armv7.s ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
+	
+sha1_bench_x64:
+	$(CC) -std=gnu99 -DHASH_SHA1_ASM -lrt -o $@ hash_benchmark.c ../src/sha1_core.c ../src/sha1_x64.s ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
 
 sha256_bench:
 	$(CC) -std=gnu99 -DHASH_SHA256 -lrt -o $@ hash_benchmark.c ../src/sha256_core.c ../src/int_util.c $(CFLAGS) $(INCLUDE_PATH)
