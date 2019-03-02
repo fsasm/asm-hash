@@ -2,13 +2,21 @@ CC=gcc
 CFLAGS=
 INCLUDE_PATH=-I.
 
-.PHONY: all clean all_c all_armv6 all_armv7 all_x64
+.PHONY: all clean all_c all_armv6 all_armv7 all_x64 test
+
 
 all: all_c all_armv6 all_armv7 all_x64
 
 clean:
 	rm -rf md5sum sha1sum sha224sum sha256sum sha384sum sha512sum sha512_224sum sha512_256sum blake224sum blake256sum blake384sum blake512sum groestl224sum groestl256sum groestl384sum groestl512sum whirlpoolsum whirlpoolsum_x64
 	rm -rf md5sum.exe sha1sum.exe sha224sum.exe sha256sum.exe sha384sum.exe sha512sum.exe sha512_224sum.exe sha512_256sum.exe blake224sum.exe blake256sum.exe blake384sum.exe blake512sum.exe groestl224sum.exe groestl256sum.exe groestl384sum.exe groestl512sum.exe whirlpoolsum.exe whirlpoolsum_x64.exe
+
+TEST_FLAGS=-I. `pkg-config --cflags --libs cmocka `
+int_util_test: test/int_util_test.c int_util.c
+	$(CC) -std=c99 -o $@ $^ $(TEST_FLAGS)
+
+test: int_util_test
+	./int_util_test
 
 # C versions
 all_c: md5sum sha1sum sha2 whirlpoolsum blake groestl
