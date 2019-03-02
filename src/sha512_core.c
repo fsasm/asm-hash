@@ -97,20 +97,20 @@ static uint64_t f2(uint64_t x, uint64_t y, uint64_t z) {
 
 /* e_0 */
 static uint64_t f3(uint64_t x) {
-	return rotate_right_64(x, 28) ^ rotate_right_64(x, 34) ^ rotate_right_64(x, 39);
+	return ror64(x, 28) ^ ror64(x, 34) ^ ror64(x, 39);
 }
 
 /* e_1 */
 static uint64_t f4(uint64_t x) {
-	return rotate_right_64(x, 14) ^ rotate_right_64(x, 18) ^ rotate_right_64(x, 41);
+	return ror64(x, 14) ^ ror64(x, 18) ^ ror64(x, 41);
 }
 
 static uint64_t f5(uint64_t x) {
-	return rotate_right_64(x, 1) ^ rotate_right_64(x, 8) ^ (x >> 7);
+	return ror64(x, 1) ^ ror64(x, 8) ^ (x >> 7);
 }
 
 static uint64_t f6(uint64_t x) {
-	return rotate_right_64(x, 19) ^ rotate_right_64(x, 61) ^ (x >> 6);
+	return ror64(x, 19) ^ ror64(x, 61) ^ (x >> 6);
 }
 
 void sha512_process_blocks(const uint8_t block[], uint64_t hash[8], unsigned int n) {

@@ -41,65 +41,65 @@ void sha1_process_blocks(const uint8_t block[], uint32_t hash[5], unsigned int n
 			W[i] = u8_to_u32_be(&block1[i * 4]);
 			
 			f = (b & c) | ((~b) & d);
-			temp = W[i] + f + k + rotate_left_32(a, 5) + e;
+			temp = W[i] + f + k + rol32(a, 5) + e;
 			
 			e = d;
 			d = c;
-			c = rotate_left_32(b, 30);
+			c = rol32(b, 30);
 			b = a;
 			a = temp;
 		}
 		for (uint_fast8_t i = 16; i < 20; i++) {
-			W[i] = rotate_left_32(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+			W[i] = rol32(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
 			
 			f = (b & c) | ((~b) & d);
-			temp = W[i] + f + k + rotate_left_32(a, 5) + e;
+			temp = W[i] + f + k + rol32(a, 5) + e;
 			
 			e = d;
 			d = c;
-			c = rotate_left_32(b, 30);
+			c = rol32(b, 30);
 			b = a;
 			a = temp;
 		}
 		
 		k = UINT32_C(0x6ED9EBA1);
 		for (uint_fast8_t i = 20; i < 40; i++) {
-			W[i] = rotate_left_32(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+			W[i] = rol32(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
 			
 			f = b ^ c ^ d; 
-			temp = W[i] + f + k + rotate_left_32(a, 5) + e;
+			temp = W[i] + f + k + rol32(a, 5) + e;
 			
 			e = d;
 			d = c;
-			c = rotate_left_32(b, 30);
+			c = rol32(b, 30);
 			b = a;
 			a = temp;
 		}
 		
 		k = UINT32_C(0x8F1BBCDC);
 		for (uint_fast8_t i = 40; i < 60; i++) {
-			W[i] = rotate_left_32(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+			W[i] = rol32(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
 			
 			f = (b & c) | (b & d) | (c & d);
-			temp = W[i] + f + k + rotate_left_32(a, 5) + e;
+			temp = W[i] + f + k + rol32(a, 5) + e;
 			
 			e = d;
 			d = c;
-			c = rotate_left_32(b, 30);
+			c = rol32(b, 30);
 			b = a;
 			a = temp;
 		}
 		
 		k = UINT32_C(0xCA62C1D6);
 		for (uint_fast8_t i = 60; i < 80; i++) {
-			W[i] = rotate_left_32(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+			W[i] = rol32(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
 			
 			f = b ^ c ^ d; 
-			temp = W[i] + f + k + rotate_left_32(a, 5) + e;
+			temp = W[i] + f + k + rol32(a, 5) + e;
 			
 			e = d;
 			d = c;
-			c = rotate_left_32(b, 30);
+			c = rol32(b, 30);
 			b = a;
 			a = temp;
 		}

@@ -52,13 +52,13 @@ static void compress(uint32_t* v1, uint32_t* v2, uint32_t* v3, uint32_t* v4, uin
 	uint32_t d = *v4;
 	
 	a = a + b + mc1;
-	d = rotate_right_32(d ^ a, 16);
+	d = ror32(d ^ a, 16);
 	c = c + d;
-	b = rotate_right_32(b ^ c, 12);
+	b = ror32(b ^ c, 12);
 	a = a + b + mc2;
-	d = rotate_right_32(d ^ a, 8);
+	d = ror32(d ^ a, 8);
 	c = c + d;
-	b = rotate_right_32(b ^ c, 7);
+	b = ror32(b ^ c, 7);
 	
 	*v1 = a;
 	*v2 = b;

@@ -6,18 +6,24 @@
 
 #include "int_util.h"
 
-void u64_to_u8_le (uint64_t from, uint8_t to[8]) {
-	for (int i = 0; i < 8; i++) {
-		to[i] = (uint8_t)(from & 0xFFu);
-		from = from >> 8;
+#define ROT_LOOP_LE(n) \
+	for (int i = 0; i < n; i++) { \
+		to[i] = (uint8_t)(from & 0xFFu); \
+		from = from >> 8; \
 	}
+
+#define ROT_LOOP_BE(n) \
+	for (int i = 0; i < n; i++) { \
+		to[n - 1 - i] = (uint8_t)(from & 0xFFu); \
+		from = from >> 8; \
+	}
+
+void u64_to_u8_le (uint64_t from, uint8_t to[8]) {
+	ROT_LOOP_LE(8)
 }
 
 void u64_to_u8_be (uint64_t from, uint8_t to[8]) {
-	for (int i = 0; i < 8; i++) {
-		to[7 - i] = (uint8_t)(from & 0xFFu);
-		from = from >> 8;
-	}
+	ROT_LOOP_BE(8)
 }
 
 void u32_to_u8_le (uint32_t from, uint8_t to[4]) {
@@ -66,66 +72,41 @@ uint64_t u8_to_u64_be (const uint8_t from[8]) {
 	return to;
 }
 
-uint8_t rotate_left_8 (uint8_t value, unsigned int times) {
-	times %= 8;
-	if (times == 0)
-		return value;
-	
-	return (value << times) | (value >> (8 - times));
-}
+#define ROT_UINT(n) uint ## n ## _t
+#define ROL_NAME(n) rol ## n
+#define ROR_NAME(n) ror ## n
 
-uint8_t rotate_right_8 (uint8_t value, unsigned int times) {
-	times %= 8;
-	if (times == 0)
-		return value;
-	
-	return (value >> times) | (value << (8 - times));
-}
+#define ROL_FUNC_PROTO(n) \
+	ROT_UINT(n) ROL_NAME(n) (ROT_UINT(n) value, unsigned int times)
 
-uint16_t rotate_left_16 (uint16_t value, unsigned int times) {
-	times %= 16;
-	if (times == 0)
-		return value;
-	
-	return (value << times) | (value >> (16 - times));
-}
+#define ROR_FUNC_PROTO(n) \
+	ROT_UINT(n) ROR_NAME(n) (ROT_UINT(n) value, unsigned int times)
 
-uint16_t rotate_right_16 (uint16_t value, unsigned int times) {
-	times %= 16;
-	if (times == 0)
-		return value;
-	
-	return (value >> times) | (value << (16 - times));
-}
+#define ROL_FUNC(n) \
+	ROL_FUNC_PROTO(n) \
+	{ \
+		times %= n; \
+		if (times == 0) \
+			return value; \
+		return (value << times) | (value >> (n - times)); \
+	}
 
-uint32_t rotate_left_32 (uint32_t value, unsigned int times) {
-	times %= 32;
-	if (times == 0)
-		return value;
-	
-	return (value << times) | (value >> (32 - times));
-}
+#define ROR_FUNC(n) \
+	ROR_FUNC_PROTO(n) \
+	{ \
+		times %= n; \
+		if (times == 0) \
+			return value; \
+		return (value >> times) | (value << (n - times)); \
+	}
 
-uint32_t rotate_right_32 (uint32_t value, unsigned int times) {
-	times %= 32;
-	if (times == 0)
-		return value;
-	
-	return (value >> times) | (value << (32 - times));
-}
+ROL_FUNC( 8)
+ROL_FUNC(16)
+ROL_FUNC(32)
+ROL_FUNC(64)
 
-uint64_t rotate_left_64 (uint64_t value, unsigned int times) {
-	times %= 64;
-	if (times == 0)
-		return value;
-	
-	return (value << times) | (value >> (64 - times));
-}
+ROR_FUNC( 8)
+ROR_FUNC(16)
+ROR_FUNC(32)
+ROR_FUNC(64)
 
-uint64_t rotate_right_64 (uint64_t value, unsigned int times) {
-	times %= 64;
-	if (times == 0)
-		return value;
-	
-	return (value >> times) | (value << (64 - times));
-}

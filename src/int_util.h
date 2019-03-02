@@ -21,16 +21,16 @@ uint32_t u8_to_u32_be (const uint8_t from[4]);
 uint64_t u8_to_u64_le (const uint8_t from[8]);
 uint64_t u8_to_u64_be (const uint8_t from[8]);
 
-uint8_t rotate_left_8 (uint8_t value, unsigned int times);
-uint8_t rotate_right_8 (uint8_t value, unsigned int times);
+uint8_t rol8(uint8_t value, unsigned int times);
+uint8_t ror8(uint8_t value, unsigned int times);
 
-uint16_t rotate_left_16 (uint16_t value, unsigned int times);
-uint16_t rotate_right_16 (uint16_t value, unsigned int times);
+uint16_t rol16(uint16_t value, unsigned int times);
+uint16_t ror16(uint16_t value, unsigned int times);
 
-uint32_t rotate_left_32 (uint32_t value, unsigned int times);
-uint32_t rotate_right_32 (uint32_t value, unsigned int times);
+uint32_t rol32(uint32_t value, unsigned int times);
+uint32_t ror32(uint32_t value, unsigned int times);
 
-uint64_t rotate_left_64 (uint64_t value, unsigned int times);
-uint64_t rotate_right_64 (uint64_t value, unsigned int times);
+uint64_t rol64(uint64_t value, unsigned int times);
+uint64_t ror64(uint64_t value, unsigned int times);
 
 #endif

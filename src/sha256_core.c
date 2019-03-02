@@ -59,19 +59,19 @@ static uint32_t f2(uint32_t x, uint32_t y, uint32_t z) {
 }
 
 static uint32_t f3(uint32_t x) {
-	return rotate_right_32(x, 2) ^ rotate_right_32(x, 13) ^ rotate_right_32(x, 22);
+	return ror32(x, 2) ^ ror32(x, 13) ^ ror32(x, 22);
 }
 
 static uint32_t f4(uint32_t x) {
-	return rotate_right_32(x, 6) ^ rotate_right_32(x, 11) ^ rotate_right_32(x, 25);
+	return ror32(x, 6) ^ ror32(x, 11) ^ ror32(x, 25);
 }
 
 static uint32_t f5(uint32_t x) {
-	return rotate_right_32(x, 7) ^ rotate_right_32(x, 18) ^ (x >> 3);
+	return ror32(x, 7) ^ ror32(x, 18) ^ (x >> 3);
 }
 
 static uint32_t f6(uint32_t x) {
-	return rotate_right_32(x, 17) ^ rotate_right_32(x, 19) ^ (x >> 10);
+	return ror32(x, 17) ^ ror32(x, 19) ^ (x >> 10);
 }
 
 void sha256_process_blocks (const uint8_t block[], uint32_t hash[8], unsigned int n) {

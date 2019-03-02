@@ -188,13 +188,13 @@ void whirlpool_process_blocks(const uint8_t block_[], uint64_t hash_[8], unsigne
 #ifdef WHIRLPOOL_SINGLE_TABLE
 
 #define TABLE0(index) (tables[((index) >> 56) & 0xFF])
-#define TABLE1(index) (rotate_right_64(tables[((index) >> 48) & 0xFF],  8))
-#define TABLE2(index) (rotate_right_64(tables[((index) >> 40) & 0xFF], 16))
-#define TABLE3(index) (rotate_right_64(tables[((index) >> 32) & 0xFF], 24))
-#define TABLE4(index) (rotate_right_64(tables[((index) >> 24) & 0xFF], 32))
-#define TABLE5(index) (rotate_right_64(tables[((index) >> 16) & 0xFF], 40))
-#define TABLE6(index) (rotate_right_64(tables[((index) >>  8) & 0xFF], 48))
-#define TABLE7(index) (rotate_right_64(tables[(index) & 0xFF], 56))
+#define TABLE1(index) (ror64(tables[((index) >> 48) & 0xFF],  8))
+#define TABLE2(index) (ror64(tables[((index) >> 40) & 0xFF], 16))
+#define TABLE3(index) (ror64(tables[((index) >> 32) & 0xFF], 24))
+#define TABLE4(index) (ror64(tables[((index) >> 24) & 0xFF], 32))
+#define TABLE5(index) (ror64(tables[((index) >> 16) & 0xFF], 40))
+#define TABLE6(index) (ror64(tables[((index) >>  8) & 0xFF], 48))
+#define TABLE7(index) (ror64(tables[(index) & 0xFF], 56))
 
 #else
 

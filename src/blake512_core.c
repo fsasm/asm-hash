@@ -51,13 +51,13 @@ static void compress(uint64_t* v1, uint64_t* v2, uint64_t* v3, uint64_t* v4, uin
 	uint64_t d = *v4;
 	
 	a = a + b + mc1;
-	d = rotate_right_64(d ^ a, 32);
+	d = ror64(d ^ a, 32);
 	c = c + d;
-	b = rotate_right_64(b ^ c, 25);
+	b = ror64(b ^ c, 25);
 	a = a + b + mc2;
-	d = rotate_right_64(d ^ a, 16);
+	d = ror64(d ^ a, 16);
 	c = c + d;
-	b = rotate_right_64(b ^ c, 11);
+	b = ror64(b ^ c, 11);
 	
 	*v1 = a;
 	*v2 = b;

@@ -59,7 +59,7 @@ void md5_process_blocks(const uint8_t block[], uint32_t hash[4], unsigned int n)
 			uint32_t f = ((c ^ d) & b) ^ d;
 			a += f + md5_table[i] + u8_to_u32_le(&block1[i * 4]);
 			uint_fast8_t shift = md5_shift[i & 0x03];
-			a = b + rotate_left_32(a, shift);
+			a = b + rol32(a, shift);
 
 			uint32_t temp = a;
 			a = d;
@@ -73,7 +73,7 @@ void md5_process_blocks(const uint8_t block[], uint32_t hash[4], unsigned int n)
 			uint32_t f = (d & b) | (~d & c);
 			a += f + md5_table[i] + u8_to_u32_le(&block1[block_index * 4]);
 			uint_fast8_t shift = md5_shift[(i & 0x03) + 4];
-			a = b + rotate_left_32(a, shift);
+			a = b + rol32(a, shift);
 
 			uint32_t temp = a;
 			a = d;
@@ -87,7 +87,7 @@ void md5_process_blocks(const uint8_t block[], uint32_t hash[4], unsigned int n)
 			uint32_t f = b ^ c ^ d;
 			a += f + md5_table[i] + u8_to_u32_le(&block1[block_index * 4]);
 			uint_fast8_t shift = md5_shift[(i & 0x03) + 8];
-			a = b + rotate_left_32(a, shift);
+			a = b + rol32(a, shift);
 
 			uint32_t temp = a;
 			a = d;
@@ -100,7 +100,7 @@ void md5_process_blocks(const uint8_t block[], uint32_t hash[4], unsigned int n)
 			uint32_t f = c ^ (b | ~d);
 			a += f + md5_table[i] + u8_to_u32_le(&block1[block_index * 4]);
 			uint_fast8_t shift = md5_shift[(i & 0x03) + 12];
-			a = b + rotate_left_32(a, shift);
+			a = b + rol32(a, shift);
 
 			uint32_t temp = a;
 			a = d;
