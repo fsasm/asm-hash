@@ -76,52 +76,74 @@ static void test_ror8_const(void **state)
 	assert_true(0x78 == ror8(0xC3,  3));
 }
 
+static void test_rol16_const(void **state)
+{
+	(void)state;
+
+	/* zero should stay zero */
+	assert_true(0x0000 == rol16(0x0000,   0));
+	assert_true(0x0000 == rol16(0x0000,   9));
+	assert_true(0x0000 == rol16(0x0000,  31));
+	assert_true(0x0000 == rol16(0x0000, 128));
+
+	/* pass through */
+	assert_true(0x9C8B == rol16(0x9C8B,  0));
+	assert_true(0xA6EB == rol16(0xA6EB, 16));
+	assert_true(0xCA62 == rol16(0xCA62, 32));
+	assert_true(0x793F == rol16(0x793F, 96));
+
+	/* rotate by one */
+	assert_true(0x8F69 == rol16(0xC7B4,  1));
+	assert_true(0xBF2B == rol16(0xDF95, 33));
+	assert_true(0x5A79 == rol16(0xAD3C, 17));
+
+	/* rotate arbitrary */
+	assert_true(0x9FC0 == rol16(0xE04F,  9));
+	assert_true(0x669B == rol16(0x6CD3,  3));
+	assert_true(0xECB5 == rol16(0x2D7B, 10));
+	assert_true(0xBB8A == rol16(0x7157, 11));
+	assert_true(0x50A6 == rol16(0x4CA1,  7));
+}
+
+static void test_ror16_const(void **state)
+{
+	(void)state;
+
+	/* zero should stay zero */
+	assert_true(0x0000 == ror16(0x0000,   0));
+	assert_true(0x0000 == ror16(0x0000,   9));
+	assert_true(0x0000 == ror16(0x0000,  31));
+	assert_true(0x0000 == ror16(0x0000, 128));
+
+	/* pass through */
+	assert_true(0x9C8B == ror16(0x9C8B,  0));
+	assert_true(0xA6EB == ror16(0xA6EB, 16));
+	assert_true(0xCA62 == ror16(0xCA62, 32));
+	assert_true(0x793F == ror16(0x793F, 96));
+
+	/* rotate by one */
+	assert_true(0x63DA == ror16(0xC7B4,  1));
+	assert_true(0xEFCA == ror16(0xDF95, 33));
+	assert_true(0x569E == ror16(0xAD3C, 17));
+
+	/* rotate arbitrary */
+	assert_true(0x9FC0 == ror16(0xE04F,  7));
+	assert_true(0x669B == ror16(0x6CD3, 13));
+	assert_true(0xECB5 == ror16(0x2D7B,  6));
+	assert_true(0xBB8A == ror16(0x7157,  5));
+	assert_true(0x50A6 == ror16(0x4CA1,  9));
+}
+
 int main (void)
 {
 	const struct CMUnitTest tests[] = {
 		cmocka_unit_test(test_rol8_const),
 		cmocka_unit_test(test_ror8_const),
+		cmocka_unit_test(test_rol16_const),
+		cmocka_unit_test(test_ror16_const),
 	};
 	
 	return cmocka_run_group_tests(tests, NULL, NULL);
-	
-	/* rol16 */
-	{
-		printf ("rol16: ");
-		uint16_t value = UINT16_C(0x5555);
-		uint16_t expected = UINT16_C(0xAAAA);
-		bool passed = true;
-		
-		for (uint_fast8_t i = 0; i < 32; i += 2) {
-			passed = passed && (value == rol16 (value, i));
-			passed = passed && (expected == rol16 (value, i + 1));
-		}
-		
-		if (passed) {
-			printf ("test passed\n");
-		} else {
-			printf ("test failed\n");
-		}
-	}
-	
-	/* ror16 */
-	{
-		printf ("ror16: ");
-		uint16_t expected = UINT16_C(0x5555);
-		uint16_t value = UINT16_C(0xAAAA);
-		bool passed = true;
-		
-		for (uint_fast8_t i = 0; i < 32; i += 2) {
-			passed = passed && (value == ror16 (value, i));
-			passed = passed && (expected == ror16 (value, i + 1));
-		}
-		
-		if (passed) {
-			printf ("test passed\n");
-		} else {
-			printf ("test failed\n");
-		}
-	}
 	
 	/* rol32 */
 	{
