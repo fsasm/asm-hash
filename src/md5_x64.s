@@ -102,7 +102,7 @@ md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
 	and r10d, \b
 	xor r10d, \d /* f */
 	add \a, r10d
-	add \a, md5_table[\offset_table]
+	add \a, [rip + md5_table + \offset_table]
 	add \a, [rdi + \offset_block]
 	rol \a, \shift
 	add \a, \b
@@ -138,7 +138,7 @@ md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
 	and r11d, \c
 	or  r10d, r11d /* f */
 	add \a, r10d
-	add \a, md5_table[\offset_table]
+	add \a, [rip + md5_table + \offset_table]
 	add \a, [rdi + \offset_block]
 	rol \a, \shift
 	add \a, \b
@@ -171,7 +171,7 @@ md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
 	xor r10d, \c
 	xor r10d, \d  /* f */
 	add \a, r10d
-	add \a, md5_table[\offset_table]
+	add \a, [rip + md5_table + \offset_table]
 	add \a, [rdi + \offset_block]
 	rol \a, \shift
 	add \a, \b
@@ -205,7 +205,7 @@ md5_process_blocks_asm: /* (uint8_t block[64], uint32_t hash[4], uint n) */
 	or  r10d, \b
 	xor r10d, \c  /* f */
 	add \a, r10d
-	add \a, md5_table[\offset_table]
+	add \a, [rip + md5_table + \offset_table]
 	add \a, [rdi + \offset_block]
 	rol \a, \shift
 	add \a, \b
