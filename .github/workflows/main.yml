@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+  schedule:
+  - cron: "0 12 * * 5"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: build and run md5 and sha1 x64 tests
+      working-directory: ./test
+      run: |
+        make md5_test_x64 sha1_test_x64
+        ./md5_test_x64
+        ./sha1_test_x64
