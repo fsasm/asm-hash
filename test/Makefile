@@ -2,6 +2,8 @@ CC=gcc
 CFLAGS=
 INCLUDE_PATH=-I../src/
 
+all_tests_x64: md5_test_x64 sha1_test_x64
+
 md5_test_armv6:
 	$(CC) -std=c99 -DHASH_MD5 -o $@ hash_test.c ../src/md5_core.c ../src/md5_armv6.s ../src/int_util.c $(INCLUDE_PATH) $(CFLAGS)
 	

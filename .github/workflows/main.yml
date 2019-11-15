@@ -15,6 +15,6 @@ jobs:
     - name: build and run md5 and sha1 x64 tests
       working-directory: ./test
       run: |
-        make md5_test_x64 sha1_test_x64
+        make all_tests_x64
         ./md5_test_x64
         ./sha1_test_x64
